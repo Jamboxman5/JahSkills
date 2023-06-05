@@ -49,15 +49,10 @@ public class EffectListeners implements Listener {
 	}
 	@EventHandler
 	public void spoilsOfWarDeath(EntityDeathEvent e) {
-		System.out.println((spwAttacker == null));
 		if (spwAttacker == null) return;
-		System.out.println((!SkillManager.activePerk(spwAttacker, Perk.SPOILSOFWAR)));
 		if (!SkillManager.activePerk(spwAttacker, Perk.SPOILSOFWAR)) return;
-		System.out.println((e.getDrops() == null));
 		if (e.getDrops() == null) return;
-		System.out.println((e.getDrops().size() == 0));
 		if (e.getDrops().size() == 0) return;
-		System.out.println("Adding drops");
 		for (ItemStack i : e.getDrops()) {
 			i.setAmount(i.getAmount()*2);
 		}
