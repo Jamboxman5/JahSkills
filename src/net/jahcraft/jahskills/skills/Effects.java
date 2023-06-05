@@ -19,8 +19,8 @@ public class Effects {
 	
 	public static void knockOut(Player player, int durationTicks) {
 		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, durationTicks, 255, false, false, false));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, durationTicks, 255, false, false, false));
 		player.sendMessage(Colors.BRIGHTRED + "You just got knocked the fuck out!");
-		knockedOuts.add(player);
 		Location loc = player.getLocation();
 		loc.setPitch(90);
 		player.teleport(loc);
@@ -42,7 +42,6 @@ public class Effects {
 					e1.printStackTrace();
 				}
 
-				knockedOuts.remove(player);
 				player.sendBlockChange(loc, above);
 
 				
