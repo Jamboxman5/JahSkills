@@ -23,7 +23,7 @@ import net.milkbowl.vault.economy.Economy;
 public class Main extends JavaPlugin {
 	
 	public static Main plugin;
-	public Economy eco;
+	public static Economy eco;
 
 	@Override
 	public void onEnable() {
