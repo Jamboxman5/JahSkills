@@ -53,6 +53,20 @@ public static List<Inventory> invs = new ArrayList<>();
 			e.getInventory().setItem(36, Perks.getButton(p, Perk.BLOODMONEY));
 
 		}
+		else if (e.getSlot() == 37) {
+			if (SkillManager.hasPerk(p, Perk.SPOILSOFWAR)) {
+				if (SkillManager.activePerk(p, Perk.SPOILSOFWAR)) {
+					SkillManager.deactivatePerk(p, Perk.SPOILSOFWAR);
+				} else {
+					SkillManager.activatePerk(p, Perk.SPOILSOFWAR);
+				}
+			}
+			else if (Perks.canBuy(p, SkillType.BUTCHER, Perk.SPOILSOFWAR)) {
+				SkillManager.buyPerk(p, Perk.SPOILSOFWAR);
+			}
+			e.getInventory().setItem(37, Perks.getButton(p, Perk.SPOILSOFWAR));
+
+		}
 	}
 
 }
