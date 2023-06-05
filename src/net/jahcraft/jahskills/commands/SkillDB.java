@@ -22,8 +22,8 @@ public class SkillDB implements CommandExecutor {
 			return true;
 		}
 		if (args.length < 1) {
-			sender.sendMessage("Usage: /skilldb <cmd> [clear] [type] [value]");
-			sender.sendMessage("Commands: reset, set, add, remove");
+			sender.sendMessage("Usage: /skilldb <cmd> [target] [value]");
+			sender.sendMessage("Commands: reset, clear, givepoints");
 			return true;
 		}
 		
@@ -38,7 +38,8 @@ public class SkillDB implements CommandExecutor {
 			clear(sender);
 			break;
 		}
-		case "set": {
+		case "givepoints": {
+			givePoints(sender, args);
 			break;
 		}
 		case "add": {
@@ -53,6 +54,30 @@ public class SkillDB implements CommandExecutor {
 
 	}
 	
+	private void givePoints(CommandSender sender, String[] args) {
+		if (Bukkit.getPlayer(args[1]) == null) {
+			sender.sendMessage(ChatColor.RED + "Player not found!");
+			return;
+		}
+		
+		try {
+			Integer.parseInt(args[2]);
+		} catch (Exception e) {
+			sender.sendMessage(ChatColor.RED + "Invalid point value!");
+			return;
+		}
+		
+		Player target = Bukkit.getPlayer(args[1]);
+		int pts = Integer.parseInt(args[2]);
+		
+		SkillManager.addPoints(target, pts);
+		target.sendMessage(ChatColor.RED + "You've been gifted " + pts + " skill points.");
+		if (target != (Player) sender) {
+			sender.sendMessage(Colors.BLUE + "They've been gifted " + pts + " skill points.");
+		}
+		ProgressBar.updateBar(target);		
+	}
+
 	private void clear(CommandSender sender) {
 		SkillDatabase.clearDatabase();
 		SkillDatabase.setupDatabase();

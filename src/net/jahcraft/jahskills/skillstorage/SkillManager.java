@@ -73,6 +73,11 @@ public class SkillManager {
 		SkillDatabase.skillPoints.put(player, points);
 	}
 	
+	public static void addPoints(Player player, int points) {
+		int ptsBefore = SkillDatabase.skillPoints.get(player);
+		SkillDatabase.skillPoints.put(player, points + ptsBefore);
+	}
+	
 	public static void loadSkills() {
 		
 		setupSkills();
