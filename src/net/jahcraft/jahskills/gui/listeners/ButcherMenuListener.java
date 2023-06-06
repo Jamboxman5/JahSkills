@@ -64,6 +64,10 @@ public static List<Inventory> invs = new ArrayList<>();
 			if (SkillManager.activePerk(p, perk)) {
 				SkillManager.deactivatePerk(p, perk);
 			} else {
+				for (Perk conflict : Perks.getConflicts(perk)) {
+					SkillManager.deactivatePerk(p, conflict);
+					e.getInventory().setItem(getSlot(conflict), Perks.getButton(p, conflict));
+				}
 				SkillManager.activatePerk(p, perk);
 			}
 		}
@@ -71,6 +75,32 @@ public static List<Inventory> invs = new ArrayList<>();
 			SkillManager.buyPerk(p, perk);
 		}
 		e.getInventory().setItem(e.getSlot(), Perks.getButton(p, perk));
+	}
+	
+	int getSlot(Perk p) {
+		switch(p) {
+		case BLOODMONEY:
+			return 36;
+		case BLUNTFORCETRAUMA:
+			return 46;
+		case HITMAN:
+			return 40;
+		case KILLINGBLOW:
+			return 39;
+		case SELFDEFENSE:
+			return 38;
+		case SERRATIONS:
+			return 46;
+		case SPOILSOFWAR:
+			return 37;
+		case THEGRINDR:
+			return 46;
+		case THEPUMMELER:
+			return 41;
+		default:
+			return -1;
+		
+		}
 	}
 
 }
