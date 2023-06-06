@@ -124,6 +124,8 @@ public class EffectListeners implements Listener {
 	public void killingBlow(EntityDamageByEntityEvent e) {
 		if (!(e.getDamager() instanceof Player)) return;
 		Player p = (Player) e.getDamager();
+		String type = p.getInventory().getItemInMainHand().getType().toString();
+		if (!type.contains("AXE") && !type.contains("SWORD")) return;
 //		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
 		if (!SkillManager.activePerk(p, Perk.KILLINGBLOW)) return;
 //		p.sendMessage(!(e.getEntity() instanceof LivingEntity) + "");
