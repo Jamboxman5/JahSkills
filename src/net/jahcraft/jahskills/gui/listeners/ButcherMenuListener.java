@@ -51,6 +51,12 @@ public static List<Inventory> invs = new ArrayList<>();
 		else if (e.getSlot() == 39) {
 			clickPerk(e,p, Perk.KILLINGBLOW);
 		}
+		else if (e.getSlot() == 40) {
+			clickPerk(e,p, Perk.HITMAN);
+		}
+		else if (e.getSlot() == 41) {
+			clickPerk(e,p, Perk.THEPUMMELER);
+		}
 	}
 	
 	void clickPerk(InventoryClickEvent e, Player p, Perk perk) {

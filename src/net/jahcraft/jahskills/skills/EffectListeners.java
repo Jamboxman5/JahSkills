@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -17,11 +20,13 @@ import org.bukkit.inventory.ItemStack;
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.EntityValues;
+import net.jahcraft.jahskills.util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class EffectListeners implements Listener {
 	
 	Player spwAttacker;
+	Player hitAttacker;
 	List<Player> selfDefenseQueue = new ArrayList<>();
 	HashMap<Player, Long> selfDefenseCooldown = new HashMap<>();
 	HashMap<Player, Long> selfDefenseHitTime = new HashMap<>();
@@ -56,7 +61,7 @@ public class EffectListeners implements Listener {
 			spwAttacker = (Player) e.getDamager();
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void spoilsOfWarDeath(EntityDeathEvent e) {
 		if (spwAttacker == null) return;
 		if (!SkillManager.activePerk(spwAttacker, Perk.SPOILSOFWAR)) return;
@@ -138,4 +143,74 @@ public class EffectListeners implements Listener {
 		ent.setHealth(0);
 		
 	}
+	@EventHandler
+	public void hitmanAttack(EntityDamageByEntityEvent e) {
+//		e.getDamager().sendMessage((!(e.getDamager() instanceof Player)) + "");
+		if (!(e.getDamager() instanceof Player)) return;
+//		e.getDamager().sendMessage((!(e.getEntity() instanceof Player)) + "");
+		if (!(e.getEntity() instanceof Player)) return;
+//		e.getDamager().sendMessage((!SkillManager.activePerk((Player)e.getDamager(), Perk.HITMAN)) + "");
+		if (!SkillManager.activePerk((Player)e.getDamager(), Perk.HITMAN)) {
+			hitAttacker = null; 
+			return;
+		} else {
+			hitAttacker = (Player) e.getDamager();
+		}
+	}
+	@EventHandler(priority = EventPriority.LOW)
+	public void hitmanDeath(EntityDeathEvent e) {
+//		e.getEntity().sendMessage((hitAttacker == null) + "");
+		if (hitAttacker == null) return;
+//		e.getEntity().sendMessage((!(e.getEntity() instanceof Player)) + "");
+		if (!(e.getEntity() instanceof Player)) return;
+//		e.getEntity().sendMessage((!SkillManager.activePerk(hitAttacker, Perk.HITMAN)) + "");
+		if (!SkillManager.activePerk(hitAttacker, Perk.HITMAN)) return;
+		e.setDroppedExp(e.getDroppedExp()*2);
+		
+		int chance = 0;
+		
+		ItemStack mainHand = hitAttacker.getInventory().getItemInMainHand();
+		if (mainHand.getType().toString().contains("SWORD")) chance = 1;
+		if (mainHand.getType().toString().contains("AXE")) chance = 2;
+		
+		int lootingLevel = 0;
+		if (mainHand.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+			lootingLevel = mainHand.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+		}
+		
+		int roll = (int) (Math.random()*101);
+		roll += (lootingLevel * 10);
+		
+		if (chance == 1) {
+			if (roll > 75) e.getDrops().add(PlayerUtil.getSkull((Player)e.getEntity()));
+		}
+		if (chance == 2) {
+			if (roll > 50) e.getDrops().add(PlayerUtil.getSkull((Player)e.getEntity()));
+		}
+		
+	}
+	@EventHandler
+	public void pummeler(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		if (!(e.getEntity() instanceof Player)) return;
+		Player p = (Player) e.getDamager();
+		if (p.getInventory().getItemInMainHand().getType() != Material.AIR) return;
+//		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
+		if (!SkillManager.activePerk(p, Perk.THEPUMMELER)) return;
+//		p.sendMessage(!(e.getEntity() instanceof LivingEntity) + "");
+		double roll = Math.random()*100.0;
+//		p.sendMessage(roll + "");
+		double barrier = 100.0 - SkillManager.getLevel(p, SkillType.BUTCHER)/5;
+//		p.sendMessage(barrier + "");
+		if (roll <= barrier) return;
+		
+		int multiplier = SkillManager.getLevel(p, SkillType.BUTCHER)/5;
+		int baseTicks = 10;
+		
+		//Actual effect
+		p.sendMessage("KO!");
+		Effects.knockOut((Player)e.getEntity(), baseTicks*multiplier);
+
+	}
 }
+ 
