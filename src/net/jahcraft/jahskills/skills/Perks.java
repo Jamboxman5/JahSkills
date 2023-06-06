@@ -1,6 +1,8 @@
 package net.jahcraft.jahskills.skills;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -218,6 +220,56 @@ public class Perks {
 		boolean unlocked = (SkillManager.getLevel(p, skill) >= getLevelRequirement(perk));
 		boolean canAfford = (SkillManager.getPoints(p) >= getPointCost(perk));
 		return (unlocked && canAfford);
+	}
+	
+	public static List<Perk> getConflicts(Perk p) {
+		switch(p) {
+		case BLOODMONEY: {
+			Perk[] conflicts = {Perk.SPOILSOFWAR, Perk.THEGRINDR};
+			return Arrays.asList(conflicts);
+		}
+		case BLUNTFORCETRAUMA:
+		{
+			Perk[] conflicts = {Perk.KILLINGBLOW};
+			return Arrays.asList(conflicts);
+		}		
+		case KILLINGBLOW:
+		{
+			Perk[] conflicts = {Perk.SERRATIONS, Perk.THEPUMMELER, Perk.BLUNTFORCETRAUMA, Perk.SELFDEFENSE};
+			return Arrays.asList(conflicts);
+		}
+		case SELFDEFENSE:
+		{
+			Perk[] conflicts = {Perk.KILLINGBLOW};
+			return Arrays.asList(conflicts);
+		}
+		case SERRATIONS:
+		{
+			Perk[] conflicts = {Perk.KILLINGBLOW};
+			return Arrays.asList(conflicts);
+		}
+		case SPOILSOFWAR:
+		{
+			Perk[] conflicts = {Perk.BLOODMONEY, Perk.THEGRINDR};
+			return Arrays.asList(conflicts);
+		}
+		case THEGRINDR:
+		{
+			Perk[] conflicts = {Perk.SPOILSOFWAR, Perk.BLOODMONEY};
+			return Arrays.asList(conflicts);
+		}
+		case THEPUMMELER:
+		{
+			Perk[] conflicts = {Perk.KILLINGBLOW};
+			return Arrays.asList(conflicts);
+		}
+		default:
+		{
+			Perk[] conflicts = {};
+			return Arrays.asList(conflicts);
+		}
+		
+		}
 	}
 
 }
