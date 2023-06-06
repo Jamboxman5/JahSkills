@@ -1,5 +1,10 @@
 package net.jahcraft.jahskills.skills;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +21,9 @@ import net.md_5.bungee.api.ChatColor;
 public class EffectListeners implements Listener {
 	
 	Player spwAttacker;
+	List<Player> selfDefenseQueue = new ArrayList<>();
+	HashMap<Player, Long> selfDefenseCooldown = new HashMap<>();
+	HashMap<Player, Long> selfDefenseHitTime = new HashMap<>();
 	
 	@EventHandler
 	public void bloodMoney(EntityDamageByEntityEvent e) {
@@ -57,5 +65,52 @@ public class EffectListeners implements Listener {
 			i.setAmount(i.getAmount()*2);
 		}
 		
+	}
+	@EventHandler
+	public void selfDefenseInitial(EntityDamageByEntityEvent e) {
+		if (!(e.getEntity() instanceof Player)) return;
+		Player p = (Player) e.getEntity();
+		if (!SkillManager.activePerk(p, Perk.SELFDEFENSE)) return;
+		if (selfDefenseCooldown.containsKey(p)) {
+			if (System.currentTimeMillis() - selfDefenseCooldown.get(p) <= 3000) return;
+			selfDefenseCooldown.remove(p);
+//			p.sendMessage("cooldown removed");
+		}
+		selfDefenseHitTime.put(p, System.currentTimeMillis());
+		if (!selfDefenseQueue.contains(p)) {
+			selfDefenseQueue.add(p);
+//			p.sendMessage("added to queue");
+		}
+		Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(3000);
+					if (System.currentTimeMillis() - selfDefenseHitTime.get(p) > 3000) {
+						if (selfDefenseQueue.contains(p)) {
+//							p.sendMessage("removed from queue");
+							selfDefenseQueue.remove(p);
+						}
+					}
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		});
+	}
+	@EventHandler
+	public void selfDefenseRetaliation(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		Player p = (Player) e.getDamager();
+		if (!SkillManager.activePerk(p, Perk.SELFDEFENSE)) return;
+		if (!selfDefenseQueue.contains(p)) return;
+		e.setDamage(e.getDamage()*1.25);
+//		p.sendMessage("damage added");
+		selfDefenseCooldown.put(p, System.currentTimeMillis());
+//		p.sendMessage("cooldown added");
+		selfDefenseQueue.remove(p);
+//		p.sendMessage("removed from queue");
 	}
 }

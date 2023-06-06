@@ -40,33 +40,28 @@ public static List<Inventory> invs = new ArrayList<>();
 			}
 		}
 		else if (e.getSlot() == 36) {
-			if (SkillManager.hasPerk(p, Perk.BLOODMONEY)) {
-				if (SkillManager.activePerk(p, Perk.BLOODMONEY)) {
-					SkillManager.deactivatePerk(p, Perk.BLOODMONEY);
-				} else {
-					SkillManager.activatePerk(p, Perk.BLOODMONEY);
-				}
-			}
-			else if (Perks.canBuy(p, SkillType.BUTCHER, Perk.BLOODMONEY)) {
-				SkillManager.buyPerk(p, Perk.BLOODMONEY);
-			}
-			e.getInventory().setItem(36, Perks.getButton(p, Perk.BLOODMONEY));
-
+			clickPerk(e,p, Perk.BLOODMONEY);
 		}
 		else if (e.getSlot() == 37) {
-			if (SkillManager.hasPerk(p, Perk.SPOILSOFWAR)) {
-				if (SkillManager.activePerk(p, Perk.SPOILSOFWAR)) {
-					SkillManager.deactivatePerk(p, Perk.SPOILSOFWAR);
-				} else {
-					SkillManager.activatePerk(p, Perk.SPOILSOFWAR);
-				}
-			}
-			else if (Perks.canBuy(p, SkillType.BUTCHER, Perk.SPOILSOFWAR)) {
-				SkillManager.buyPerk(p, Perk.SPOILSOFWAR);
-			}
-			e.getInventory().setItem(37, Perks.getButton(p, Perk.SPOILSOFWAR));
-
+			clickPerk(e,p, Perk.SPOILSOFWAR);
 		}
+		else if (e.getSlot() == 38) {
+			clickPerk(e,p, Perk.SELFDEFENSE);
+		}
+	}
+	
+	void clickPerk(InventoryClickEvent e, Player p, Perk perk) {
+		if (SkillManager.hasPerk(p, perk)) {
+			if (SkillManager.activePerk(p, perk)) {
+				SkillManager.deactivatePerk(p, perk);
+			} else {
+				SkillManager.activatePerk(p, perk);
+			}
+		}
+		else if (Perks.canBuy(p, SkillType.BUTCHER, perk)) {
+			SkillManager.buyPerk(p, perk);
+		}
+		e.getInventory().setItem(e.getSlot(), Perks.getButton(p, perk));
 	}
 
 }
