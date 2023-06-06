@@ -48,6 +48,9 @@ public static List<Inventory> invs = new ArrayList<>();
 		else if (e.getSlot() == 38) {
 			clickPerk(e,p, Perk.SELFDEFENSE);
 		}
+		else if (e.getSlot() == 39) {
+			clickPerk(e,p, Perk.KILLINGBLOW);
+		}
 	}
 	
 	void clickPerk(InventoryClickEvent e, Player p, Perk perk) {
