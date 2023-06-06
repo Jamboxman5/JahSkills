@@ -115,15 +115,21 @@ public class EffectListeners implements Listener {
 		selfDefenseQueue.remove(p);
 //		p.sendMessage("removed from queue");
 	}
+	@EventHandler
 	public void killingBlow(EntityDamageByEntityEvent e) {
 		if (!(e.getDamager() instanceof Player)) return;
 		Player p = (Player) e.getDamager();
+//		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
 		if (!SkillManager.activePerk(p, Perk.KILLINGBLOW)) return;
+//		p.sendMessage(!(e.getEntity() instanceof LivingEntity) + "");
 		if (!(e.getEntity() instanceof LivingEntity)) return;
 		LivingEntity ent = (LivingEntity) e.getEntity();
-		if (ent.getHealth() >= ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) return;
+//		p.sendMessage("" + (ent.getHealth() >= ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()/2.0));
+		if (ent.getHealth() >= ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()/2.0) return;
 		double roll = Math.random()*100.0;
+//		p.sendMessage(roll + "");
 		double barrier = 100.0 - SkillManager.getLevel(p, SkillType.BUTCHER)/2.0;
+//		p.sendMessage(barrier + "");
 		if (roll <= barrier) return;
 		
 		//Actual effect
