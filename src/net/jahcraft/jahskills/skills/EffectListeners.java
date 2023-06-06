@@ -105,10 +105,11 @@ public class EffectListeners implements Listener {
 		if (!(e.getDamager() instanceof Player)) return;
 		Player p = (Player) e.getDamager();
 		if (!SkillManager.activePerk(p, Perk.SELFDEFENSE)) return;
-		if (!selfDefenseQueue.contains(p)) return;
-		e.setDamage(e.getDamage()*1.25);
 //		p.sendMessage("damage added");
 		selfDefenseCooldown.put(p, System.currentTimeMillis());
+		if (!selfDefenseQueue.contains(p)) return;
+		e.setDamage(e.getDamage()*1.5);
+
 //		p.sendMessage("cooldown added");
 		selfDefenseQueue.remove(p);
 //		p.sendMessage("removed from queue");
