@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -113,5 +114,22 @@ public class EffectListeners implements Listener {
 //		p.sendMessage("cooldown added");
 		selfDefenseQueue.remove(p);
 //		p.sendMessage("removed from queue");
+	}
+	public void killingBlow(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		Player p = (Player) e.getDamager();
+		if (!SkillManager.activePerk(p, Perk.KILLINGBLOW)) return;
+		if (!(e.getEntity() instanceof LivingEntity)) return;
+		LivingEntity ent = (LivingEntity) e.getEntity();
+		if (ent.getHealth() >= ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) return;
+		double roll = Math.random()*100.0;
+		double barrier = 100.0 - SkillManager.getLevel(p, SkillType.BUTCHER)/2.0;
+		if (roll <= barrier) return;
+		
+		//Actual effect
+		p.sendMessage("Dealt a killing blow!");
+		ent.getLocation().getWorld().createExplosion(ent.getLocation(), .1F);
+		ent.setHealth(0);
+		
 	}
 }
