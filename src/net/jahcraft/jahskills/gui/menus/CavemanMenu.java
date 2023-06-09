@@ -10,13 +10,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.jahcraft.jahskills.gui.animations.SubMenuAnim;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.perks.Perks;
-import net.jahcraft.jahskills.skills.Butcher;
+import net.jahcraft.jahskills.skills.Caveman;
 
-public class ButcherMenu {
+public class CavemanMenu {
 	
 	public static Inventory getInv(Player player) {
 
-		Inventory inv = Bukkit.createInventory(null, 54, "Skills - Butcher");
+		Inventory inv = Bukkit.createInventory(null, 54, "Skills - Caveman");
 		setFillers(inv);
 		setButtons(inv, player);
 		inv.setItem(49, SkillMenu.getInfoButton(player));
@@ -26,10 +26,10 @@ public class ButcherMenu {
 	
 	private static void setButtons(Inventory inv, Player p) {
 		inv.setItem(4, SkillMenu.getBackButton());
-		inv.setItem(22, Butcher.getSkillButton(p));
+		inv.setItem(22, Caveman.getSkillButton(p));
 		
 		int i = 36;
-		for (Perk perk : Butcher.getPerks()) {
+		for (Perk perk : Caveman.getPerks()) {
 			inv.setItem(i, Perks.getButton(p, perk));
 			i++;
 		}

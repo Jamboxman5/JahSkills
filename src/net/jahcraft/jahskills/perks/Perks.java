@@ -1,4 +1,4 @@
-package net.jahcraft.jahskills.skills;
+package net.jahcraft.jahskills.perks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.jahcraft.jahskills.skills.Butcher;
+import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
@@ -116,8 +118,98 @@ public class Perks {
 												   player);
 			return button;
 		}
-		default:
-			break;
+		case CAVEVISION:
+		{
+			ItemStack button = constructPerkButton(Material.GOLDEN_CARROT, 
+												   "Cave Vision", 
+												   "Get down on your knees, it'll", 
+												   "help you see in the dark.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case CLIMBINGGEAR:
+		{
+			ItemStack button = constructPerkButton(Material.LEAD, 
+												   "Climbing Gear", 
+												   "Gravity has become a much", 
+												   "less significant problem.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case DIVININGROD:
+		{
+			ItemStack button = constructPerkButton(Material.BLAZE_ROD, 
+												   "Divining Rod", 
+												   "Helps you sniff out ores", 
+												   "while you're deep underground.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case EFFICIENTDIGGER:
+		{
+			ItemStack button = constructPerkButton(Material.COBBLESTONE, 
+												   "Efficient Digger", 
+												   "Get yourself a better yield", 
+												   "when mining terrain blocks.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case MANICMINING:
+		{
+			ItemStack button = constructPerkButton(Material.GOLDEN_PICKAXE, 
+												   "Manic Miner", 
+												   "You'll be digging so fast you'll", 
+												   "hardly remember the crack you sniffed.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case OREWHISPERER:
+		{
+			ItemStack button = constructPerkButton(Material.EXPERIENCE_BOTTLE, 
+												   "The Ore Whisperer", 
+												   "Learn how to finesse the ores", 
+												   "into giving you more experience.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case THERMALINSULATION:
+		{
+			ItemStack button = constructPerkButton(Material.LEATHER, 
+												   "Thermal Insulation", 
+												   "Fall into lava and you'll have", 
+												   "more time to get the hell out!", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case WEEPINGCREEPERS:
+		{
+			ItemStack button = constructPerkButton(Material.CREEPER_HEAD, 
+												   "Weeping Creepers", 
+												   "Keep a feline companion in the", 
+												   "caves to keep the creepers at bay.", 
+												   perk, 
+												   player);
+			return button;
+		}
+		case MOTHERLODE:
+		{
+			ItemStack button = constructPerkButton(Material.DIAMOND, 
+												   "Wondrous Bounty", 
+												   "Bring home the motherlode and ", 
+												   "finally cross the poverty line!", 
+												   perk, 
+												   player);
+			return button;
+		}
+
+
 		}
 		return new ItemStack(Material.BARRIER);
 		
@@ -143,6 +235,13 @@ public class Perks {
 			} else {
 				lore.add(inactive);
 				button.removeEnchantment(Enchantment.LURE);
+			}
+			lore.add(breaker);
+			if (Perks.getConflicts(perk).size() > 0) {
+				lore.add(Colors.GOLD + "Conflicts With:");
+				for (Perk p : Perks.getConflicts(perk)) {
+					lore.add(ChatColor.GRAY + "- " + Colors.BRIGHTBLUE + SkillManager.getFormattedName(p));
+				}
 			}
 		} else {
 			lore.add(requirements);

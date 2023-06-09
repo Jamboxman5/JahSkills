@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.jahcraft.jahskills.skills.Perk;
+import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.skills.SkillType;
 
 public class SkillDatabase {

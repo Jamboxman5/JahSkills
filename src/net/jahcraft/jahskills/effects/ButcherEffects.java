@@ -1,4 +1,4 @@
-package net.jahcraft.jahskills.skills;
+package net.jahcraft.jahskills.effects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,21 +16,26 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.jahcraft.jahskills.main.Main;
+import net.jahcraft.jahskills.perks.Perk;
+import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.EntityValues;
 import net.jahcraft.jahskills.util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class EffectListeners implements Listener {
+public class ButcherEffects implements Listener {
 	
 	Player spwAttacker;
 	Player hitAttacker;
 	List<Player> selfDefenseQueue = new ArrayList<>();
 	HashMap<Player, Long> selfDefenseCooldown = new HashMap<>();
 	HashMap<Player, Long> selfDefenseHitTime = new HashMap<>();
+	List<Entity> theGrindrMobs = new ArrayList<>();
+	Player theGrindrAttacker;
 	
 	@EventHandler
 	public void bloodMoney(EntityDamageByEntityEvent e) {
@@ -123,7 +129,9 @@ public class EffectListeners implements Listener {
 	@EventHandler
 	public void killingBlow(EntityDamageByEntityEvent e) {
 		if (!(e.getDamager() instanceof Player)) return;
+		if (!PlayerUtil.isHitSufficient(e)) return;
 		Player p = (Player) e.getDamager();
+		if (!PlayerUtil.isFalling(p)) return;
 		String type = p.getInventory().getItemInMainHand().getType().toString();
 		if (!type.contains("AXE") && !type.contains("SWORD")) return;
 //		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
@@ -195,7 +203,9 @@ public class EffectListeners implements Listener {
 	public void pummeler(EntityDamageByEntityEvent e) {
 		if (!(e.getDamager() instanceof Player)) return;
 		if (!(e.getEntity() instanceof Player)) return;
+		if (e.getDamage() < 1.5) return;
 		Player p = (Player) e.getDamager();
+		if (!PlayerUtil.isFalling(p)) return;
 		if (p.getInventory().getItemInMainHand().getType() != Material.AIR) return;
 //		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
 		if (!SkillManager.activePerk(p, Perk.THEPUMMELER)) return;
@@ -211,8 +221,92 @@ public class EffectListeners implements Listener {
 		
 		//Actual effect
 		p.sendMessage("KO!");
-		Effects.knockOut((Player)e.getEntity(), baseTicks*multiplier);
+		EffectActions.knockOut((Player)e.getEntity(), baseTicks*multiplier);
 
+	}
+	@EventHandler
+	public void serrations(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		Player p = (Player) e.getDamager();
+		String type = p.getInventory().getItemInMainHand().getType().toString();
+		if (!type.contains("SWORD")) return;
+		if (!PlayerUtil.isHitSufficient(e)) return;
+//		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
+		if (!SkillManager.activePerk(p, Perk.SERRATIONS)) return;
+//		p.sendMessage(!(e.getEntity() instanceof LivingEntity) + "");
+		double roll = Math.random()*100.0;
+//		p.sendMessage(roll + "");
+		double barrier = 100.0 - SkillManager.getLevel(p, SkillType.BUTCHER)/2;
+//		p.sendMessage(barrier + "");
+		if (roll <= barrier) return;
+		
+		int multiplier = SkillManager.getLevel(p, SkillType.BUTCHER)/5;
+		int baseBleeds = 3;
+		
+		//Actual effect
+		p.sendMessage("Enemy Bleeding!");
+		EffectActions.bleed(e.getEntity(), baseBleeds*multiplier);
+	}
+	@EventHandler
+	public void bluntForceTrauma(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		if (!(e.getEntity() instanceof Player)) return;
+		if (e.getDamage() < 4.0) return;
+		Player p = (Player) e.getDamager();
+		if (!PlayerUtil.isFalling(p)) return;
+		if (!PlayerUtil.isHoldingShovel(p)) return;
+//		p.sendMessage(SkillManager.activePerk(p, Perk.KILLINGBLOW) + "");
+		if (!SkillManager.activePerk(p, Perk.THEPUMMELER)) return;
+//		p.sendMessage(!(e.getEntity() instanceof LivingEntity) + "");
+		double roll = Math.random()*100.0;
+//		p.sendMessage(roll + "");
+		double barrier = 100.0 - SkillManager.getLevel(p, SkillType.BUTCHER);
+//		p.sendMessage(barrier + "");
+//		p.sendMessage("rolled " + roll + " needed " + barrier);
+		if (roll <= barrier) return;
+		
+		int multiplier = SkillManager.getLevel(p, SkillType.BUTCHER)/4;
+		int baseMS = 1000;
+//		p.sendMessage("ms: " + baseMS * multiplier);
+		//Actual effect
+		p.sendMessage("Opponent Dazed!");
+		EffectActions.daze((Player)e.getEntity(), baseMS*multiplier);
+	}
+	@EventHandler
+	public void theGrindrSpawn(SpawnerSpawnEvent e) {
+		theGrindrMobs.add(e.getEntity());
+		Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(1000*60*15);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (theGrindrMobs.contains(e.getEntity())) theGrindrMobs.remove(e.getEntity());
+			}
+		});
+	}
+	@EventHandler
+	public void theGrindrAttack(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		if (e.getEntity() instanceof Player) return;
+		if (!SkillManager.activePerk((Player)e.getDamager(), Perk.THEGRINDR)) {
+			theGrindrAttacker = null; 
+			return;
+		} else {
+			theGrindrAttacker = (Player) e.getDamager();
+		}
+	}
+	@EventHandler
+	public void theGrindrDeath(EntityDeathEvent e) {
+		if (theGrindrAttacker == null) return;
+		if (!SkillManager.activePerk(theGrindrAttacker, Perk.THEGRINDR)) return;
+		if (!theGrindrMobs.contains(e.getEntity())) return;
+		e.setDroppedExp(e.getDroppedExp()*2);
+		theGrindrMobs.remove(e.getEntity());
+		theGrindrAttacker.sendMessage("Bonus XP Rewarded");
+		
 	}
 }
  

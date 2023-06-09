@@ -9,9 +9,10 @@ import net.jahcraft.jahskills.commands.KnockOut;
 import net.jahcraft.jahskills.commands.SkillDB;
 import net.jahcraft.jahskills.commands.SkillQuery;
 import net.jahcraft.jahskills.commands.Skills;
+import net.jahcraft.jahskills.effects.ButcherEffects;
 import net.jahcraft.jahskills.gui.listeners.ButcherMenuListener;
+import net.jahcraft.jahskills.gui.listeners.CavemanMenuListener;
 import net.jahcraft.jahskills.gui.listeners.SkillMenuListener;
-import net.jahcraft.jahskills.skills.EffectListeners;
 import net.jahcraft.jahskills.skillstorage.LoadSave;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
@@ -50,7 +51,8 @@ public class Main extends JavaPlugin {
 					getServer().getPluginManager().registerEvents(new LoadSave(), this);
 					getServer().getPluginManager().registerEvents(new SkillMenuListener(), this);
 					getServer().getPluginManager().registerEvents(new ButcherMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new EffectListeners(), this);
+					getServer().getPluginManager().registerEvents(new CavemanMenuListener(), this);
+					getServer().getPluginManager().registerEvents(new ButcherEffects(), this);
 					
 					getCommand("skilldb").setExecutor((CommandExecutor)new SkillDB());
 					getCommand("skillquery").setExecutor((CommandExecutor)new SkillQuery());

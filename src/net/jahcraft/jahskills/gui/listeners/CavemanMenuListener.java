@@ -19,7 +19,7 @@ import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 
-public class ButcherMenuListener implements Listener {
+public class CavemanMenuListener implements Listener {
 	
 public static List<Inventory> invs = new ArrayList<>();
 	

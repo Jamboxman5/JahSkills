@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import net.jahcraft.jahskills.skills.Effects;
+import net.jahcraft.jahskills.effects.EffectActions;
 
 public class KnockOut implements CommandExecutor {
 	
@@ -23,7 +23,7 @@ public class KnockOut implements CommandExecutor {
 			return true;
 		}
 		
-		Effects.knockOut(Bukkit.getPlayer(args[0]), 100);
+		EffectActions.knockOut(Bukkit.getPlayer(args[0]), 100);
 		return true;
 
 	}

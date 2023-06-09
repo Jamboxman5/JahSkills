@@ -15,11 +15,11 @@ import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
 
-public class Butcher {
+public class Caveman {
 	
-	private static SkillType type = SkillType.BUTCHER;
-	private static String name = Colors.BRIGHTRED + ChatColor.BOLD + "Butcher";
-	private static Material displayItem = Material.NETHERITE_SWORD;
+	private static SkillType type = SkillType.CAVEMAN;
+	private static String name = Colors.MUDBROWN + ChatColor.BOLD + "Caveman";
+	private static Material displayItem = Material.IRON_PICKAXE;
 	private static String breaker = Colors.BLUE + ChatColor.STRIKETHROUGH + "                   ";
 
 	public static ItemStack getButton(Player player) {
@@ -38,15 +38,15 @@ public class Butcher {
 	
 	public static Perk[] getPerks() {
 		Perk[] perks = {
-		Perk.BLOODMONEY,
-		Perk.SPOILSOFWAR,
-		Perk.SELFDEFENSE,
-		Perk.KILLINGBLOW,
-		Perk.HITMAN,
-		Perk.THEPUMMELER,
-		Perk.SERRATIONS,
-		Perk.BLUNTFORCETRAUMA,
-		Perk.THEGRINDR};
+		Perk.MOTHERLODE,
+		Perk.OREWHISPERER,
+		Perk.EFFICIENTDIGGER,
+		Perk.CAVEVISION,
+		Perk.CLIMBINGGEAR,
+		Perk.THERMALINSULATION,
+		Perk.DIVININGROD,
+		Perk.WEEPINGCREEPERS,
+		Perk.MANICMINING};
 		return perks;
 	}
 

@@ -1,19 +1,24 @@
-package net.jahcraft.jahskills.skills;
+package net.jahcraft.jahskills.effects;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.util.Colors;
+import net.md_5.bungee.api.ChatColor;
 
-public class Effects {
+public class EffectActions {
 	
 	public static List<Player> knockedOuts = new ArrayList<>();
 	
@@ -56,4 +61,47 @@ public class Effects {
 		return knockedOuts.contains(player);
 	}
 
+	public static void bleed(Entity entity, int bleedCount) {
+		
+		Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+		
+			@Override
+			public void run() {
+
+				entity.sendMessage(ChatColor.RED + "You are bleeding!");
+				
+				for (int i = 1; i <= bleedCount; i++) {
+					try {
+//						entity.sendMessage("bleed " + i);
+						Thread.sleep(500);
+						entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getLocation(), 5, new Particle.DustOptions(org.bukkit.Color.RED, i));
+						entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_CALCITE_BREAK, 1, 1);
+
+						Bukkit.getScheduler().runTask(Main.plugin, new Runnable() {
+							@Override
+							public void run() {
+								LivingEntity ent = (LivingEntity) entity;
+								ent.damage(.33);
+
+							}
+						});
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+			
+		});
+		
+	}
+	
+	public static void daze(Player entity, int timeMS) {
+		
+		entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15, 1, false, false, false));
+		entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15, 1, false, false, false));
+		entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (timeMS/25), 2, false, false, false));
+		entity.sendMessage(ChatColor.RED + "You're dazed and confused!");
+
+	}
 }

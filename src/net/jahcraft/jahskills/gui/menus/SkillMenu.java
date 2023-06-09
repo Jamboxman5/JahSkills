@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.jahcraft.jahskills.skills.Butcher;
+import net.jahcraft.jahskills.skills.Caveman;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
@@ -30,7 +31,7 @@ public class SkillMenu {
 	
 	private static void setButtons(Inventory inv, Player p) {
 		inv.setItem(10, Butcher.getButton(p));
-		inv.setItem(12, Butcher.getButton(p));
+		inv.setItem(12, Caveman.getButton(p));
 		inv.setItem(14, Butcher.getButton(p));
 		inv.setItem(16, Butcher.getButton(p));
 		inv.setItem(28, Butcher.getButton(p));
@@ -92,7 +93,12 @@ public class SkillMenu {
 	public static List<String> getLore(Player player, SkillType type) {
 		List<String> lore = new ArrayList<>();
 		lore.add(Colors.BLUE + "Skill Level: " + Colors.GOLD + SkillManager.getLevel(player, type));
-		lore.add(Colors.BLUE + "Available Perks: " + Colors.GOLD + SkillManager.getAvailablePerks(player, type));
+		if (SkillManager.ownsAllPerks(player, type)) {
+			lore.add(Colors.BLUE + "You've unlocked every perk!");
+		} else {
+			lore.add(Colors.BLUE + "Available Perks: " + Colors.GOLD + SkillManager.getAvailablePerks(player, type));
+
+		}
 		lore.add(Colors.BLUE + "Active Perks: ");
 		int count = 0;
 		for (String line : SkillManager.getActivePerks(player, type)) {
@@ -105,7 +111,7 @@ public class SkillMenu {
 		return lore;
 	}
 	
-	private static String formatActivePerk(String perk) {
+	public static String formatActivePerk(String perk) {
 		return ChatColor.GRAY + "- " + Colors.BRIGHTBLUE + perk;
 	}
 

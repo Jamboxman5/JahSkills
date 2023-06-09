@@ -8,9 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import net.jahcraft.jahskills.perks.Perk;
+import net.jahcraft.jahskills.perks.Perks;
 import net.jahcraft.jahskills.skills.Butcher;
-import net.jahcraft.jahskills.skills.Perk;
-import net.jahcraft.jahskills.skills.Perks;
+import net.jahcraft.jahskills.skills.Caveman;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.Colors;
@@ -125,9 +126,16 @@ public class SkillManager {
 	public static int getAvailablePerks(Player player, SkillType type) {
 		int available = 0;
 		for (Perk perk : getPerks(type)) {
-			if (isPerkAvailable(perk, player, type)) available++;
+			if (isPerkAvailable(perk, player, type) && !hasPerk(player, perk)) available++;
 		}
 		return available;
+	}
+	
+	public static boolean ownsAllPerks(Player player, SkillType type) {
+		for (Perk p : getPerks(type)) {
+			if (!hasPerk(player, p)) return false;
+		}
+		return true;
 	}
 	
 	private static boolean isPerkAvailable(Perk perk, Player player, SkillType type) {
@@ -149,7 +157,7 @@ public class SkillManager {
 		case BUTCHER:
 			return Butcher.getPerks();
 		case CAVEMAN:
-			return Butcher.getPerks();
+			return Caveman.getPerks();
 		case EXPLORER:
 			return Butcher.getPerks();
 		case HARVESTER:
@@ -180,7 +188,7 @@ public class SkillManager {
 		return SkillDatabase.ownedPerks.get(player).contains(perk);
 	}
 
-	private static String getFormattedName(Perk perk) {
+	public static String getFormattedName(Perk perk) {
 		switch(perk) {
 		case BLOODMONEY:
 			return "Blood Money";
@@ -200,6 +208,24 @@ public class SkillManager {
 			return "The Grindr";
 		case THEPUMMELER:
 			return "The Pummeler";
+		case CAVEVISION:
+			return "Cave Vision";
+		case CLIMBINGGEAR:
+			return "Climbing Gear";
+		case DIVININGROD:
+			return "Divining Rod";
+		case EFFICIENTDIGGER:
+			return "Efficient Digger";
+		case MANICMINING:
+			return "Manic Mining";
+		case OREWHISPERER:
+			return "Ore Whisperer";
+		case THERMALINSULATION:
+			return "Thermal Insulation";
+		case WEEPINGCREEPERS:
+			return "Weeping Creepers";
+		case MOTHERLODE:
+			return "Wondrous Bounty";
 		default:
 			return "Error! Placeholder!";
 		}
@@ -211,7 +237,7 @@ public class SkillManager {
 	}
 
 	public static void buyPerk(Player p, Perk perk) {
-		SkillDatabase.activePerks.get(p).add(perk);
+//		SkillDatabase.activePerks.get(p).add(perk);
 		SkillDatabase.ownedPerks.get(p).add(perk);
 		setPoints(p, getPoints(p) - Perks.getPointCost(perk));
 	}
