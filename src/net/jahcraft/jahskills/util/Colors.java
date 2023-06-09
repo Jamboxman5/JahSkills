@@ -11,5 +11,6 @@ public class Colors {
 	public static final String BRIGHTBLUE = ChatColor.of("#00E8FF") + "";
 	public static final String BRIGHTRED = ChatColor.of("#FF0000") + "";
 	public static final String MUDBROWN = ChatColor.of("#c2a389") + "";
+	public static final String DARKBLUE = ChatColor.of("#007AD0") + "";
 
 }
