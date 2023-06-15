@@ -242,12 +242,12 @@ public class SkillManager {
 		setPoints(p, getPoints(p) - Perks.getPointCost(perk));
 	}
 
-	public static void levelUp(Player p, SkillType butcher) {
-		int skillLevel = SkillDatabase.butcherLevel.get(p) + 1;
+	public static void levelUp(Player p, SkillType type) {
+		int skillLevel = SkillDatabase.getSkill(type).get(p) + 1;
 		int skillPoints = SkillDatabase.skillPoints.get(p);
 		int pointsAdded = 1;
 		int newPoints = skillPoints - pointsAdded;
-		SkillDatabase.butcherLevel.put(p, skillLevel);
+		SkillDatabase.getSkill(type).put(p, skillLevel);
 		SkillDatabase.skillPoints.put(p, newPoints);		
 	}
 

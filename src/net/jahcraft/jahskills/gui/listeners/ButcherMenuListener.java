@@ -42,6 +42,7 @@ public static List<Inventory> invs = new ArrayList<>();
 			if (SkillManager.getPoints(p) > 0 && SkillManager.getLevel(p, SkillType.BUTCHER) < 20) {
 				SkillManager.levelUp(p, SkillType.BUTCHER);
 				e.getInventory().setItem(22, Butcher.getSkillButton(p));
+				e.getInventory().setItem(49, SkillMenu.getInfoButton(p));
 			}
 		}
 		else if (e.getSlot() == 36) {
@@ -90,6 +91,8 @@ public static List<Inventory> invs = new ArrayList<>();
 			SkillManager.buyPerk(p, perk);
 		}
 		e.getInventory().setItem(e.getSlot(), Perks.getButton(p, perk));
+		e.getInventory().setItem(49, SkillMenu.getInfoButton(p));
+
 	}
 	
 	int getSlot(Perk p) {

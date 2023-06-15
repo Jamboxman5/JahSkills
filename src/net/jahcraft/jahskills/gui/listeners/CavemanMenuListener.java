@@ -15,7 +15,7 @@ import net.jahcraft.jahskills.gui.menus.SkillMenu;
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.perks.Perks;
-import net.jahcraft.jahskills.skills.Butcher;
+import net.jahcraft.jahskills.skills.Caveman;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 
@@ -39,37 +39,39 @@ public static List<Inventory> invs = new ArrayList<>();
 
 		}
 		else if (e.getSlot() == 22) {
-			if (SkillManager.getPoints(p) > 0 && SkillManager.getLevel(p, SkillType.BUTCHER) < 20) {
-				SkillManager.levelUp(p, SkillType.BUTCHER);
-				e.getInventory().setItem(22, Butcher.getSkillButton(p));
+			if (SkillManager.getPoints(p) > 0 && SkillManager.getLevel(p, SkillType.CAVEMAN) < 20) {
+				SkillManager.levelUp(p, SkillType.CAVEMAN);
+				e.getInventory().setItem(22, Caveman.getSkillButton(p));
+				e.getInventory().setItem(49, SkillMenu.getInfoButton(p));
+
 			}
 		}
 		else if (e.getSlot() == 36) {
-			clickPerk(e,p, Perk.BLOODMONEY);
+			clickPerk(e,p, Perk.MOTHERLODE);
 		}
 		else if (e.getSlot() == 37) {
-			clickPerk(e,p, Perk.SPOILSOFWAR);
+			clickPerk(e,p, Perk.OREWHISPERER);
 		}
 		else if (e.getSlot() == 38) {
-			clickPerk(e,p, Perk.SELFDEFENSE);
+			clickPerk(e,p, Perk.EFFICIENTDIGGER);
 		}
 		else if (e.getSlot() == 39) {
-			clickPerk(e,p, Perk.KILLINGBLOW);
+			clickPerk(e,p, Perk.CAVEVISION);
 		}
 		else if (e.getSlot() == 40) {
-			clickPerk(e,p, Perk.HITMAN);
+			clickPerk(e,p, Perk.CLIMBINGGEAR);
 		}
 		else if (e.getSlot() == 41) {
-			clickPerk(e,p, Perk.THEPUMMELER);
+			clickPerk(e,p, Perk.THERMALINSULATION);
 		}
 		else if (e.getSlot() == 42) {
-			clickPerk(e,p, Perk.SERRATIONS);
+			clickPerk(e,p, Perk.DIVININGROD);
 		}
 		else if (e.getSlot() == 43) {
-			clickPerk(e,p, Perk.BLUNTFORCETRAUMA);
+			clickPerk(e,p, Perk.WEEPINGCREEPERS);
 		}
 		else if (e.getSlot() == 44) {
-			clickPerk(e,p, Perk.THEGRINDR);
+			clickPerk(e,p, Perk.MANICMINING);
 		}
 	}
 	
@@ -86,31 +88,33 @@ public static List<Inventory> invs = new ArrayList<>();
 				SkillManager.activatePerk(p, perk);
 			}
 		}
-		else if (Perks.canBuy(p, SkillType.BUTCHER, perk)) {
+		else if (Perks.canBuy(p, SkillType.CAVEMAN, perk)) {
 			SkillManager.buyPerk(p, perk);
 		}
 		e.getInventory().setItem(e.getSlot(), Perks.getButton(p, perk));
+		e.getInventory().setItem(49, SkillMenu.getInfoButton(p));
+
 	}
 	
 	int getSlot(Perk p) {
 		switch(p) {
-		case BLOODMONEY:
+		case MOTHERLODE:
 			return 36;
-		case BLUNTFORCETRAUMA:
+		case WEEPINGCREEPERS:
 			return 43;
-		case HITMAN:
+		case CLIMBINGGEAR:
 			return 40;
-		case KILLINGBLOW:
+		case CAVEVISION:
 			return 39;
-		case SELFDEFENSE:
+		case EFFICIENTDIGGER:
 			return 38;
-		case SERRATIONS:
+		case DIVININGROD:
 			return 42;
-		case SPOILSOFWAR:
+		case OREWHISPERER:
 			return 37;
-		case THEGRINDR:
+		case MANICMINING:
 			return 44;
-		case THEPUMMELER:
+		case THERMALINSULATION:
 			return 41;
 		default:
 			return -1;

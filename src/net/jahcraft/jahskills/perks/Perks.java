@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.jahcraft.jahskills.skills.Butcher;
+import net.jahcraft.jahskills.skills.Caveman;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
@@ -201,7 +202,7 @@ public class Perks {
 		case MOTHERLODE:
 		{
 			ItemStack button = constructPerkButton(Material.DIAMOND, 
-												   "Wondrous Bounty", 
+												   "Motherlode", 
 												   "Bring home the motherlode and ", 
 												   "finally cross the poverty line!", 
 												   perk, 
@@ -308,6 +309,9 @@ public class Perks {
 
 		for (Perk o : Butcher.getPerks()) {
 			if (o==p) return "Butcher";
+		}
+		for (Perk o : Caveman.getPerks()) {
+			if (o==p) return "Caveman";
 		}
 		
 		return "Unknown";
