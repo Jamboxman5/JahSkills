@@ -20,6 +20,8 @@ import net.md_5.bungee.api.ChatColor;
 
 public class SkillMenu {
 			
+	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
+	
 	public static Inventory getInv(Player player) {
 
 		Inventory inv = Bukkit.createInventory(null, 54, "Skill Menu");
@@ -48,11 +50,11 @@ public class SkillMenu {
 		meta.setDisplayName(" ");
 		List<String> lore = new ArrayList<>();
 		lore.add(Colors.GOLD + "Stats:");
-		lore.add(Colors.PALEBLUE + ChatColor.STRIKETHROUGH + "                   ");
+		lore.add(Colors.PALEBLUE + "" + ChatColor.STRIKETHROUGH + "                   ");
 		lore.add(Colors.BLUE + "Level: " + Colors.GOLD + SkillManager.getLevel(p));
 		lore.add(Colors.BLUE + "Skill Points: " + Colors.GOLD + SkillManager.getPoints(p));
 		lore.add(Colors.BLUE + "Level Progress: " + Colors.GOLD + SkillManager.getProgress(p).multiply(BigDecimal.valueOf(100.0)).intValue() + "%");
-		lore.add(Colors.PALEBLUE + ChatColor.STRIKETHROUGH + "                   ");
+		lore.add(Colors.PALEBLUE + "" + ChatColor.STRIKETHROUGH + "                   ");
 		lore.add("");
 		meta.setLore(lore);
 		i.setItemMeta(meta);
@@ -92,14 +94,19 @@ public class SkillMenu {
 	
 	public static List<String> getLore(Player player, SkillType type) {
 		List<String> lore = new ArrayList<>();
-		lore.add(Colors.BLUE + "Skill Level: " + Colors.GOLD + SkillManager.getLevel(player, type));
+		lore.add(Colors.PALEBLUE + "Skill Level: " + Colors.GOLD + SkillManager.getLevel(player, type));
 		if (SkillManager.ownsAllPerks(player, type)) {
-			lore.add(Colors.BLUE + "You've unlocked every perk!");
+			lore.add(Colors.BRIGHTBLUE + "You've unlocked every perk!");
 		} else {
-			lore.add(Colors.BLUE + "Available Perks: " + Colors.GOLD + SkillManager.getAvailablePerks(player, type));
+			lore.add(Colors.PALEBLUE + "Available Perks: " + Colors.GOLD + SkillManager.getAvailablePerks(player, type));
 
 		}
-		lore.add(Colors.BLUE + "Active Perks: ");
+		lore.add(breaker);
+		if (SkillManager.getMainSkill(player) == type) {
+			lore.add(Colors.PALEBLUE + "This is your main skill.");
+			lore.add(breaker);
+		}
+		lore.add(Colors.PALEBLUE + "Active Perks: ");
 		int count = 0;
 		for (String line : SkillManager.getActivePerks(player, type)) {
 			if (line != null) {
@@ -108,6 +115,11 @@ public class SkillMenu {
 			}
 		}
 		if (count == 0) lore.add(formatActivePerk("None"));
+		if (SkillManager.canClaimSkill(player, type)) {
+			lore.add(breaker);
+			lore.add(ChatColor.GREEN + "Shift click to claim this");
+			lore.add(ChatColor.GREEN + "as your main skill!");
+		}
 		return lore;
 	}
 	

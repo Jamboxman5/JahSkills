@@ -49,6 +49,7 @@ public class ButcherEffects implements Listener {
 		if (baseValue <= 0) return;
 		
 		double multiplier = 1.0 + SkillManager.getLevel(player, SkillType.BUTCHER)/100.0;
+		if (SkillManager.getMainSkill(player) == SkillType.BUTCHER) multiplier *= 1.5;
 		double finalValue = baseValue * multiplier;
 		
 		
@@ -74,7 +75,9 @@ public class ButcherEffects implements Listener {
 		if (e.getDrops() == null) return;
 		if (e.getDrops().size() == 0) return;
 		for (ItemStack i : e.getDrops()) {
-			i.setAmount(i.getAmount()*2);
+			double multiplier = 2;
+			if (SkillManager.getMainSkill(spwAttacker) == SkillType.BUTCHER) multiplier *= 1.5;
+			i.setAmount((int) (i.getAmount()*multiplier));
 		}
 		
 	}
@@ -120,7 +123,10 @@ public class ButcherEffects implements Listener {
 //		p.sendMessage("damage added");
 		selfDefenseCooldown.put(p, System.currentTimeMillis());
 		if (!selfDefenseQueue.contains(p)) return;
-		e.setDamage(e.getDamage()*1.5);
+		double multiplier = 1.5;
+		if (SkillManager.getMainSkill(p) == SkillType.BUTCHER) multiplier *= 1.5;
+
+		e.setDamage(e.getDamage()*multiplier);
 
 //		p.sendMessage("cooldown added");
 		selfDefenseQueue.remove(p);
@@ -143,7 +149,10 @@ public class ButcherEffects implements Listener {
 		if (ent.getHealth() >= ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()/2.0) return;
 		double roll = Math.random()*100.0;
 //		p.sendMessage(roll + "");
-		double barrier = 100.0 - SkillManager.getLevel(p, SkillType.BUTCHER)/2.0;
+		double upperBarrier = SkillManager.getLevel(p, SkillType.BUTCHER)/2.0;
+		if (SkillManager.getMainSkill(p) == SkillType.BUTCHER) upperBarrier *= 1.5;
+		double barrier = 100.0 - upperBarrier;
+		
 //		p.sendMessage(barrier + "");
 		if (roll <= barrier) return;
 		
@@ -190,6 +199,7 @@ public class ButcherEffects implements Listener {
 		
 		int roll = (int) (Math.random()*101);
 		roll += (lootingLevel * 10);
+		if (SkillManager.getMainSkill(hitAttacker) == SkillType.BUTCHER) roll += 20;
 		
 		if (chance == 1) {
 			if (roll > 75) e.getDrops().add(PlayerUtil.getSkull((Player)e.getEntity()));
@@ -217,6 +227,7 @@ public class ButcherEffects implements Listener {
 		if (roll <= barrier) return;
 		
 		int multiplier = SkillManager.getLevel(p, SkillType.BUTCHER)/5;
+		if (SkillManager.getMainSkill(p) == SkillType.BUTCHER) multiplier *= 1.5;
 		int baseTicks = 10;
 		
 		//Actual effect
@@ -241,6 +252,8 @@ public class ButcherEffects implements Listener {
 		if (roll <= barrier) return;
 		
 		int multiplier = SkillManager.getLevel(p, SkillType.BUTCHER)/5;
+		if (SkillManager.getMainSkill(p) == SkillType.BUTCHER) multiplier *= 1.5;
+
 		int baseBleeds = 3;
 		
 		//Actual effect
@@ -266,6 +279,8 @@ public class ButcherEffects implements Listener {
 		if (roll <= barrier) return;
 		
 		int multiplier = SkillManager.getLevel(p, SkillType.BUTCHER)/4;
+		if (SkillManager.getMainSkill(p) == SkillType.BUTCHER) multiplier *= 1.5;
+
 		int baseMS = 1000;
 //		p.sendMessage("ms: " + baseMS * multiplier);
 		//Actual effect
@@ -303,9 +318,12 @@ public class ButcherEffects implements Listener {
 		if (theGrindrAttacker == null) return;
 		if (!SkillManager.activePerk(theGrindrAttacker, Perk.THEGRINDR)) return;
 		if (!theGrindrMobs.contains(e.getEntity())) return;
-		e.setDroppedExp(e.getDroppedExp()*2);
+		double multiplier = 2.0;
+		if (SkillManager.getMainSkill(theGrindrAttacker) == SkillType.BUTCHER) multiplier *= 1.5;
+		e.setDroppedExp((int) (e.getDroppedExp()*multiplier));
+
 		theGrindrMobs.remove(e.getEntity());
-		theGrindrAttacker.sendMessage("Bonus XP Rewarded");
+//		theGrindrAttacker.sendMessage("Bonus XP Rewarded");
 		
 	}
 }

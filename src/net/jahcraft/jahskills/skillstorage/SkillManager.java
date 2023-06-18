@@ -21,14 +21,12 @@ public class SkillManager {
 	public static int getLevel(Player player) {
 		return SkillDatabase.skillLevel.get(player);
 	}
-	
 	public static int getLevel(Player player, SkillType skill) {
 		if (SkillDatabase.getSkill(skill).get(player) == null) {
 			SkillDatabase.getSkill(skill).put(player, 0);
 		}
 		return SkillDatabase.getSkill(skill).get(player);
 	}
-	
 	public static void levelUp(Player p) {
 		int skillLevel = SkillDatabase.skillLevel.get(p) + 1;
 		int skillPoints = SkillDatabase.skillPoints.get(p);
@@ -46,11 +44,9 @@ public class SkillManager {
 			p.sendMessage(Colors.GOLD + "Level up!" + Colors.BRIGHTBLUE + " » " + Colors.BLUE + "You gained " + Colors.BRIGHTBLUE + pointsAdded + Colors.BLUE + " skill point!" + Colors.BRIGHTBLUE + " (Total: " + newPoints + ")");
 		}
 	}
-
 	public static BigDecimal getProgress(Player player) {
 		return SkillDatabase.skillProgress.get(player);
 	}
-	
 	public static void addProgress(Player player, BigDecimal toAdd) {
 		BigDecimal newProgress = SkillDatabase.skillProgress.get(player).add(toAdd);
 		while (newProgress.doubleValue() >= 1) {
@@ -61,24 +57,19 @@ public class SkillManager {
 		ProgressBar.updateBar(player);
 		
 	}
-
 	public static boolean hasPoints(Player player) {
 		return (SkillDatabase.skillPoints.get(player) > 0);
 	}
-
 	public static int getPoints(Player player) {
 		return SkillDatabase.skillPoints.get(player);
 	}
-	
 	public static void setPoints(Player player, int points) {
 		SkillDatabase.skillPoints.put(player, points);
 	}
-	
 	public static void addPoints(Player player, int points) {
 		int ptsBefore = SkillDatabase.skillPoints.get(player);
 		SkillDatabase.skillPoints.put(player, points + ptsBefore);
 	}
-	
 	public static void loadSkills() {
 		
 		setupSkills();
@@ -88,9 +79,9 @@ public class SkillManager {
 			ProgressBar.createBar(p);
 		}
 	}
-	
 	private static void setupSkills() {
 		ProgressBar.bars = new HashMap<>();
+		SkillDatabase.mainSkills = new HashMap<>();
 		SkillDatabase.ownedPerks = new HashMap<>();
 		SkillDatabase.activePerks = new HashMap<>();
 		SkillDatabase.skillLevel = new HashMap<>();
@@ -105,8 +96,8 @@ public class SkillManager {
 		SkillDatabase.naturalistLevel = new HashMap<>();
 		SkillDatabase.survivalistLevel = new HashMap<>();
 	}
-
 	public static void reset(Player target) {
+		SkillDatabase.mainSkills.put(target, null);
 		SkillDatabase.ownedPerks.put(target, new ArrayList<>());
 		SkillDatabase.activePerks.put(target, new ArrayList<>());
 		SkillDatabase.skillLevel.put(target, 1);
@@ -122,7 +113,6 @@ public class SkillManager {
 		SkillDatabase.survivalistLevel.put(target, 0);
 		ProgressBar.updateBar(target);
 	}
-
 	public static int getAvailablePerks(Player player, SkillType type) {
 		int available = 0;
 		for (Perk perk : getPerks(type)) {
@@ -130,28 +120,23 @@ public class SkillManager {
 		}
 		return available;
 	}
-	
 	public static boolean ownsAllPerks(Player player, SkillType type) {
 		for (Perk p : getPerks(type)) {
 			if (!hasPerk(player, p)) return false;
 		}
 		return true;
 	}
-	
 	private static boolean isPerkAvailable(Perk perk, Player player, SkillType type) {
 		if (getLevel(player, type) >= getRequiredAttributeLevel(perk) &&
 			getPoints(player) >= getRequiredPoints(perk)) return true;
 		return false;
 	}
-
 	private static int getRequiredPoints(Perk perk) {
 		return Perks.getPointCost(perk);
 	}
-
 	private static int getRequiredAttributeLevel(Perk perk) {
 		return Perks.getLevelRequirement(perk);
 	}
-
 	public static Perk[] getPerks(SkillType type) {
 		switch(type) {
 		case BUTCHER:
@@ -187,7 +172,6 @@ public class SkillManager {
 	public static boolean hasPerk(Player player, Perk perk) {
 		return SkillDatabase.ownedPerks.get(player).contains(perk);
 	}
-
 	public static String getFormattedName(Perk perk) {
 		switch(perk) {
 		case BLOODMONEY:
@@ -230,18 +214,15 @@ public class SkillManager {
 			return "Error! Placeholder!";
 		}
 	}
-
 	public static boolean activePerk(Player player, Perk perk) {
 		return SkillDatabase.activePerks.get(player).contains(perk);
 
 	}
-
 	public static void buyPerk(Player p, Perk perk) {
 //		SkillDatabase.activePerks.get(p).add(perk);
 		SkillDatabase.ownedPerks.get(p).add(perk);
 		setPoints(p, getPoints(p) - Perks.getPointCost(perk));
 	}
-
 	public static void levelUp(Player p, SkillType type) {
 		int skillLevel = SkillDatabase.getSkill(type).get(p) + 1;
 		int skillPoints = SkillDatabase.skillPoints.get(p);
@@ -249,15 +230,12 @@ public class SkillManager {
 		SkillDatabase.getSkill(type).put(p, skillLevel);
 		SkillDatabase.skillPoints.put(p, newPoints);		
 	}
-
 	public static void deactivatePerk(Player p, Perk perk) {
 		SkillDatabase.activePerks.get(p).remove(perk);
 	}
-
 	public static void activatePerk(Player p, Perk perk) {
 		SkillDatabase.activePerks.get(p).add(perk);
 	}
-
 	public static int getLevelCost(Player p, SkillType type) {
 		if (getLevel(p, type) < 5) return 1;
 		if (getLevel(p, type) < 10) return 2;
@@ -265,13 +243,30 @@ public class SkillManager {
 		if (getLevel(p, type) <= 20) return 5;
 		return 0;
 	}
-
 	public static boolean canLevelUp(Player p, SkillType type) {
 		return (SkillManager.getPoints(p) >= SkillManager.getLevelCost(p, type) && SkillManager.getLevel(p, type) < 20);
 	}
-
 	public static int getPointsToLevelUp(Player p, SkillType type) {
 		return (getLevelCost(p, type) - getPoints(p));
+	}
+	public static boolean canClaimSkill(Player p, SkillType type) {
+		boolean meetsLevelReq = (getLevel(p,type) >= 5);
+		boolean hasEnoughPoints = (getPoints(p) >= 5);
+		boolean hasClaimedSkill = (getMainSkill(p) != null);
+		return meetsLevelReq && hasEnoughPoints && !hasClaimedSkill;
+	}
+	public static SkillType getMainSkill(Player p) {
+		try {
+			return SkillDatabase.mainSkills.get(p);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	public static void setMainSkill(Player p, SkillType type) {
+		SkillDatabase.mainSkills.put(p, type);
+	}
+	public static void removeMainSkill(Player p, SkillType type) {
+		SkillDatabase.mainSkills.put(p, null);
 	}
 
 }

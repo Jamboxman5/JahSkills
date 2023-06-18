@@ -18,9 +18,9 @@ import net.md_5.bungee.api.ChatColor;
 public class Butcher {
 	
 	private static SkillType type = SkillType.BUTCHER;
-	private static String name = Colors.BRIGHTRED + ChatColor.BOLD + "Butcher";
+	private static String name = Colors.BRIGHTRED + "" + ChatColor.BOLD + "Butcher";
 	private static Material displayItem = Material.NETHERITE_SWORD;
-	private static String breaker = Colors.BLUE + ChatColor.STRIKETHROUGH + "                   ";
+	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 
 	public static ItemStack getButton(Player player) {
 		ItemStack button = new ItemStack(displayItem);
@@ -66,12 +66,23 @@ public class Butcher {
 		lore.add(Colors.PALEBLUE + "your level, the more effective ");
 		lore.add(Colors.PALEBLUE + "your perks will be!");
 		lore.add(breaker);
+		if (SkillManager.getMainSkill(p) == type) {
+			lore.add(Colors.PALEBLUE + "This is your main skill!");
+			lore.add(Colors.PALEBLUE + "All perks will be even more effective!");
+			lore.add(breaker);
+		}
 		if (SkillManager.canLevelUp(p, type)) {
 			lore.add(Colors.BRIGHTBLUE + "Click to level up! Cost: " + Colors.GOLD + SkillManager.getLevelCost(p, type));
+			lore.add(Colors.BRIGHTBLUE + "Shift click to auto level up!");
 		} else if (level >= 20) {
 			lore.add(Colors.BRIGHTBLUE + "You've maxed out this skill!");
 		} else if (level < 20) {
-			lore.add(ChatColor.RED + "You need " + SkillManager.getPointsToLevelUp(p, type) + " more points");
+			int morePoints = SkillManager.getPointsToLevelUp(p, type);
+			if (morePoints > 1) {
+				lore.add(ChatColor.RED + "You need " + SkillManager.getPointsToLevelUp(p, type) + " more points");
+			} else {
+				lore.add(ChatColor.RED + "You need " + SkillManager.getPointsToLevelUp(p, type) + " more point");
+			}
 			lore.add(ChatColor.RED + "to level up this skill!");		}
 		
 		meta.setLore(lore);

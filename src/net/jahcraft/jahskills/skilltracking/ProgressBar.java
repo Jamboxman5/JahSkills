@@ -32,7 +32,7 @@ public class ProgressBar {
 	}
 	
 	public static String getTitle(Player player) {
-		return Colors.BRIGHTBLUE + SkillManager.getLevel(player);
+		return Colors.BRIGHTBLUE + "" + SkillManager.getLevel(player);
 	}
 	
 	public static void disposeBars() {

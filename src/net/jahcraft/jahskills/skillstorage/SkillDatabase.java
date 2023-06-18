@@ -35,6 +35,7 @@ public class SkillDatabase {
 	protected static HashMap<Player, Integer> survivalistLevel;
 	protected static HashMap<Player, BigDecimal> skillProgress;
 	protected static HashMap<Player, Integer> skillPoints;
+	protected static HashMap<Player, SkillType> mainSkills;
 	
 	private static Connection getConnection() {
 		Connection con = null;
@@ -79,6 +80,7 @@ public class SkillDatabase {
 	public static void setupDatabase() {
 		Bukkit.getLogger().info("Setting up database...");
 		try {
+			sendUnsafeQuery("create table mainskills(uuid varchar(36), skill varchar(36), primary key ( uuid ) )");
 			sendUnsafeQuery("create table ownedPerks(uuid varchar(36), perk varchar(36))");
 			sendUnsafeQuery("create table activePerks(uuid varchar(36), perk varchar(36))");
 			sendUnsafeQuery("create table butcherlevel(uuid varchar(36), level int, primary key ( uuid ) )");
@@ -105,6 +107,7 @@ public class SkillDatabase {
 	public static void clearDatabase() {
 		Bukkit.getLogger().info("Removing database...");
 		try {
+			sendUnsafeQuery("drop table mainskills");
 			sendUnsafeQuery("drop table ownedPerks");
 			sendUnsafeQuery("drop table activePerks");
 			sendUnsafeQuery("drop table userskills");
@@ -140,7 +143,7 @@ public class SkillDatabase {
 		skillProgress.put(p, BigDecimal.valueOf(Double.parseDouble(getData(p, "userprogress"))));
 		skillPoints.put(p, Integer.parseInt(getData(p, "userpoints")));
 		butcherLevel.put(p, Integer.parseInt(getLevel(p, "butcherlevel")));
-		cavemanLevel.put(p, 1);
+		cavemanLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
 		explorerLevel.put(p, 1);
 		harvesterLevel.put(p, 1);
 		huntsmanLevel.put(p, 1);
@@ -149,10 +152,19 @@ public class SkillDatabase {
 		survivalistLevel.put(p, 1);
 		activePerks.put(p, getActivePerks(p));
 		ownedPerks.put(p, getOwnedPerks(p));
+		mainSkills.put(p, getMainSkill(p));
 		
 		
 	}
 	
+	private static SkillType getMainSkill(Player p) {
+		try {
+			return SkillType.valueOf(getMainSkillData(p));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	private static List<Perk> getActivePerks(Player p) {
 		List<Perk> perks = new ArrayList<>();
 		ResultSet result = null;
@@ -215,6 +227,19 @@ public class SkillDatabase {
 		} 
 	}
 	
+	private static String getMainSkillData(Player p) {
+		try {
+			ResultSet result = sendResultQuery("select skill from " + "mainskills" + " where uuid = '" + p.getUniqueId() + "'");
+			if (result.next()) {
+				return result.getString(1);
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			return null;
+		} 
+	}
+	
 	private static String getLevel(Player p, String table) {
 		try {
 			ResultSet result = sendResultQuery("select level from " + table + " where uuid = '" + p.getUniqueId() + "'");
@@ -231,6 +256,7 @@ public class SkillDatabase {
 	}
 	
 	private static void clearData(Player p) {
+		sendQuery("delete from mainskills where uuid = '" + p.getUniqueId() + "'");
 		sendQuery("delete from ownedPerks where uuid = '" + p.getUniqueId() + "'");
 		sendQuery("delete from activePerks where uuid = '" + p.getUniqueId() + "'");
 		sendQuery("delete from userskills where uuid = '" + p.getUniqueId() + "'");
@@ -268,6 +294,9 @@ public class SkillDatabase {
 		sendQuery("insert into survivalistlevel values ('" + player.getUniqueId() + "', " + SkillManager.getLevel(player, SkillType.SURVIVALIST) + ")");
 		sendQuery("insert into naturalistlevel values ('" + player.getUniqueId() + "', " + SkillManager.getLevel(player, SkillType.NATURALIST) + ")");
 		sendQuery("insert into intellectuallevel values ('" + player.getUniqueId() + "', " + SkillManager.getLevel(player, SkillType.INTELLECTUAL) + ")");
+		if (SkillManager.getMainSkill(player) != null) {
+			sendQuery("insert into mainskills values ('" + player.getUniqueId() + "', '" + SkillManager.getMainSkill(player).toString() + "')");
+		}
 
 	}
 

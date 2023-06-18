@@ -20,7 +20,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Perks {
 	
-	private static String breaker = Colors.BLUE + ChatColor.STRIKETHROUGH + "                   ";
+	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 	private static String active = ChatColor.GREEN + "Active Perk! Click to Deactivate.";
 	private static String inactive = Colors.BRIGHTRED + "Inactive Perk! Click to Activate.";
 	private static String requirements = Colors.PALEBLUE + "Requirements:";
