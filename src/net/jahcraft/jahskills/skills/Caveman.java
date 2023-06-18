@@ -66,12 +66,13 @@ public class Caveman {
 		lore.add(Colors.PALEBLUE + "your level, the more effective ");
 		lore.add(Colors.PALEBLUE + "your perks will be!");
 		lore.add(breaker);
-		if (level < 20 && SkillManager.hasPoints(p)) {
-			lore.add(Colors.BRIGHTBLUE + "Click to level up!");
+		if (SkillManager.canLevelUp(p, type)) {
+			lore.add(Colors.BRIGHTBLUE + "Click to level up! Cost: " + Colors.GOLD + SkillManager.getLevelCost(p, type));
 		} else if (level >= 20) {
 			lore.add(Colors.BRIGHTBLUE + "You've maxed out this skill!");
 		} else if (level < 20) {
-			lore.add(ChatColor.RED + "You can't afford to level up this skill!");
+			lore.add(ChatColor.RED + "You need " + SkillManager.getPointsToLevelUp(p, type) + " more points");
+			lore.add(ChatColor.RED + "to level up this skill!");
 		}
 		
 		meta.setLore(lore);

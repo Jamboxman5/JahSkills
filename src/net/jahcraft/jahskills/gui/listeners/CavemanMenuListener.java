@@ -39,7 +39,7 @@ public static List<Inventory> invs = new ArrayList<>();
 
 		}
 		else if (e.getSlot() == 22) {
-			if (SkillManager.getPoints(p) > 0 && SkillManager.getLevel(p, SkillType.CAVEMAN) < 20) {
+			if (SkillManager.canLevelUp(p, SkillType.CAVEMAN)) {
 				SkillManager.levelUp(p, SkillType.CAVEMAN);
 				e.getInventory().setItem(22, Caveman.getSkillButton(p));
 				e.getInventory().setItem(49, SkillMenu.getInfoButton(p));

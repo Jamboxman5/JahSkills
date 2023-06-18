@@ -245,8 +245,7 @@ public class SkillManager {
 	public static void levelUp(Player p, SkillType type) {
 		int skillLevel = SkillDatabase.getSkill(type).get(p) + 1;
 		int skillPoints = SkillDatabase.skillPoints.get(p);
-		int pointsAdded = 1;
-		int newPoints = skillPoints - pointsAdded;
+		int newPoints = skillPoints - getLevelCost(p, type);
 		SkillDatabase.getSkill(type).put(p, skillLevel);
 		SkillDatabase.skillPoints.put(p, newPoints);		
 	}
@@ -257,6 +256,22 @@ public class SkillManager {
 
 	public static void activatePerk(Player p, Perk perk) {
 		SkillDatabase.activePerks.get(p).add(perk);
+	}
+
+	public static int getLevelCost(Player p, SkillType type) {
+		if (getLevel(p, type) < 5) return 1;
+		if (getLevel(p, type) < 10) return 2;
+		if (getLevel(p, type) < 15) return 3;
+		if (getLevel(p, type) <= 20) return 5;
+		return 0;
+	}
+
+	public static boolean canLevelUp(Player p, SkillType type) {
+		return (SkillManager.getPoints(p) >= SkillManager.getLevelCost(p, type) && SkillManager.getLevel(p, type) < 20);
+	}
+
+	public static int getPointsToLevelUp(Player p, SkillType type) {
+		return (getLevelCost(p, type) - getPoints(p));
 	}
 
 }

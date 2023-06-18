@@ -258,13 +258,13 @@ public class Perks {
 	public static int getPointCost(Perk p) {
 		switch(p) {
 		case BLOODMONEY:
-			return 6;
+			return 9;
 		case BLUNTFORCETRAUMA:
 			return 3;
 		case HITMAN:
 			return 12;
 		case KILLINGBLOW:
-			return 6;
+			return 15;
 		case SELFDEFENSE:
 			return 3;
 		case SERRATIONS:
@@ -272,7 +272,7 @@ public class Perks {
 		case SPOILSOFWAR:
 			return 6;
 		case THEGRINDR:
-			return 3;
+			return 9;
 		case THEPUMMELER:
 			return 3;
 		default:
@@ -283,13 +283,13 @@ public class Perks {
 	public static int getLevelRequirement(Perk p) {
 		switch(p) {
 		case BLOODMONEY:
-			return 5;
+			return 10;
 		case BLUNTFORCETRAUMA:
 			return 5;
 		case HITMAN:
 			return 20;
 		case KILLINGBLOW:
-			return 10;
+			return 20;
 		case SELFDEFENSE:
 			return 10;
 		case SERRATIONS:
