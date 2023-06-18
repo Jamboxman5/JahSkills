@@ -1,9 +1,13 @@
 package net.jahcraft.jahskills.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
@@ -12,7 +16,28 @@ import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
 
-public class SkillDB implements CommandExecutor {
+public class SkillDB implements CommandExecutor, TabCompleter {
+	
+	List<String> arguments1 = new ArrayList<>();
+	
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		if (!sender.hasPermission("jahskills.admin")) return null;
+		if (arguments1.isEmpty()) {
+			arguments1.add("reset");
+			arguments1.add("clear");
+			arguments1.add("givepoints");
+		}
+		List<String> result = new ArrayList<>();
+		if (args.length == 1) {
+			for (String s : arguments1) {
+				if (s.toLowerCase().startsWith(args[0])) {
+					result.add(s);
+				}
+			}
+			return result;
+		}
+		return null;
+	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
@@ -71,9 +96,9 @@ public class SkillDB implements CommandExecutor {
 		int pts = Integer.parseInt(args[2]);
 		
 		SkillManager.addPoints(target, pts);
-		target.sendMessage(ChatColor.RED + "You've been gifted " + pts + " skill points.");
+		target.sendMessage(Colors.BRIGHTBLUE + "You've been gifted " + Colors.GOLD + pts + Colors.BRIGHTBLUE + " skill points!");
 		if (target != (Player) sender) {
-			sender.sendMessage(Colors.BLUE + "They've been gifted " + pts + " skill points.");
+			sender.sendMessage(Colors.BLUE + "They've been gifted " + Colors.GOLD + pts + Colors.BRIGHTBLUE + " skill points.");
 		}
 		ProgressBar.updateBar(target);		
 	}

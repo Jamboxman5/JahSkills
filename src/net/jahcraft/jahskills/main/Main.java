@@ -2,9 +2,11 @@ package net.jahcraft.jahskills.main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.jahcraft.jahskills.commands.ClaimMainSkill;
 import net.jahcraft.jahskills.commands.KnockOut;
 import net.jahcraft.jahskills.commands.SkillDB;
 import net.jahcraft.jahskills.commands.SkillQuery;
@@ -55,9 +57,11 @@ public class Main extends JavaPlugin {
 					getServer().getPluginManager().registerEvents(new ButcherEffects(), this);
 					
 					getCommand("skilldb").setExecutor((CommandExecutor)new SkillDB());
+					getCommand("skilldb").setTabCompleter((TabCompleter)new SkillDB());
 					getCommand("skillquery").setExecutor((CommandExecutor)new SkillQuery());
 					getCommand("skills").setExecutor((CommandExecutor)new Skills());
 					getCommand("knockout").setExecutor((CommandExecutor)new KnockOut());
+					getCommand("claimmainskill").setExecutor((CommandExecutor)new ClaimMainSkill());
 
 				} catch (Exception e) {
 
