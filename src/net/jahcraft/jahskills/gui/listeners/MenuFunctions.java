@@ -16,6 +16,7 @@ import net.jahcraft.jahskills.perks.Perks;
 import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
+import net.md_5.bungee.api.ChatColor;
 
 public class MenuFunctions {
 	
@@ -30,7 +31,7 @@ public class MenuFunctions {
 			}
 			e.getInventory().setItem(22, Butcher.getSkillButton(p));
 			e.getInventory().setItem(49, SkillMenu.getInfoButton(p));
-			
+			p.sendMessage(ChatColor.RED + "You have " + SkillManager.getPoints(p) + " points remaining.");
 		}
 	}
 	
@@ -49,6 +50,7 @@ public class MenuFunctions {
 		}
 		else if (Perks.canBuy(p, type, perk)) {
 			SkillManager.buyPerk(p, perk);
+			p.sendMessage(ChatColor.RED + "You have " + SkillManager.getPoints(p) + " points remaining.");
 		}
 		e.getInventory().setItem(e.getSlot(), Perks.getButton(p, perk));
 		e.getInventory().setItem(49, SkillMenu.getInfoButton(p));

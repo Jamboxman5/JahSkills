@@ -94,7 +94,11 @@ public class SkillMenu {
 	
 	public static List<String> getLore(Player player, SkillType type) {
 		List<String> lore = new ArrayList<>();
-		lore.add(Colors.PALEBLUE + "Skill Level: " + Colors.GOLD + SkillManager.getLevel(player, type));
+		if (SkillManager.getLevel(player, type) == 20) {
+			lore.add(Colors.BRIGHTBLUE + "You've maxed out this skill!");
+		} else {
+			lore.add(Colors.PALEBLUE + "Skill Level: " + Colors.GOLD + SkillManager.getLevel(player, type));
+		}
 		if (SkillManager.ownsAllPerks(player, type)) {
 			lore.add(Colors.BRIGHTBLUE + "You've unlocked every perk!");
 		} else {
