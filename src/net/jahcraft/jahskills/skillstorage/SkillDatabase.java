@@ -147,9 +147,9 @@ public class SkillDatabase {
 		explorerLevel.put(p, Integer.parseInt(getLevel(p, "explorerlevel")));
 		harvesterLevel.put(p, Integer.parseInt(getLevel(p, "harvesterlevel")));
 		huntsmanLevel.put(p, Integer.parseInt(getLevel(p, "huntsmanlevel")));
-		intellectualLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
-		naturalistLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
-		survivalistLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
+		intellectualLevel.put(p, Integer.parseInt(getLevel(p, "intellectuallevel")));
+		naturalistLevel.put(p, Integer.parseInt(getLevel(p, "naturalistlevel")));
+		survivalistLevel.put(p, Integer.parseInt(getLevel(p, "survivalistlevel")));
 		activePerks.put(p, getActivePerks(p));
 		ownedPerks.put(p, getOwnedPerks(p));
 		mainSkills.put(p, getMainSkill(p));
