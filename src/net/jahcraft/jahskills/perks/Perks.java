@@ -450,7 +450,7 @@ public class Perks {
 		}
 		case LUCKYLOOTER:
 		{
-			ItemStack button = constructPerkButton(Material.CHORUS_FRUIT, 
+			ItemStack button = constructPerkButton(Material.DIAMOND, 
 												   "Lucky Looter", 
 												   "Get more treasure from the chests", 
 												   "you loot in your travels!", 
