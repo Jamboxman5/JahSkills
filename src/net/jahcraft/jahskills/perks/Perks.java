@@ -672,6 +672,16 @@ public class Perks {
 												   player);
 			return button;
 		}
+		case THEWASTELANDER:
+		{
+			ItemStack button = constructPerkButton(Material.DEAD_BUSH, 
+												   "The Wastelander", 
+												   "Turn your back on nature and kill", 
+												   "every plant you come near.",
+												   perk, 
+												   player);
+			return button;
+		}
 		case THEYFLYNOW:
 		{
 			ItemStack button = constructPerkButton(Material.ELYTRA, 
