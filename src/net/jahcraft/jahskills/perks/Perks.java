@@ -13,7 +13,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.Caveman;
+import net.jahcraft.jahskills.skills.Explorer;
+import net.jahcraft.jahskills.skills.Harvester;
+import net.jahcraft.jahskills.skills.Huntsman;
+import net.jahcraft.jahskills.skills.Intellectual;
+import net.jahcraft.jahskills.skills.Naturalist;
 import net.jahcraft.jahskills.skills.SkillType;
+import net.jahcraft.jahskills.skills.Survivalist;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
@@ -1109,6 +1115,24 @@ public class Perks {
 		}
 		for (Perk o : Caveman.getPerks()) {
 			if (o==p) return "Caveman";
+		}
+		for (Perk o : Naturalist.getPerks()) {
+			if (o==p) return "Naturalist";
+		}
+		for (Perk o : Huntsman.getPerks()) {
+			if (o==p) return "Huntsman";
+		}
+		for (Perk o : Harvester.getPerks()) {
+			if (o==p) return "Harvester";
+		}
+		for (Perk o : Intellectual.getPerks()) {
+			if (o==p) return "Intellectual";
+		}
+		for (Perk o : Explorer.getPerks()) {
+			if (o==p) return "Explorer";
+		}
+		for (Perk o : Survivalist.getPerks()) {
+			if (o==p) return "Survivalist";
 		}
 		
 		return "Unknown";
