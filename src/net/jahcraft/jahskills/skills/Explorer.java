@@ -19,7 +19,7 @@ public class Explorer {
 	
 	private static SkillType type = SkillType.EXPLORER;
 	private static String name = Colors.BEIGE + "" + ChatColor.BOLD + "Explorer";
-	private static Material displayItem = Material.MAP;
+	private static Material displayItem = Material.FILLED_MAP;
 	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 
 	public static ItemStack getButton(Player player) {
