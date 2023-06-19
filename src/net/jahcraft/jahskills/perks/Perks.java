@@ -251,7 +251,7 @@ public class Perks {
 		}
 		case BAREHANDEDARCHERY:
 		{
-			ItemStack button = constructPerkButton(Material.ARROW, 
+			ItemStack button = constructPerkButton(Material.RABBIT_FOOT, 
 												   "Bare Handed Archery", 
 												   "Who needs a bow? Grab that arrow", 
 												   "and throw it yourself!", 

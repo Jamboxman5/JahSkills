@@ -19,7 +19,7 @@ public class Huntsman {
 	
 	private static SkillType type = SkillType.HUNTSMAN;
 	private static String name = ChatColor.RED + "" + ChatColor.BOLD + "Huntsman";
-	private static Material displayItem = Material.TIPPED_ARROW;
+	private static Material displayItem = Material.ARROW;
 	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 
 	public static ItemStack getButton(Player player) {
