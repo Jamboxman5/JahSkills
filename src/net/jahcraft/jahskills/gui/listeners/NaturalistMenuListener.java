@@ -32,31 +32,31 @@ public static List<Inventory> invs = new ArrayList<>();
 			MenuFunctions.skillLevelUpButton(p, type, e);
 		}
 		else if (e.getSlot() == 36) {
-			MenuFunctions.clickPerk(e,type,p, Perk.MOTHERLODE);
+			MenuFunctions.clickPerk(e,type,p, Perk.TREECAPITATOR);
 		}
 		else if (e.getSlot() == 37) {
-			MenuFunctions.clickPerk(e,type,p, Perk.OREWHISPERER);
+			MenuFunctions.clickPerk(e,type,p, Perk.LUMBERJACK);
 		}
 		else if (e.getSlot() == 38) {
-			MenuFunctions.clickPerk(e,type,p, Perk.EFFICIENTDIGGER);
+			MenuFunctions.clickPerk(e,type,p, Perk.MUSHROOMMAN);
 		}
 		else if (e.getSlot() == 39) {
-			MenuFunctions.clickPerk(e,type,p, Perk.CAVEVISION);
+			MenuFunctions.clickPerk(e,type,p, Perk.MEGAEXCAVATOR);
 		}
 		else if (e.getSlot() == 40) {
-			MenuFunctions.clickPerk(e,type,p, Perk.CLIMBINGGEAR);
+			MenuFunctions.clickPerk(e,type,p, Perk.BIGGERSHOVEL);
 		}
 		else if (e.getSlot() == 41) {
-			MenuFunctions.clickPerk(e,type,p, Perk.THERMALINSULATION);
+			MenuFunctions.clickPerk(e,type,p, Perk.NATURESTOUCH);
 		}
 		else if (e.getSlot() == 42) {
-			MenuFunctions.clickPerk(e,type,p, Perk.DIVININGROD);
+			MenuFunctions.clickPerk(e,type,p, Perk.ISPEAKFORTHETREES);
 		}
 		else if (e.getSlot() == 43) {
-			MenuFunctions.clickPerk(e,type,p, Perk.SUPERIORSMELTING);
+			MenuFunctions.clickPerk(e,type,p, Perk.THEWASTELANDER);
 		}
 		else if (e.getSlot() == 44) {
-			MenuFunctions.clickPerk(e,type,p, Perk.MANICMINING);
+			MenuFunctions.clickPerk(e,type,p, Perk.MANVSWILD);
 		}
 	}
 

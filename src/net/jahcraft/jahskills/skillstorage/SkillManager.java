@@ -12,7 +12,13 @@ import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.perks.Perks;
 import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.Caveman;
+import net.jahcraft.jahskills.skills.Explorer;
+import net.jahcraft.jahskills.skills.Harvester;
+import net.jahcraft.jahskills.skills.Huntsman;
+import net.jahcraft.jahskills.skills.Intellectual;
+import net.jahcraft.jahskills.skills.Naturalist;
 import net.jahcraft.jahskills.skills.SkillType;
+import net.jahcraft.jahskills.skills.Survivalist;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.Colors;
 
@@ -144,17 +150,17 @@ public class SkillManager {
 		case CAVEMAN:
 			return Caveman.getPerks();
 		case EXPLORER:
-			return Butcher.getPerks();
+			return Explorer.getPerks();
 		case HARVESTER:
-			return Butcher.getPerks();
+			return Harvester.getPerks();
 		case HUNTSMAN:
-			return Butcher.getPerks();
+			return Huntsman.getPerks();
 		case INTELLECTUAL:
-			return Butcher.getPerks();
+			return Intellectual.getPerks();
 		case NATURALIST:
-			return Butcher.getPerks();
+			return Naturalist.getPerks();
 		case SURVIVALIST:
-			return Butcher.getPerks();
+			return Survivalist.getPerks();
 		}
 		return null;
 	}
@@ -210,8 +216,117 @@ public class SkillManager {
 			return "Superior Smelting";
 		case MOTHERLODE:
 			return "Motherlode";
+		case AGRICULTURALSTUDIES:
+			return "Agricultural Studies";
+		case ARTFULDODGER:
+			return "Artful Dodger";
+		case ARTOFTHEDEAL:
+			return "Art of the Deal";
+		case ATTACKOFTHECLONES:
+			return "Attack of the Clones";
+		case BAREHANDEDARCHERY:
+			return "Bare Handed Archery";
+		case BETTERMENDER:
+			return "Better Mender";
+		case BIGGERSHOVEL:
+			return "Bigger Shovel";
+		case BOMBTHROWER:
+			return "Bomb Thrower";
+		case CALLOFTHEWILD:
+			return "Call of the Wild";
+		case CHRISKYLE:
+			return "Chris Kyle";
+		case EMTCERTIFIED:
+			return "EMT Certified";
+		case EXPLOSIVESHOTS:
+			return "Explosive Shots";
+		case FAMILYRECIPES:
+			return "Family Recipes";
+		case FARMINGFRENZY:
+			return "Farming Frenzy";
+		case FERTILITYTREATMENT:
+			return "Fertility Treatment";
+		case FERTILIZATION:
+			return "Fertilization";
+		case FREAKISHFARMING:
+			return "Freakish Farming";
+		case GORDONRAMSAY:
+			return "Gordon Ramsay";
+		case GREENTHUMB:
+			return "Green Thumb";
+		case INCENDIARYROUNDS:
+			return "Incendiary Rounds";
+		case INDUSTRIALREVOLUTION:
+			return "Industrial Revolution";
+		case ISPEAKFORTHETREES:
+			return "I Speak for the Trees";
+		case KENTUCKYDERBY:
+			return "Kentucky Derby";
+		case LUCKYLOOTER:
+			return "Lucky Looter";
+		case LUMBERJACK:
+			return "Lumberjack";
+		case MAGICMAN:
+			return "Magic Man";
+		case MAJORSWINDLER:
+			return "Major Swindler";
+		case MANVSWILD:
+			return "Man vs. Wild";
+		case MEGAEXCAVATOR:
+			return "Mega Excavator";
+		case MUSHROOMMAN:
+			return "Mushroom Man";
+		case NATURESTOUCH:
+			return "Nature's Touch";
+		case NAVIGATIONALSKILLS:
+			return "Navigational Skills";
+		case NEPTUNEFLIGHT:
+			return "Neptune Flight";
+		case PALEOLITHICPROWESS:
+			return "Paleolithic Prowess";
+		case PIGWHISPERER:
+			return "Pig Whisperer";
+		case QUICKLEARNER:
+			return "Quick Learner";
+		case REPLANTER:
+			return "Replanter";
+		case RESURRECTION:
+			return "Resurrection";
+		case SALVAGEOPERATION:
+			return "Salvage Operation";
+		case SLAUGHTERHOUSE:
+			return "Slaughterhouse";
+		case SNIPERSENSE:
+			return "Sniper Sense";
+		case SUPERFOODS:
+			return "Superfoods";
+		case SUPERSAIYAN:
+			return "Super Saiyan";
+		case SWEETMEATS:
+			return "Sweet Meats";
+		case SWIFTSTEPS:
+			return "Swift Steps";
+		case THEBIRDSANDTHEBEES:
+			return "The Birds & The Bees";
+		case THEWASTELANDER:
+			return "The Wastelander";
+		case THEYFLYNOW:
+			return "They Fly Now";
+		case TREASURESNIFFER:
+			return "Treasure Sniffer";
+		case TREECAPITATOR:
+			return "TreeCapitator";
+		case UNMATCHEDWILLPOWER:
+			return "Unmatched Willpower";
+		case USETHEFORCE:
+			return "Use the Force";
+		case XPREBATES:
+			return "XP Rebates";
+		case YOUMISSEDME:
+			return "You Missed Me";
 		default:
-			return "Error! Placeholder!";
+			return "Placeholder!";
+		
 		}
 	}
 	public static boolean activePerk(Player player, Perk perk) {

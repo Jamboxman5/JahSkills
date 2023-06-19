@@ -18,7 +18,7 @@ import net.md_5.bungee.api.ChatColor;
 public class Explorer {
 	
 	private static SkillType type = SkillType.EXPLORER;
-	private static String name = Colors.BEIGE + "" + ChatColor.BOLD + "Naturalist";
+	private static String name = Colors.BEIGE + "" + ChatColor.BOLD + "Explorer";
 	private static Material displayItem = Material.MAP;
 	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 
