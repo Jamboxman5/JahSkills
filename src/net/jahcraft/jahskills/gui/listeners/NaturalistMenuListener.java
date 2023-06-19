@@ -12,11 +12,11 @@ import org.bukkit.inventory.Inventory;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.skills.SkillType;
 
-public class CavemanMenuListener implements Listener {
+public class NaturalistMenuListener implements Listener {
 	
 public static List<Inventory> invs = new ArrayList<>();
 	
-	SkillType type = SkillType.CAVEMAN;
+	SkillType type = SkillType.NATURALIST;
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import net.jahcraft.jahskills.gui.animations.SkillMenuAnim;
 import net.jahcraft.jahskills.gui.menus.SkillMenu;
@@ -14,6 +15,8 @@ import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.perks.Perks;
 import net.jahcraft.jahskills.skills.Butcher;
+import net.jahcraft.jahskills.skills.Caveman;
+import net.jahcraft.jahskills.skills.Naturalist;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.md_5.bungee.api.ChatColor;
@@ -29,10 +32,34 @@ public class MenuFunctions {
 			} else {
 				SkillManager.levelUp(p, type);
 			}
-			e.getInventory().setItem(22, Butcher.getSkillButton(p));
+			e.getInventory().setItem(22, getSkillButton(p, type));
 			e.getInventory().setItem(49, SkillMenu.getInfoButton(p));
 			p.sendMessage(ChatColor.RED + "You have " + SkillManager.getPoints(p) + " points remaining.");
 		}
+	}
+	
+	public static ItemStack getSkillButton(Player p, SkillType type) {
+		switch(type) {
+		case BUTCHER:
+			return Butcher.getSkillButton(p);
+		case CAVEMAN:
+			return Caveman.getSkillButton(p);
+		case EXPLORER:
+			break;
+		case HARVESTER:
+			break;
+		case HUNTSMAN:
+			break;
+		case INTELLECTUAL:
+			break;
+		case NATURALIST:
+			return Naturalist.getSkillButton(p);
+		case SURVIVALIST:
+			break;
+		default:
+			break;
+		}
+		return null;
 	}
 	
 	static void clickPerk(InventoryClickEvent e, SkillType type, Player p, Perk perk) {
@@ -79,7 +106,7 @@ public class MenuFunctions {
 			return 41;
 		case MOTHERLODE:
 			return 36;
-		case WEEPINGCREEPERS:
+		case SUPERIORSMELTING:
 			return 43;
 		case CLIMBINGGEAR:
 			return 40;

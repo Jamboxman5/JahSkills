@@ -144,12 +144,12 @@ public class SkillDatabase {
 		skillPoints.put(p, Integer.parseInt(getData(p, "userpoints")));
 		butcherLevel.put(p, Integer.parseInt(getLevel(p, "butcherlevel")));
 		cavemanLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
-		explorerLevel.put(p, 1);
-		harvesterLevel.put(p, 1);
-		huntsmanLevel.put(p, 1);
-		intellectualLevel.put(p, 1);
-		naturalistLevel.put(p, 1);
-		survivalistLevel.put(p, 1);
+		explorerLevel.put(p, Integer.parseInt(getLevel(p, "explorerlevel")));
+		harvesterLevel.put(p, Integer.parseInt(getLevel(p, "harvesterlevel")));
+		huntsmanLevel.put(p, Integer.parseInt(getLevel(p, "huntsmanlevel")));
+		intellectualLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
+		naturalistLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
+		survivalistLevel.put(p, Integer.parseInt(getLevel(p, "cavemanlevel")));
 		activePerks.put(p, getActivePerks(p));
 		ownedPerks.put(p, getOwnedPerks(p));
 		mainSkills.put(p, getMainSkill(p));

@@ -206,10 +206,10 @@ public class SkillManager {
 			return "Ore Whisperer";
 		case THERMALINSULATION:
 			return "Thermal Insulation";
-		case WEEPINGCREEPERS:
-			return "Weeping Creepers";
+		case SUPERIORSMELTING:
+			return "Superior Smelting";
 		case MOTHERLODE:
-			return "Wondrous Bounty";
+			return "Motherlode";
 		default:
 			return "Error! Placeholder!";
 		}

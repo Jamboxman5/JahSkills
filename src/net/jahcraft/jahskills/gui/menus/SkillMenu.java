@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.Caveman;
+import net.jahcraft.jahskills.skills.Naturalist;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
@@ -34,7 +35,7 @@ public class SkillMenu {
 	private static void setButtons(Inventory inv, Player p) {
 		inv.setItem(10, Butcher.getButton(p));
 		inv.setItem(12, Caveman.getButton(p));
-		inv.setItem(14, Butcher.getButton(p));
+		inv.setItem(14, Naturalist.getButton(p));
 		inv.setItem(16, Butcher.getButton(p));
 		inv.setItem(28, Butcher.getButton(p));
 		inv.setItem(30, Butcher.getButton(p));
@@ -50,11 +51,11 @@ public class SkillMenu {
 		meta.setDisplayName(" ");
 		List<String> lore = new ArrayList<>();
 		lore.add(Colors.GOLD + "Stats:");
-		lore.add(Colors.PALEBLUE + "" + ChatColor.STRIKETHROUGH + "                   ");
-		lore.add(Colors.BLUE + "Level: " + Colors.GOLD + SkillManager.getLevel(p));
-		lore.add(Colors.BLUE + "Skill Points: " + Colors.GOLD + SkillManager.getPoints(p));
-		lore.add(Colors.BLUE + "Level Progress: " + Colors.GOLD + SkillManager.getProgress(p).multiply(BigDecimal.valueOf(100.0)).intValue() + "%");
-		lore.add(Colors.PALEBLUE + "" + ChatColor.STRIKETHROUGH + "                   ");
+		lore.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ");
+		lore.add(Colors.PALEBLUE + "Level: " + Colors.GOLD + SkillManager.getLevel(p));
+		lore.add(Colors.PALEBLUE + "Skill Points: " + Colors.GOLD + SkillManager.getPoints(p));
+		lore.add(Colors.PALEBLUE + "Level Progress: " + Colors.GOLD + SkillManager.getProgress(p).multiply(BigDecimal.valueOf(100.0)).intValue() + "%");
+		lore.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ");
 		lore.add("");
 		meta.setLore(lore);
 		i.setItemMeta(meta);

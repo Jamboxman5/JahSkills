@@ -189,12 +189,12 @@ public class Perks {
 												   player);
 			return button;
 		}
-		case WEEPINGCREEPERS:
+		case SUPERIORSMELTING:
 		{
-			ItemStack button = constructPerkButton(Material.CREEPER_HEAD, 
-												   "Weeping Creepers", 
-												   "Keep a feline companion in the", 
-												   "caves to keep the creepers at bay.", 
+			ItemStack button = constructPerkButton(Material.BLAST_FURNACE, 
+												   "Superior Smelting", 
+												   "You can get twice the yield", 
+												   "when smelting your raw ores!", 
 												   perk, 
 												   player);
 			return button;

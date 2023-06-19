@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import net.jahcraft.jahskills.gui.animations.SubMenuAnim;
 import net.jahcraft.jahskills.gui.menus.ButcherMenu;
 import net.jahcraft.jahskills.gui.menus.CavemanMenu;
+import net.jahcraft.jahskills.gui.menus.NaturalistMenu;
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
@@ -53,6 +54,15 @@ public class SkillMenuListener implements Listener {
 			invs.remove(e.getClickedInventory());
 			Inventory inv = CavemanMenu.getInv((Player)e.getWhoClicked());
 			CavemanMenuListener.invs.add(inv);
+			e.getWhoClicked().openInventory(inv);
+			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+
+		}
+		
+		if (e.getSlot() == 14) {
+			invs.remove(e.getClickedInventory());
+			Inventory inv = NaturalistMenu.getInv((Player)e.getWhoClicked());
+			NaturalistMenuListener.invs.add(inv);
 			e.getWhoClicked().openInventory(inv);
 			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
 

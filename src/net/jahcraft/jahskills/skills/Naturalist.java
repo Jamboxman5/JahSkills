@@ -15,11 +15,11 @@ import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
 
-public class Caveman {
+public class Naturalist {
 	
-	private static SkillType type = SkillType.CAVEMAN;
-	private static String name = Colors.MUDBROWN + "" + ChatColor.BOLD + "Caveman";
-	private static Material displayItem = Material.DIAMOND_ORE;
+	private static SkillType type = SkillType.NATURALIST;
+	private static String name = Colors.NATUREGREEN + "" + ChatColor.BOLD + "Naturalist";
+	private static Material displayItem = Material.GRASS_BLOCK;
 	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 
 	public static ItemStack getButton(Player player) {
@@ -38,15 +38,15 @@ public class Caveman {
 	
 	public static Perk[] getPerks() {
 		Perk[] perks = {
-		Perk.MOTHERLODE,
-		Perk.OREWHISPERER,
-		Perk.EFFICIENTDIGGER,
-		Perk.CAVEVISION,
-		Perk.CLIMBINGGEAR,
-		Perk.THERMALINSULATION,
-		Perk.DIVININGROD,
-		Perk.SUPERIORSMELTING,
-		Perk.MANICMINING};
+		Perk.BLOODMONEY,
+		Perk.SPOILSOFWAR,
+		Perk.SELFDEFENSE,
+		Perk.KILLINGBLOW,
+		Perk.HITMAN,
+		Perk.THEPUMMELER,
+		Perk.SERRATIONS,
+		Perk.BLUNTFORCETRAUMA,
+		Perk.THEGRINDR};
 		return perks;
 	}
 
@@ -68,7 +68,7 @@ public class Caveman {
 		lore.add(breaker);
 		if (SkillManager.getMainSkill(p) == type) {
 			lore.add(Colors.PALEBLUE + "This is your main skill!");
-			lore.add(Colors.PALEBLUE + "All perks will be twice as effective!");
+			lore.add(Colors.PALEBLUE + "All perks will be even more effective!");
 			lore.add(breaker);
 		}
 		if (SkillManager.canLevelUp(p, type)) {
@@ -83,8 +83,7 @@ public class Caveman {
 			} else {
 				lore.add(ChatColor.RED + "You need " + SkillManager.getPointsToLevelUp(p, type) + " more point");
 			}
-			lore.add(ChatColor.RED + "to level up this skill!");
-		}
+			lore.add(ChatColor.RED + "to level up this skill!");		}
 		
 		meta.setLore(lore);
 		meta.setDisplayName(name);
