@@ -13,8 +13,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.Caveman;
+import net.jahcraft.jahskills.skills.Explorer;
+import net.jahcraft.jahskills.skills.Harvester;
+import net.jahcraft.jahskills.skills.Huntsman;
+import net.jahcraft.jahskills.skills.Intellectual;
 import net.jahcraft.jahskills.skills.Naturalist;
 import net.jahcraft.jahskills.skills.SkillType;
+import net.jahcraft.jahskills.skills.Survivalist;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
@@ -36,11 +41,11 @@ public class SkillMenu {
 		inv.setItem(10, Butcher.getButton(p));
 		inv.setItem(12, Caveman.getButton(p));
 		inv.setItem(14, Naturalist.getButton(p));
-		inv.setItem(16, Butcher.getButton(p));
-		inv.setItem(28, Butcher.getButton(p));
-		inv.setItem(30, Butcher.getButton(p));
-		inv.setItem(32, Butcher.getButton(p));
-		inv.setItem(34, Butcher.getButton(p));
+		inv.setItem(16, Huntsman.getButton(p));
+		inv.setItem(28, Harvester.getButton(p));
+		inv.setItem(30, Intellectual.getButton(p));
+		inv.setItem(32, Explorer.getButton(p));
+		inv.setItem(34, Survivalist.getButton(p));
 		inv.setItem(49, getInfoButton(p));
 		
 	}

@@ -15,11 +15,11 @@ import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
 
-public class Naturalist {
+public class Intellectual {
 	
-	private static SkillType type = SkillType.NATURALIST;
-	private static String name = Colors.NATUREGREEN + "" + ChatColor.BOLD + "Naturalist";
-	private static Material displayItem = Material.GRASS_BLOCK;
+	private static SkillType type = SkillType.INTELLECTUAL;
+	private static String name = Colors.BRIGHTPURPLE + "" + ChatColor.BOLD + "Intellectual";
+	private static Material displayItem = Material.BOOKSHELF;
 	private static String breaker = Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                   ";
 
 	public static ItemStack getButton(Player player) {
@@ -38,15 +38,15 @@ public class Naturalist {
 	
 	public static Perk[] getPerks() {
 		Perk[] perks = {
-		Perk.TREECAPITATOR,
-		Perk.LUMBERJACK,
-		Perk.MUSHROOMMAN,
-		Perk.MEGAEXCAVATOR,
-		Perk.BIGGERSHOVEL,
-		Perk.NATURESTOUCH,
-		Perk.ISPEAKFORTHETREES,
-		Perk.THEWASTELANDER,
-		Perk.MANVSWILD};
+		Perk.XPREBATES,
+		Perk.FAMILYRECIPES,
+		Perk.THEYFLYNOW,
+		Perk.SALVAGEOPERATION,
+		Perk.QUICKLEARNER,
+		Perk.BETTERMENDER,
+		Perk.MAGICMAN,
+		Perk.USETHEFORCE,
+		Perk.INDUSTRIALREVOLUTION};
 		return perks;
 	}
 

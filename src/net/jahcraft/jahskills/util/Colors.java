@@ -13,6 +13,8 @@ public class Colors {
 	public static final ChatColor MUDBROWN = ChatColor.of("#c2a389");
 	public static final ChatColor DARKBLUE = ChatColor.of("#007AD0");
 	public static final ChatColor NATUREGREEN = ChatColor.of("#65e057");
+	public static final ChatColor BRIGHTPURPLE = ChatColor.of("#e6008a");
+	public static final ChatColor BEIGE = ChatColor.of("#fbe7c6");
 	public static String format(String before) {
 		return ChatColor.translateAlternateColorCodes('&', before);
 	}

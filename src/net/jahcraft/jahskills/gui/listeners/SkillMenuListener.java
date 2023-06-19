@@ -14,7 +14,12 @@ import org.bukkit.inventory.Inventory;
 import net.jahcraft.jahskills.gui.animations.SubMenuAnim;
 import net.jahcraft.jahskills.gui.menus.ButcherMenu;
 import net.jahcraft.jahskills.gui.menus.CavemanMenu;
+import net.jahcraft.jahskills.gui.menus.ExplorerMenu;
+import net.jahcraft.jahskills.gui.menus.HarvesterMenu;
+import net.jahcraft.jahskills.gui.menus.HuntsmanMenu;
+import net.jahcraft.jahskills.gui.menus.IntellectualMenu;
 import net.jahcraft.jahskills.gui.menus.NaturalistMenu;
+import net.jahcraft.jahskills.gui.menus.SurvivalistMenu;
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
@@ -51,21 +56,122 @@ public class SkillMenuListener implements Listener {
 			
 		}
 		if (e.getSlot() == 12) {
-			invs.remove(e.getClickedInventory());
-			Inventory inv = CavemanMenu.getInv((Player)e.getWhoClicked());
-			CavemanMenuListener.invs.add(inv);
-			e.getWhoClicked().openInventory(inv);
-			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
-
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.CAVEMAN) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.CAVEMAN);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = CavemanMenu.getInv((Player)e.getWhoClicked());
+				CavemanMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
 		}
 		
 		if (e.getSlot() == 14) {
-			invs.remove(e.getClickedInventory());
-			Inventory inv = NaturalistMenu.getInv((Player)e.getWhoClicked());
-			NaturalistMenuListener.invs.add(inv);
-			e.getWhoClicked().openInventory(inv);
-			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
-
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.NATURALIST) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.NATURALIST);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = NaturalistMenu.getInv((Player)e.getWhoClicked());
+				NaturalistMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
+		}
+		
+		if (e.getSlot() == 16) {
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.HUNTSMAN) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.HUNTSMAN);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = HuntsmanMenu.getInv((Player)e.getWhoClicked());
+				HuntsmanMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
+		}
+		
+		if (e.getSlot() == 28) {
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.HARVESTER) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.HARVESTER);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = HarvesterMenu.getInv((Player)e.getWhoClicked());
+				HarvesterMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
+		}
+		
+		if (e.getSlot() == 30) {
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.INTELLECTUAL) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.INTELLECTUAL);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = IntellectualMenu.getInv((Player)e.getWhoClicked());
+				IntellectualMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
+		}
+		
+		if (e.getSlot() == 32) {
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.EXPLORER) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.EXPLORER);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = ExplorerMenu.getInv((Player)e.getWhoClicked());
+				ExplorerMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
+		}
+		
+		if (e.getSlot() == 34) {
+			if (SkillManager.canClaimSkill((Player)e.getWhoClicked(), SkillType.SURVIVALIST) && e.getClick() == ClickType.SHIFT_LEFT) {
+				invs.remove(e.getClickedInventory());
+				sendClaimMainSkillConfirmation((Player)e.getWhoClicked(), SkillType.SURVIVALIST);
+				
+				
+			} else {
+				invs.remove(e.getClickedInventory());
+				Inventory inv = SurvivalistMenu.getInv((Player)e.getWhoClicked());
+				SurvivalistMenuListener.invs.add(inv);
+				e.getWhoClicked().openInventory(inv);
+				Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new SubMenuAnim(inv, (Player)e.getWhoClicked()));
+			}
+			
+			
 		}
 	}
 	
