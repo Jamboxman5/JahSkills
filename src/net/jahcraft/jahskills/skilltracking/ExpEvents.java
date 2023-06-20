@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import net.jahcraft.jahskills.effects.ButcherEffects;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 
@@ -36,6 +37,7 @@ public class ExpEvents implements Listener {
 	public void onKill(EntityDamageByEntityEvent e) {
 						
 		if (!(e.getDamager() instanceof Player)) return;
+		if (ButcherEffects.theGrindrMobs.contains(e.getEntity())) return;
 		Player p = (Player) e.getDamager();
 		
 		BigDecimal baseProgress = BigDecimal.valueOf(.05);
