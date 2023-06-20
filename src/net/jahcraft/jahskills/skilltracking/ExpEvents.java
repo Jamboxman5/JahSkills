@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,6 +39,9 @@ public class ExpEvents implements Listener {
 						
 		if (!(e.getDamager() instanceof Player)) return;
 		if (ButcherEffects.theGrindrMobs.contains(e.getEntity())) return;
+		if (!(e.getEntity() instanceof LivingEntity)) return;
+		LivingEntity ent = (LivingEntity) e.getEntity();
+		if (ent.getHealth() > 0) return;
 		Player p = (Player) e.getDamager();
 		
 		BigDecimal baseProgress = BigDecimal.valueOf(.05);
@@ -74,22 +78,22 @@ public class ExpEvents implements Listener {
 	}
 	
 	private int getMultiplier(Material type) {
-		if (type.toString().contains("EMERALD")) return 10;
-		if (type.toString().contains("DIAMOND")) return 8;
-		if (type.toString().contains("GOLD")) return 7;
-		if (type.toString().contains("IRON")) return 6;
-		if (type.toString().contains("LAPIS")) return 6;
-		if (type.toString().contains("REDSTONE")) return 6;
-		if (type.toString().contains("COAL")) return 5;
-		if (type.toString().contains("WHEAT")) return 4;
-		if (type.toString().contains("SUGAR")) return 4;
-		if (type.toString().contains("CARROT")) return 4;
-		if (type.toString().contains("POTATO")) return 4;
-		if (type.toString().contains("MELON")) return 4;
-		if (type.toString().contains("PUMPKIN")) return 4;
-		if (type.toString().contains("BEET")) return 4;
-		if (type.toString().contains("BEANS")) return 4;
-		if (type.toString().contains("LOG")) return 3;
+		if (type.toString().contains("EMERALD")) return 200;
+		if (type.toString().contains("DIAMOND")) return 100;
+		if (type.toString().contains("GOLD")) return 50;
+		if (type.toString().contains("IRON")) return 20;
+		if (type.toString().contains("LAPIS")) return 35;
+		if (type.toString().contains("REDSTONE")) return 25;
+		if (type.toString().contains("COAL")) return 10;
+		if (type.toString().contains("WHEAT")) return 8;
+		if (type.toString().contains("SUGAR")) return 8;
+		if (type.toString().contains("CARROT")) return 8;
+		if (type.toString().contains("POTATO")) return 8;
+		if (type.toString().contains("MELON")) return 8;
+		if (type.toString().contains("PUMPKIN")) return 8;
+		if (type.toString().contains("BEET")) return 8;
+		if (type.toString().contains("BEANS")) return 8;
+		if (type.toString().contains("LOG")) return 4;
 		return 1;
 		
 	}
