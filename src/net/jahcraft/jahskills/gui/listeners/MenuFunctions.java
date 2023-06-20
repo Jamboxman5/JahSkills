@@ -16,8 +16,13 @@ import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.perks.Perks;
 import net.jahcraft.jahskills.skills.Butcher;
 import net.jahcraft.jahskills.skills.Caveman;
+import net.jahcraft.jahskills.skills.Explorer;
+import net.jahcraft.jahskills.skills.Harvester;
+import net.jahcraft.jahskills.skills.Huntsman;
+import net.jahcraft.jahskills.skills.Intellectual;
 import net.jahcraft.jahskills.skills.Naturalist;
 import net.jahcraft.jahskills.skills.SkillType;
+import net.jahcraft.jahskills.skills.Survivalist;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.md_5.bungee.api.ChatColor;
 
@@ -45,17 +50,17 @@ public class MenuFunctions {
 		case CAVEMAN:
 			return Caveman.getSkillButton(p);
 		case EXPLORER:
-			break;
+			return Explorer.getSkillButton(p);
 		case HARVESTER:
-			break;
+			return Harvester.getSkillButton(p);
 		case HUNTSMAN:
-			break;
+			return Huntsman.getSkillButton(p);
 		case INTELLECTUAL:
-			break;
+			return Intellectual.getSkillButton(p);
 		case NATURALIST:
 			return Naturalist.getSkillButton(p);
 		case SURVIVALIST:
-			break;
+			return Survivalist.getSkillButton(p);
 		default:
 			break;
 		}
@@ -122,8 +127,117 @@ public class MenuFunctions {
 			return 44;
 		case THERMALINSULATION:
 			return 41;
+		case AGRICULTURALSTUDIES:
+			return 43;
+		case ARTFULDODGER:
+			return 37;
+		case ARTOFTHEDEAL:
+			return 38;
+		case ATTACKOFTHECLONES:
+			return 39;
+		case BAREHANDEDARCHERY:
+			return 42;
+		case BETTERMENDER:
+			return 41;
+		case BIGGERSHOVEL:
+			return 40;
+		case BOMBTHROWER:
+			return 43;
+		case CALLOFTHEWILD:
+			return 41;
+		case CHRISKYLE:
+			return 39;
+		case EMTCERTIFIED:
+			return 41;
+		case EXPLOSIVESHOTS:
+			return 40;
+		case FAMILYRECIPES:
+			return 37;
+		case FARMINGFRENZY:
+			return 39;
+		case FERTILITYTREATMENT:
+			return 40;
+		case FERTILIZATION:
+			return 42;
+		case FREAKISHFARMING:
+			return 38;
+		case GORDONRAMSAY:
+			return 40;
+		case GREENTHUMB:
+			return 36;
+		case INCENDIARYROUNDS:
+			return 41;
+		case INDUSTRIALREVOLUTION:
+			return 44;
+		case ISPEAKFORTHETREES:
+			return 42;
+		case KENTUCKYDERBY:
+			return 40;
+		case LUCKYLOOTER:
+			return 36;
+		case LUMBERJACK:
+			return 37;
+		case MAGICMAN:
+			return 42;
+		case MAJORSWINDLER:
+			return 39;
+		case MANVSWILD:
+			return 44;
+		case MEGAEXCAVATOR:
+			return 39;
+		case MUSHROOMMAN:
+			return 38;
+		case NATURESTOUCH:
+			return 41;
+		case NAVIGATIONALSKILLS:
+			return 44;
+		case NEPTUNEFLIGHT:
+			return 42;
+		case PALEOLITHICPROWESS:
+			return 44;
+		case PIGWHISPERER:
+			return 38;
+		case QUICKLEARNER:
+			return 40;
+		case REPLANTER:
+			return 37;
+		case RESURRECTION:
+			return 38;
+		case SALVAGEOPERATION:
+			return 39;
+		case SLAUGHTERHOUSE:
+			return 36;
+		case SNIPERSENSE:
+			return 44;
+		case SUPERFOODS:
+			return 42;
+		case SUPERSAIYAN:
+			return 44;
+		case SWEETMEATS:
+			return 37;
+		case SWIFTSTEPS:
+			return 37;
+		case THEBIRDSANDTHEBEES:
+			return 41;
+		case THEWASTELANDER:
+			return 43;
+		case THEYFLYNOW:
+			return 38;
+		case TREASURESNIFFER:
+			return 43;
+		case TREECAPITATOR:
+			return 36;
+		case UNMATCHEDWILLPOWER:
+			return 43;
+		case USETHEFORCE:
+			return 43;
+		case XPREBATES:
+			return 36;
+		case YOUMISSEDME:
+			return 36;
 		default:
 			return -1;
+
 		
 		}
 	}

@@ -318,9 +318,9 @@ public class Perks {
 		case EMTCERTIFIED:
 		{
 			ItemStack button = constructPerkButton(Material.DRIED_KELP, 
-												   "Artful Dodger", 
-												   "A chance to make a quick getaway", 
-												   "after an enemy attacks you!", 
+												   "EMT Certified", 
+												   "Craft first aid kits to give", 
+												   "yourself the quick health you need!", 
 												   perk, 
 												   player);
 			ItemMeta meta = button.getItemMeta();

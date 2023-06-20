@@ -34,7 +34,7 @@ public class ButcherEffects implements Listener {
 	List<Player> selfDefenseQueue = new ArrayList<>();
 	HashMap<Player, Long> selfDefenseCooldown = new HashMap<>();
 	HashMap<Player, Long> selfDefenseHitTime = new HashMap<>();
-	List<Entity> theGrindrMobs = new ArrayList<>();
+	public static List<Entity> theGrindrMobs = new ArrayList<>();
 	Player theGrindrAttacker;
 	
 	@EventHandler
