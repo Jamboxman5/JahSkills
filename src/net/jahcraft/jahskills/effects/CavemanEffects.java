@@ -23,7 +23,7 @@ public class CavemanEffects implements Listener {
 
 	SkillType type = SkillType.CAVEMAN;
 	
-	private int getRandom(int i) { return (int) (Math.random() * 101); }
+	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) {
 		Bukkit.broadcastMessage(s);
 	}
@@ -79,6 +79,47 @@ public class CavemanEffects implements Listener {
 		//DONE!
 		
 	}
+	
+	@EventHandler
+	public void oreWhisperer(BlockBreakEvent e) {
+		
+		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
+		
+		if (e.getPlayer() == null) return;
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+		if (e.getExpToDrop() <= 0) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.OREWHISPERER)) return;
+		if (!e.getBlock().getType().toString().contains("ORE") &&
+				!e.getBlock().getType().toString().contains("DEBRIS")) return;
+		
+		//INITIALIZE TOOLS
+		
+		Player p = e.getPlayer();
+		int level = SkillManager.getLevel(p, type);
 
+		//SECONDARY CHECKS (IS THIS EVENT VALID FOR MANIPULATION?)
+		
+		if (p.getGameMode().equals(GameMode.CREATIVE)) return;
+
+		//ROLLS (ROLL FOR CHANCE FOR PERK/MODIFIERS TO TAKE EFFECT)
+		
+		double chance = (level*5);
+		double multiplier = 1.5;
+
+		if (getRandom(100) > chance) return;
+		if (getRandom(100) >= 50 && level >= 20) multiplier += 1.5;
+		
+		//DO THE THING
+
+		{
+			int originalPoints = e.getExpToDrop();
+			int newPoints = (int) (originalPoints * multiplier);
+			e.setExpToDrop(newPoints);
+		}
+		
+		//DONE!
+		
+	}
+	
 	
 }
