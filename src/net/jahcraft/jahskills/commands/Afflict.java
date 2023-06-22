@@ -48,11 +48,11 @@ public class Afflict implements CommandExecutor {
 
 	private void sendUsage(CommandSender sender) {
 		sender.sendMessage(ChatColor.RED + "Afflicts a player with a JahSkills PVP affliction.");
-		sender.sendMessage(ChatColor.RED + "Afflict other player:");
+		sender.sendMessage(ChatColor.DARK_RED + "Afflict other player:");
 		util.sendUsage("/afflict <player> <affliction>");
-		sender.sendMessage(ChatColor.RED + "Afflict self:");
+		sender.sendMessage(ChatColor.DARK_RED + "Afflict self:");
 		util.sendUsage("/afflict <affliction>");
-		sender.sendMessage(ChatColor.RED + "Afflict player w/ random affliction:");
+		sender.sendMessage(ChatColor.DARK_RED + "Afflict player w/ random affliction:");
 		util.sendUsage("/afflict <player>");
 
 
