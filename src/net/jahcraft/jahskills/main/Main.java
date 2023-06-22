@@ -41,16 +41,7 @@ public class Main extends JavaPlugin {
 			initializePerkEffects();
 			initializeDataTrackers();
 			initializeGUI();
-				
-			
-			
-				
-			getCommand("skilldb").setExecutor((CommandExecutor)new SkillDB());
-			getCommand("skilldb").setTabCompleter((TabCompleter)new SkillDB());
-			getCommand("skillquery").setExecutor((CommandExecutor)new SkillQuery());
-			getCommand("skills").setExecutor((CommandExecutor)new Skills());
-			getCommand("knockout").setExecutor((CommandExecutor)new KnockOut());
-			getCommand("claimmainskill").setExecutor((CommandExecutor)new ClaimMainSkill());
+			initializeCommands();
 
 		} catch (Exception e) {
 
@@ -60,6 +51,22 @@ public class Main extends JavaPlugin {
 		}	
 	}
 	
+	private void initializeCommands() {
+		
+		//EXPLICIT COMMANDS (INTENDED FOR NORMAL USE)
+		getCommand("skilldb").setExecutor((CommandExecutor)new SkillDB());
+		getCommand("skillquery").setExecutor((CommandExecutor)new SkillQuery());
+		getCommand("skills").setExecutor((CommandExecutor)new Skills());
+		
+		//IMPLICIT AND DEBUG COMMANDS
+		getCommand("claimmainskill").setExecutor((CommandExecutor)new ClaimMainSkill());
+		getCommand("afflict").setExecutor((CommandExecutor)new Afflict());
+		
+		//SET TAB EXECUTORS
+		getCommand("skilldb").setTabCompleter((TabCompleter)new SkillDB());
+
+	}
+
 	private void initializeGUI() {
 		getServer().getPluginManager().registerEvents(new SkillMenuListener(), this);
 		getServer().getPluginManager().registerEvents(new ButcherMenuListener(), this);
