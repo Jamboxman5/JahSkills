@@ -97,7 +97,7 @@ public class Afflict implements CommandExecutor {
 			Afflictions.bleed(player, 8);
 			return;
 		case DAZE:
-			Afflictions.daze(player, 8000);
+			Afflictions.daze(player, 6000);
 			return;
 		case KNOCKOUT:
 			Afflictions.knockOut(player, 80);
