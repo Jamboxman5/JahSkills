@@ -1,21 +1,28 @@
 package net.jahcraft.jahskills.skilltracking;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerFishEvent.State;
 
-import net.jahcraft.jahskills.effects.ButcherEffects;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 
 public class ExpEvents implements Listener {
+	
+	private static HashMap<Entity, Player> targetStorage = new HashMap<>();
+	private final double levelScaler = .85;
+	private final double randomMultiplierCap = 20;
 	
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
@@ -26,7 +33,7 @@ public class ExpEvents implements Listener {
 		Player p = e.getPlayer();
 		
 		BigDecimal baseProgress = BigDecimal.valueOf(.01);
-		BigDecimal factor = BigDecimal.valueOf(.75).pow(SkillManager.getLevel(p));
+		BigDecimal factor = BigDecimal.valueOf(levelScaler).pow(SkillManager.getLevel(p));
 		BigDecimal multiplier = BigDecimal.valueOf(getMultiplier(e.getBlock().getType()));
 		
 		SkillManager.addProgress(p, baseProgress.multiply(factor).multiply(multiplier));
@@ -35,42 +42,63 @@ public class ExpEvents implements Listener {
 	}
 	
 	@EventHandler
-	public void onKill(EntityDamageByEntityEvent e) {
+	public void onKill(EntityDeathEvent e) {
 						
-		if (!(e.getDamager() instanceof Player)) return;
-		if (ButcherEffects.theGrindrMobs.contains(e.getEntity())) return;
-		if (!(e.getEntity() instanceof LivingEntity)) return;
-		LivingEntity ent = (LivingEntity) e.getEntity();
-		if (ent.getHealth() > 0) return;
-		Player p = (Player) e.getDamager();
+//		if (ButcherEffects.theGrindrMobs.contains(e.getEntity())) return;
+		if (!targetStorage.containsKey(e.getEntity())) return;
+		Player p = targetStorage.get(e.getEntity());
 		
-		BigDecimal baseProgress = BigDecimal.valueOf(.05);
-		BigDecimal factor = BigDecimal.valueOf(.75).pow(SkillManager.getLevel(p));
+		BigDecimal baseProgress = BigDecimal.valueOf(.03);
+		BigDecimal factor = BigDecimal.valueOf(levelScaler).pow(SkillManager.getLevel(p));
 		BigDecimal multiplier = BigDecimal.valueOf(getMultiplier(e.getEntityType()));
 		
 		SkillManager.addProgress(p, baseProgress.multiply(factor).multiply(multiplier));
 		ProgressBar.updateBar(p);
 		
 	}
+	
+	@EventHandler
+	public void onKill(PlayerFishEvent e) {
+		if (e.getState() != State.CAUGHT_FISH) return;
+		
+		BigDecimal baseProgress = BigDecimal.valueOf(.03);
+		BigDecimal factor = BigDecimal.valueOf(levelScaler).pow(SkillManager.getLevel(e.getPlayer()));
+		BigDecimal multiplier = BigDecimal.valueOf(getMultiplier());
+		
+		SkillManager.addProgress(e.getPlayer(), baseProgress.multiply(factor).multiply(multiplier));
+		ProgressBar.updateBar(e.getPlayer());
+		
+	}
+	
+	private double getMultiplier() {
+		return Math.random() * randomMultiplierCap;
+	}
+
+	@EventHandler
+	public void onTarget(EntityDamageByEntityEvent e) {
+		if (!(e.getDamager() instanceof Player)) return;
+		targetStorage.put(e.getEntity(), (Player)e.getDamager());
+	}
 
 	private int getMultiplier(EntityType type) {
-		if (type.equals(EntityType.PLAYER)) return 15;
-		if (type.equals(EntityType.ZOMBIE)) return 3;
-		if (type.equals(EntityType.SKELETON)) return 3;
-		if (type.equals(EntityType.SPIDER)) return 3;
-		if (type.equals(EntityType.CAVE_SPIDER)) return 5;
-		if (type.equals(EntityType.CREEPER)) return 3;
-		if (type.equals(EntityType.GUARDIAN)) return 5;
-		if (type.equals(EntityType.STRAY)) return 5;
-		if (type.equals(EntityType.HUSK)) return 5;
-		if (type.equals(EntityType.GHAST)) return 25;
+		if (type.equals(EntityType.PLAYER)) return 25;
+		if (type.equals(EntityType.ZOMBIE)) return 5;
+		if (type.equals(EntityType.SKELETON)) return 5;
+		if (type.equals(EntityType.SPIDER)) return 5;
+		if (type.equals(EntityType.CAVE_SPIDER)) return 8;
+		if (type.equals(EntityType.CREEPER)) return 10;
+		if (type.equals(EntityType.GUARDIAN)) return 10;
+		if (type.equals(EntityType.STRAY)) return 8;
+		if (type.equals(EntityType.HUSK)) return 8;
+		if (type.equals(EntityType.GHAST)) return 50;
 		if (type.equals(EntityType.BLAZE)) return 25;
-		if (type.equals(EntityType.IRON_GOLEM)) return 50;
-		if (type.equals(EntityType.EVOKER)) return 15;
-		if (type.equals(EntityType.VEX)) return 15;
-		if (type.equals(EntityType.PILLAGER)) return 10;
+		if (type.equals(EntityType.IRON_GOLEM)) return 75;
+		if (type.equals(EntityType.EVOKER)) return 50;
+		if (type.equals(EntityType.VEX)) return 20;
+		if (type.equals(EntityType.PILLAGER)) return 15;
 		if (type.equals(EntityType.ENDERMAN)) return 40;
-		if (type.equals(EntityType.ELDER_GUARDIAN)) return 200;
+		if (type.equals(EntityType.WITCH)) return 100;
+		if (type.equals(EntityType.ELDER_GUARDIAN)) return 250;
 		if (type.equals(EntityType.WARDEN)) return 500;
 		if (type.equals(EntityType.ENDER_DRAGON)) return 250;
 		return 1;
