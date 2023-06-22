@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,19 +53,30 @@ public class SkillDatabase {
 	public static void sendQuery(String query) {
 		try {
 			con.createStatement().execute(query);
+		} catch (SQLNonTransientConnectionException e) {
+			con = getConnection();
+			sendQuery(query);
 		} catch (SQLException e) {
 			warn(e, query);
-		}
+		} 
 	}
 	
 	public static void sendUnsafeQuery(String query) throws SQLException {
-		con.createStatement().execute(query);
+		try {
+			con.createStatement().execute(query);
+		} catch (SQLNonTransientConnectionException e) {
+			con = getConnection();
+			sendUnsafeQuery(query);
+		}
 	}
 	
 	public static ResultSet sendResultQuery(String query) {
-		ResultSet result;
+		ResultSet result = null;
 		try {
 			result = con.createStatement().executeQuery(query);
+		} catch (SQLNonTransientConnectionException e) {
+			con = getConnection();
+			sendQuery(query);
 		} catch (SQLException e) {
 			warn(e, query);
 			return null;
