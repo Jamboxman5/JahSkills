@@ -6,27 +6,11 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.jahcraft.jahskills.commands.ClaimMainSkill;
-import net.jahcraft.jahskills.commands.KnockOut;
-import net.jahcraft.jahskills.commands.SkillDB;
-import net.jahcraft.jahskills.commands.SkillQuery;
-import net.jahcraft.jahskills.commands.Skills;
-import net.jahcraft.jahskills.effects.ButcherEffects;
-import net.jahcraft.jahskills.gui.listeners.ButcherMenuListener;
-import net.jahcraft.jahskills.gui.listeners.CavemanMenuListener;
-import net.jahcraft.jahskills.gui.listeners.ExplorerMenuListener;
-import net.jahcraft.jahskills.gui.listeners.HarvesterMenuListener;
-import net.jahcraft.jahskills.gui.listeners.HuntsmanMenuListener;
-import net.jahcraft.jahskills.gui.listeners.IntellectualMenuListener;
-import net.jahcraft.jahskills.gui.listeners.NaturalistMenuListener;
-import net.jahcraft.jahskills.gui.listeners.SkillMenuListener;
-import net.jahcraft.jahskills.gui.listeners.SurvivalistMenuListener;
-import net.jahcraft.jahskills.skillstorage.LoadSave;
-import net.jahcraft.jahskills.skillstorage.SkillDatabase;
-import net.jahcraft.jahskills.skillstorage.SkillManager;
-import net.jahcraft.jahskills.skilltracking.BlockTracker;
-import net.jahcraft.jahskills.skilltracking.ExpEvents;
-import net.jahcraft.jahskills.skilltracking.ProgressBar;
+import net.jahcraft.jahskills.commands.*;
+import net.jahcraft.jahskills.effects.*;
+import net.jahcraft.jahskills.gui.listeners.*;
+import net.jahcraft.jahskills.skillstorage.*;
+import net.jahcraft.jahskills.skilltracking.*;
 import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
@@ -48,41 +32,57 @@ public class Main extends JavaPlugin {
 		plugin = this;
 		
 		//JAHSKILLS
-				try {
+		try {
 
-					//SUBCOMMANDS
-					SkillDatabase.setupDatabase();
-					SkillManager.loadSkills();
-					
-					getServer().getPluginManager().registerEvents(new BlockTracker(), this);
-					getServer().getPluginManager().registerEvents(new ExpEvents(), this);
-					getServer().getPluginManager().registerEvents(new LoadSave(), this);
-					getServer().getPluginManager().registerEvents(new SkillMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new ButcherMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new CavemanMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new NaturalistMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new HuntsmanMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new HarvesterMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new IntellectualMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new ExplorerMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new SurvivalistMenuListener(), this);
-					getServer().getPluginManager().registerEvents(new ButcherEffects(), this);
-					
-					getCommand("skilldb").setExecutor((CommandExecutor)new SkillDB());
-					getCommand("skilldb").setTabCompleter((TabCompleter)new SkillDB());
-					getCommand("skillquery").setExecutor((CommandExecutor)new SkillQuery());
-					getCommand("skills").setExecutor((CommandExecutor)new Skills());
-					getCommand("knockout").setExecutor((CommandExecutor)new KnockOut());
-					getCommand("claimmainskill").setExecutor((CommandExecutor)new ClaimMainSkill());
+			//SUBCOMMANDS
+			SkillDatabase.setupDatabase();
+			SkillManager.loadSkills();
+			
+			initializePerkEffects();
+			initializeDataTrackers();
+			initializeGUI();
+				
+			
+			
+				
+			getCommand("skilldb").setExecutor((CommandExecutor)new SkillDB());
+			getCommand("skilldb").setTabCompleter((TabCompleter)new SkillDB());
+			getCommand("skillquery").setExecutor((CommandExecutor)new SkillQuery());
+			getCommand("skills").setExecutor((CommandExecutor)new Skills());
+			getCommand("knockout").setExecutor((CommandExecutor)new KnockOut());
+			getCommand("claimmainskill").setExecutor((CommandExecutor)new ClaimMainSkill());
 
-				} catch (Exception e) {
+		} catch (Exception e) {
 
-					Bukkit.getLogger().warning("Failed to load JahSkills!");
-					e.printStackTrace();
+			Bukkit.getLogger().warning("Failed to load JahSkills!");
+			e.printStackTrace();
 
-				}	
+		}	
 	}
 	
+	private void initializeGUI() {
+		getServer().getPluginManager().registerEvents(new SkillMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new ButcherMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new CavemanMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new NaturalistMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new HuntsmanMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new HarvesterMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new IntellectualMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new ExplorerMenuListener(), this);
+		getServer().getPluginManager().registerEvents(new SurvivalistMenuListener(), this);		
+	}
+
+	private void initializeDataTrackers() {
+		getServer().getPluginManager().registerEvents(new BlockTracker(), this);
+		getServer().getPluginManager().registerEvents(new ExpEvents(), this);
+		getServer().getPluginManager().registerEvents(new LoadSave(), this);		
+	}
+
+	private void initializePerkEffects() {
+		getServer().getPluginManager().registerEvents(new ButcherEffects(), this);
+		getServer().getPluginManager().registerEvents(new CavemanEffects(), this);
+	}
+
 	@Override 
 	public void onDisable() {
 
