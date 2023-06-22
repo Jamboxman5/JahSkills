@@ -232,7 +232,7 @@ public class ButcherEffects implements Listener {
 		
 		//Actual effect
 		p.sendMessage("KO!");
-		EffectActions.knockOut((Player)e.getEntity(), baseTicks*multiplier);
+		Afflictions.knockOut((Player)e.getEntity(), baseTicks*multiplier);
 
 	}
 	@EventHandler
@@ -258,7 +258,7 @@ public class ButcherEffects implements Listener {
 		
 		//Actual effect
 		p.sendMessage("Enemy Bleeding!");
-		EffectActions.bleed(e.getEntity(), baseBleeds*multiplier);
+		Afflictions.bleed(e.getEntity(), baseBleeds*multiplier);
 	}
 	@EventHandler
 	public void bluntForceTrauma(EntityDamageByEntityEvent e) {
@@ -285,7 +285,7 @@ public class ButcherEffects implements Listener {
 //		p.sendMessage("ms: " + baseMS * multiplier);
 		//Actual effect
 		p.sendMessage("Opponent Dazed!");
-		EffectActions.daze((Player)e.getEntity(), baseMS*multiplier);
+		Afflictions.daze((Player)e.getEntity(), baseMS*multiplier);
 	}
 	@EventHandler
 	public void theGrindrSpawn(SpawnerSpawnEvent e) {
