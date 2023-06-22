@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 
 import net.jahcraft.jahskills.perks.Perk;
@@ -185,5 +187,42 @@ public class CavemanEffects implements Listener {
 		//DONE!
 		
 	}
-	
+	@EventHandler
+	public void climbingGear(EntityDamageEvent e) {
+		
+		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
+		
+		if (!(e.getEntity() instanceof Player)) return;
+		if (!SkillManager.activePerk((Player) e.getEntity(), Perk.CLIMBINGGEAR)) return;
+		if (e.getCause() != DamageCause.FALL) return;
+		
+		//INITIALIZE TOOLS
+		
+		Player p = (Player) e.getEntity();
+		int level = SkillManager.getLevel(p, type);
+
+		//SECONDARY CHECKS (IS THIS EVENT VALID FOR MANIPULATION?)
+		
+		if (e.getDamage() <= 0) return;
+		
+		if (p.getGameMode().equals(GameMode.CREATIVE)) return;
+
+		//ROLLS (ROLL FOR CHANCE FOR PERK/MODIFIERS TO TAKE EFFECT)
+		
+		double chance = (level*5);
+
+		if (getRandom(100) > chance) return;
+		
+		//DO THE THING
+
+		{
+			double multiplier = 1.0/(level/5.0);
+			double initialDamage = e.getDamage();
+			e.setDamage(initialDamage * multiplier);
+			if (p.isSneaking()) e.setCancelled(true);
+		}
+		
+		//DONE!
+		
+	}
 }
