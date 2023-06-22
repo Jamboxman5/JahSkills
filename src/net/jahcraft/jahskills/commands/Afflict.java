@@ -55,9 +55,6 @@ public class Afflict implements CommandExecutor {
 		sender.sendMessage(ChatColor.DARK_RED + "Afflict player w/ random affliction:");
 		util.sendUsage("/afflict <player>");
 
-
-		
-		
 	}
 
 	private void afflictOther(CommandSender sender, String[] args, boolean isRandom) {
