@@ -151,6 +151,7 @@ public class SkillDatabase {
 	
 	public static void load(Player p) {
 		
+		con = getConnection();
 		skillLevel.put(p, Integer.parseInt(getData(p, "userlevels")));
 		skillProgress.put(p, BigDecimal.valueOf(Double.parseDouble(getData(p, "userprogress"))));
 		skillPoints.put(p, Integer.parseInt(getData(p, "userpoints")));
@@ -287,6 +288,7 @@ public class SkillDatabase {
 	}
 
 	public static void save(Player player) {
+		con = getConnection();
 		clearData(player);
 		for (Perk p : activePerks.get(player)) {
 			sendQuery("insert into activePerks values ('" + player.getUniqueId() + "'" + ",'" + p.toString() + "')");
