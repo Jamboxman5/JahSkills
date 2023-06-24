@@ -42,6 +42,7 @@ public class Main extends JavaPlugin {
 			initializeDataTrackers();
 			initializeGUI();
 			initializeCommands();
+			initializeRepeatingTasks();
 
 		} catch (Exception e) {
 
@@ -49,6 +50,12 @@ public class Main extends JavaPlugin {
 			e.printStackTrace();
 
 		}	
+	}
+	
+	private void initializeRepeatingTasks() {
+		
+		CavemanEffects.getCaveVisionTask().runTaskTimer(plugin, 0, 5);
+		
 	}
 	
 	private void initializeCommands() {
@@ -64,6 +71,7 @@ public class Main extends JavaPlugin {
 		
 		//SET TAB EXECUTORS
 		getCommand("skilldb").setTabCompleter((TabCompleter)new SkillDB());
+		getCommand("afflict").setTabCompleter((TabCompleter)new Afflict());
 
 	}
 

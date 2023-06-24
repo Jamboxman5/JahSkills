@@ -1,18 +1,47 @@
 package net.jahcraft.jahskills.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import net.jahcraft.jahskills.effects.Affliction;
 import net.jahcraft.jahskills.effects.Afflictions;
 import net.md_5.bungee.api.ChatColor;
 
-public class Afflict implements CommandExecutor {
+public class Afflict implements CommandExecutor, TabCompleter {
 	
 	CommandUtil util;
+	
+	List<String> arguments2 = new ArrayList<>();
+	
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		
+		util = new CommandUtil(sender, label);
+		
+		if (!util.canDoCommand()) return null;
+		
+		if (arguments2.isEmpty()) {
+			for (Affliction a : Affliction.values()) {
+				arguments2.add(a.toString().toLowerCase());
+			}
+		}
+		List<String> result = new ArrayList<>();
+		if (args.length == 2) {
+			for (String s : arguments2) {
+				if (s.toLowerCase().startsWith(args[1])) {
+					result.add(s);
+				}
+			}
+			return result;
+		}
+		return null;
+	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
