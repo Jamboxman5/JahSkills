@@ -16,7 +16,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
@@ -260,5 +262,72 @@ public class CavemanEffects implements Listener {
 		
 		//DONE!
 		
+	}
+	public static BukkitRunnable getCaveVisionTask() {
+		return new BukkitRunnable () {
+
+			@Override
+			public void run() {
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					if (SkillManager.activePerk(p, Perk.CAVEVISION)) {
+						pollCaveVision(p);
+					}
+				}
+			}
+			
+		};
+	}
+	public static void pollCaveVision(Player p) {
+//		int radius = SkillManager.getLevel(p, SkillType.CAVEMAN);
+		Location loc = p.getLocation().add(0, 1, 0);
+		
+		if (loc.getBlock().getType() == Material.AIR ||
+			loc.getBlock().getType() == Material.STRUCTURE_VOID) {
+			p.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
+			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, blockDataTimer(p, loc));
+		}
+//		loc.add(radius, 0, 0);
+//		if (loc.getBlock().getType() == Material.AIR) {
+//			p.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
+//			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, blockDataTimer(p, loc));
+//		}
+//		loc.add(radius, 0, radius);
+//		if (loc.getBlock().getType() == Material.AIR) {
+//			p.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
+//			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, blockDataTimer(p, loc));
+//		}
+//		loc.add(-radius, 0, 0);
+//		if (loc.getBlock().getType() == Material.AIR) {
+//			p.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
+//			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, blockDataTimer(p, loc));
+//		}
+//		loc.add(-radius, 0, -radius);
+//		if (loc.getBlock().getType() == Material.AIR) {
+//			p.sendBlockChange(loc, Bukkit.createBlockData(Material.LIGHT));
+//			Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, blockDataTimer(p, loc));
+//		}
+
+	}
+	public static Runnable blockDataTimer(Player p, Location loc) {
+		return new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (loc.getBlockX() != p.getLocation().getBlockX() &&
+					loc.getBlockY() != p.getLocation().getBlockY() &&
+					loc.getBlockZ() != p.getLocation().getBlockZ()) {
+					p.sendBlockChange(loc, Bukkit.createBlockData(Material.AIR));				
+				} else {
+					Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, blockDataTimer(p, loc));
+				}
+			}
+		
+		};
 	}
 }
