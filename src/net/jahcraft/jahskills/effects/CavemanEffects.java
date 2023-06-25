@@ -12,6 +12,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Furnace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,8 +21,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -37,7 +41,11 @@ public class CavemanEffects implements Listener {
 
 	SkillType type = SkillType.CAVEMAN;
 	
+	HashMap<Block, Player> superSmeltingPlayers = new HashMap<>();
 	HashMap<Player, Long> diviningRodCooldown = new HashMap<>();
+	HashMap<Player, Long> manicMinerCooldown = new HashMap<>();
+	
+	List<Player> manicMinerReady = new ArrayList<>();
 	
 	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
@@ -457,4 +465,167 @@ public class CavemanEffects implements Listener {
 		return null;
 		
 	}
+	@EventHandler
+	public void superSmeltingPlace(PlayerInteractEvent e) {
+		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
+		
+				if (e.getPlayer() == null) return;
+				if (!SkillManager.activePerk(e.getPlayer(), Perk.SUPERIORSMELTING)) return;
+				if (e.getClickedBlock() == null) return;
+				if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+				if (!e.getClickedBlock().getType().toString().contains("FURNACE")) return;
+				//INITIALIZE TOOLS
+					
+				Player p = e.getPlayer();
+				Block furnace = e.getClickedBlock();
+
+				//SECONDARY CHECKS (IS THIS EVENT VALID FOR MANIPULATION?)
+
+				
+				//ROLLS (ROLL FOR CHANCE FOR PERK/MODIFIERS TO TAKE EFFECT)
+					
+					
+				//DO THE THING
+
+				{
+					superSmeltingPlayers.put(furnace, p);
+				}
+					
+				//DONE!
+		
+	}
+	@EventHandler
+	public void superSmeltingCook(FurnaceSmeltEvent e) {
+		
+		
+		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
+		
+		if (!superSmeltingPlayers.containsKey(e.getBlock())) return;
+		if (e.getResult() == null) return;
+
+		//INITIALIZE TOOLS
+	
+		Block furnace = e.getBlock();
+		Player p = superSmeltingPlayers.get(furnace);
+		Furnace furn = (Furnace) furnace.getState();
+		int level = SkillManager.getLevel(p, type);
+
+		//SECONDARY CHECKS (IS THIS EVENT VALID FOR MANIPULATION?)
+
+		if (!SkillManager.activePerk(p, Perk.SUPERIORSMELTING)) return;
+		if (furn.getInventory().getItem(2) != null &&
+			furn.getInventory().getItem(2).getAmount() >= 63) return;
+		
+		//ROLLS (ROLL FOR CHANCE FOR PERK/MODIFIERS TO TAKE EFFECT)
+			
+		double chance = (level*5);
+
+		if (getRandom(100) > chance) return;
+			
+		//DO THE THING
+
+		{
+			e.getResult().setAmount(2);
+		}
+			
+		//DONE!
+	}
+	@EventHandler
+	public void manicMinerToggle(PlayerInteractEvent e) {
+		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
+		
+		if (e.getPlayer() == null) return;
+		if (e.getItem() == null) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.MANICMINING)) return;
+		if (e.getClickedBlock() == null) return;
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK &&
+			e.getAction() != Action.LEFT_CLICK_BLOCK &&
+			e.getAction() != Action.RIGHT_CLICK_AIR) return;
+				
+		Player p = e.getPlayer();
+		ItemStack tool = e.getItem();
+		
+		if (!tool.getType().toString().contains("PICKAXE")) return;
+		
+		if (e.getAction() == Action.RIGHT_CLICK_AIR ||
+			e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			
+			if (manicMinerCooldown.containsKey(p) && 
+			   (System.currentTimeMillis() - manicMinerCooldown.get(p)) < (1000*60*3)) {
+				int seconds =  (int)(180-((System.currentTimeMillis() - manicMinerCooldown.get(p))/1000));
+				p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use manic mining again!");
+				return;
+			}
+			
+			if (!manicMinerReady.contains(p)) {
+				manicMinerReady.add(p);
+				p.sendMessage(Colors.BRIGHTBLUE + "You ready your pickaxe.");
+				try {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(3000);
+								if (manicMinerReady.contains(p)) {
+									manicMinerReady.remove(p);
+									p.sendMessage(Colors.BRIGHTBLUE + "You lower your pickaxe.");
+								}
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
+						
+					}.runTaskAsynchronously(Main.plugin);
+				
+				} catch(Exception e2) {
+					
+				}
+
+					
+			}
+			
+		}
+		
+		if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+			if (manicMinerReady.contains(p)) {
+				manicMinerReady.remove(p);
+				p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Activated!");
+				int oldLevel = tool.getEnchantmentLevel(Enchantment.DIG_SPEED);
+				ItemMeta meta = tool.getItemMeta();
+				meta.addEnchant(Enchantment.DIG_SPEED, 10, true);
+				tool.setItemMeta(meta);
+				try {
+					new BukkitRunnable() {
+
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(SkillManager.getLevel(p, SkillType.CAVEMAN) * 1000);
+								ItemMeta meta = tool.getItemMeta();
+								if (oldLevel > 0) {
+									meta.addEnchant(Enchantment.DIG_SPEED, oldLevel, true);
+								} else {
+									meta.removeEnchant(Enchantment.DIG_SPEED);
+								}
+								tool.setItemMeta(meta);								
+								p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Finished.");
+								manicMinerCooldown.put(p, System.currentTimeMillis());
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
+						
+					}.runTaskAsynchronously(Main.plugin);
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		
+	}
+	
 }
