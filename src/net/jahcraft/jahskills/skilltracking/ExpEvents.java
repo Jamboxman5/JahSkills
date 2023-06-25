@@ -106,21 +106,21 @@ public class ExpEvents implements Listener {
 	}
 	
 	private int getMultiplier(Material type) {
-		if (type.toString().contains("EMERALD")) return 200;
-		if (type.toString().contains("DIAMOND")) return 100;
-		if (type.toString().contains("GOLD")) return 50;
-		if (type.toString().contains("IRON")) return 20;
-		if (type.toString().contains("LAPIS")) return 35;
-		if (type.toString().contains("REDSTONE")) return 25;
+		if (type.toString().contains("EMERALD")) return 150;
+		if (type.toString().contains("DIAMOND")) return 75;
+		if (type.toString().contains("GOLD")) return 30;
+		if (type.toString().contains("IRON")) return 15;
+		if (type.toString().contains("LAPIS")) return 25;
+		if (type.toString().contains("REDSTONE")) return 20;
 		if (type.toString().contains("COAL")) return 10;
-		if (type.toString().contains("WHEAT")) return 8;
-		if (type.toString().contains("SUGAR")) return 8;
-		if (type.toString().contains("CARROT")) return 8;
-		if (type.toString().contains("POTATO")) return 8;
-		if (type.toString().contains("MELON")) return 8;
-		if (type.toString().contains("PUMPKIN")) return 8;
-		if (type.toString().contains("BEET")) return 8;
-		if (type.toString().contains("BEANS")) return 8;
+		if (type.toString().contains("WHEAT")) return 5;
+		if (type.toString().contains("SUGAR")) return 5;
+		if (type.toString().contains("CARROT")) return 5;
+		if (type.toString().contains("POTATO")) return 5;
+		if (type.toString().contains("MELON")) return 5;
+		if (type.toString().contains("PUMPKIN")) return 5;
+		if (type.toString().contains("BEET")) return 5;
+		if (type.toString().contains("BEANS")) return 5;
 		if (type.toString().contains("LOG")) return 4;
 		return 1;
 		
