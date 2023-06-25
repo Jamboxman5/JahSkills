@@ -1,5 +1,7 @@
 package net.jahcraft.jahskills.util;
 
+import org.bukkit.Material;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class Colors {
@@ -18,5 +20,15 @@ public class Colors {
 	public static String format(String before) {
 		return ChatColor.translateAlternateColorCodes('&', before);
 	}
+	public final static String getFormattedName(Material material ) {
+        if ( material == null ) {
+            return null;
+        }
+        StringBuilder friendlyName = new StringBuilder();
+        for ( String word : material.name().split( "_" ) ) {
+            friendlyName.append( word.substring( 0, 1 ).toUpperCase() + word.substring( 1 ).toLowerCase() + " " );
+        }
+        return friendlyName.toString().trim();
+    }
 
 }
