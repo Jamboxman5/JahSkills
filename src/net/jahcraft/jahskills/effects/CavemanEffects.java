@@ -39,7 +39,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class CavemanEffects implements Listener {
 
-	SkillType type = SkillType.CAVEMAN;
+	static SkillType type = SkillType.CAVEMAN;
 	
 	HashMap<Block, Player> superSmeltingPlayers = new HashMap<>();
 	HashMap<Player, Long> diviningRodCooldown = new HashMap<>();
@@ -49,6 +49,7 @@ public class CavemanEffects implements Listener {
 	
 	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
+	static boolean mainSkill(Player p) { return SkillManager.getMainSkill(p) == type; }
 	
 	@EventHandler
 	public void motherlode(BlockBreakEvent e) {
@@ -71,6 +72,7 @@ public class CavemanEffects implements Listener {
 		World world = location.getWorld();
 
 		//SECONDARY CHECKS (IS THIS EVENT VALID FOR MANIPULATION?)
+		
 		
 		if (originalDrops.size() == 0) return;
 		if (p.getGameMode().equals(GameMode.CREATIVE)) return;
@@ -95,6 +97,9 @@ public class CavemanEffects implements Listener {
 			
 			for (ItemStack i : newDrops) {
 				world.dropItemNaturally(location, i);
+				if (mainSkill(p)) {
+					world.dropItemNaturally(location, i);
+				}
 			}
 		}
 		
@@ -129,6 +134,7 @@ public class CavemanEffects implements Listener {
 
 		if (getRandom(100) > chance) return;
 		if (getRandom(100) >= 50 && level >= 20) multiplier += 1.5;
+		if (mainSkill(p)) multiplier += 1.5;
 		
 		//DO THE THING
 
@@ -202,6 +208,9 @@ public class CavemanEffects implements Listener {
 			
 			for (ItemStack i : newDrops) {
 				world.dropItemNaturally(location, i);
+				if (mainSkill(p)) {
+					world.dropItemNaturally(location, i);
+				}
 			}
 		}
 		
@@ -239,7 +248,11 @@ public class CavemanEffects implements Listener {
 		{
 			double multiplier = 1.0/(level/5.0);
 			double initialDamage = e.getDamage();
-			e.setDamage(initialDamage * multiplier);
+			if (mainSkill(p)) {
+				e.setDamage((initialDamage * multiplier)/2);
+			} else {
+				e.setDamage(initialDamage * multiplier);
+			}
 			if (p.isSneaking()) e.setCancelled(true);
 		}
 		
@@ -276,7 +289,11 @@ public class CavemanEffects implements Listener {
 		{
 			double multiplier = 1.0/(level/15.0);
 			double initialDamage = e.getDamage();
-			e.setDamage(initialDamage * multiplier);
+			if (mainSkill(p)) {
+				e.setDamage((initialDamage * multiplier)*(2.0/3.0));
+			} else {
+				e.setDamage(initialDamage * multiplier);
+			}
 		}
 		
 		//DONE!
@@ -337,7 +354,11 @@ public class CavemanEffects implements Listener {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(3000);
+					if (mainSkill(p)) {
+						Thread.sleep(6000);
+					} else {
+						Thread.sleep(3000);
+					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -398,11 +419,14 @@ public class CavemanEffects implements Listener {
 			
 		//DO THE THING
 
-		{
+		
 			new BukkitRunnable() {
 				@Override
 				public void run() {
 					Material ore = divineRodSearch(face, start, distance);
+					if (mainSkill(p)) {
+						ore = divineRodSearch(face, start, distance*2);
+					} 
 					if (ore == null) {
 						p.sendMessage(ChatColor.GRAY + "No ores detected...");
 					}
@@ -413,7 +437,7 @@ public class CavemanEffects implements Listener {
 				}
 			}.runTaskAsynchronously(Main.plugin);
 			
-		}
+		
 			
 		//DONE!
 		
@@ -525,7 +549,11 @@ public class CavemanEffects implements Listener {
 		//DO THE THING
 
 		{
-			e.getResult().setAmount(2);
+			if (mainSkill(p)) {
+				e.getResult().setAmount(3);
+			} else {
+				e.getResult().setAmount(2);
+			}
 		}
 			
 		//DONE!
@@ -546,13 +574,21 @@ public class CavemanEffects implements Listener {
 		ItemStack tool = e.getItem();
 		
 		if (!tool.getType().toString().contains("PICKAXE")) return;
-		
+		if (!p.isSneaking()) return;
 		if (e.getAction() == Action.RIGHT_CLICK_AIR ||
 			e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			
-			if (manicMinerCooldown.containsKey(p) && 
+			if (manicMinerCooldown.containsKey(p) &&
+				!mainSkill(p) &&
 			   (System.currentTimeMillis() - manicMinerCooldown.get(p)) < (1000*60*3)) {
 				int seconds =  (int)(180-((System.currentTimeMillis() - manicMinerCooldown.get(p))/1000));
+				p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use manic mining again!");
+				return;
+			}
+			if (manicMinerCooldown.containsKey(p) &&
+				mainSkill(p) &&
+			   (System.currentTimeMillis() - manicMinerCooldown.get(p)) < (500*60*3)) {
+				int seconds =  (int)(90-((System.currentTimeMillis() - manicMinerCooldown.get(p))/1000));
 				p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use manic mining again!");
 				return;
 			}
@@ -602,7 +638,11 @@ public class CavemanEffects implements Listener {
 						@Override
 						public void run() {
 							try {
-								Thread.sleep(SkillManager.getLevel(p, SkillType.CAVEMAN) * 1000);
+								if (mainSkill(p)) {
+									Thread.sleep(SkillManager.getLevel(p, SkillType.CAVEMAN) * 2000);
+								} else {
+									Thread.sleep(SkillManager.getLevel(p, SkillType.CAVEMAN) * 1000);
+								}
 								ItemMeta meta = tool.getItemMeta();
 								if (oldLevel > 0) {
 									meta.addEnchant(Enchantment.DIG_SPEED, oldLevel, true);
