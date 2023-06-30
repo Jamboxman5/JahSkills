@@ -1,4 +1,4 @@
-package net.jahcraft.jahskills.effects;
+package net.jahcraft.jahskills.afflicts;
 
 import java.util.ArrayList;
 import java.util.List;

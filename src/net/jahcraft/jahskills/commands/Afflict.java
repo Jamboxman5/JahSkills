@@ -10,8 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import net.jahcraft.jahskills.effects.Affliction;
-import net.jahcraft.jahskills.effects.Afflictions;
+import net.jahcraft.jahskills.afflicts.Affliction;
+import net.jahcraft.jahskills.afflicts.Afflictions;
 import net.md_5.bungee.api.ChatColor;
 
 public class Afflict implements CommandExecutor, TabCompleter {
