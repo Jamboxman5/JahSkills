@@ -53,7 +53,7 @@ public static List<Inventory> invs = new ArrayList<>();
 			MenuFunctions.clickPerk(e,type,p, Perk.ISPEAKFORTHETREES);
 		}
 		else if (e.getSlot() == 43) {
-			MenuFunctions.clickPerk(e,type,p, Perk.THEWASTELANDER);
+			MenuFunctions.clickPerk(e,type,p, Perk.HIPPYHEALING);
 		}
 		else if (e.getSlot() == 44) {
 			MenuFunctions.clickPerk(e,type,p, Perk.MANVSWILD);

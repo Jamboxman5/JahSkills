@@ -219,7 +219,7 @@ public class MenuFunctions {
 			return 37;
 		case THEBIRDSANDTHEBEES:
 			return 41;
-		case THEWASTELANDER:
+		case HIPPYHEALING:
 			return 43;
 		case THEYFLYNOW:
 			return 38;

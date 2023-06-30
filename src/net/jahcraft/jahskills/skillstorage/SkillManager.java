@@ -308,7 +308,7 @@ public class SkillManager {
 			return "Swift Steps";
 		case THEBIRDSANDTHEBEES:
 			return "The Birds & The Bees";
-		case THEWASTELANDER:
+		case HIPPYHEALING:
 			return "The Wastelander";
 		case THEYFLYNOW:
 			return "They Fly Now";

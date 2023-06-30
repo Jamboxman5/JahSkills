@@ -678,13 +678,13 @@ public class Perks {
 												   player);
 			return button;
 		}
-		case THEWASTELANDER:
+		case HIPPYHEALING:
 		{
-			ItemStack button = constructPerkButton(Material.DEAD_BUSH, 
-												   "The Wastelander", 
-												   "Turn your back on nature and kill", 
-												   "every plant you come near.",
-												   perk, 
+			ItemStack button = constructPerkButton(Material.GRASS_BLOCK, 
+												   "Hippy Healing", 
+												   "Shoes are an illusion, and so is death.", 
+												   "Heal by feeling the grass on your bare feet!",
+												   perk,
 												   player);
 			return button;
 		}
@@ -936,7 +936,7 @@ public class Perks {
 			return 6;
 		case THERMALINSULATION:
 			return 12;
-		case THEWASTELANDER:
+		case HIPPYHEALING:
 			return 9;
 		case THEYFLYNOW:
 			return 15;
@@ -1086,7 +1086,7 @@ public class Perks {
 			return 5;
 		case THERMALINSULATION:
 			return 15;
-		case THEWASTELANDER:
+		case HIPPYHEALING:
 			return 10;
 		case THEYFLYNOW:
 			return 20;

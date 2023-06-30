@@ -45,7 +45,7 @@ public class Naturalist {
 		Perk.BIGGERSHOVEL,
 		Perk.NATURESTOUCH,
 		Perk.ISPEAKFORTHETREES,
-		Perk.THEWASTELANDER,
+		Perk.HIPPYHEALING,
 		Perk.MANVSWILD};
 		return perks;
 	}
