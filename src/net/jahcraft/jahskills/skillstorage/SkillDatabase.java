@@ -208,7 +208,11 @@ public class SkillDatabase {
 		}
 		try {
 			while (result.next()) {
-				perks.add(Perk.valueOf(result.getString(1)));
+				try {
+					perks.add(Perk.valueOf(result.getString(1)));
+				} catch(Exception e) {
+					
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
