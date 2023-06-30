@@ -565,7 +565,9 @@ public class CavemanEffects implements Listener {
 		if (e.getPlayer() == null) return;
 		if (e.getItem() == null) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.MANICMINING)) return;
-		if (e.getClickedBlock() == null) return;
+		if (e.getAction() == Action.LEFT_CLICK_BLOCK && e.getClickedBlock() == null) return;
+		if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) return;
+
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK &&
 			e.getAction() != Action.LEFT_CLICK_BLOCK &&
 			e.getAction() != Action.RIGHT_CLICK_AIR) return;
@@ -574,7 +576,6 @@ public class CavemanEffects implements Listener {
 		ItemStack tool = e.getItem();
 		
 		if (!tool.getType().toString().contains("PICKAXE")) return;
-		if (!p.isSneaking()) return;
 		if (e.getAction() == Action.RIGHT_CLICK_AIR ||
 			e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			
