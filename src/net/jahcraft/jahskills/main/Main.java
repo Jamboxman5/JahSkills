@@ -96,6 +96,7 @@ public class Main extends JavaPlugin {
 	private void initializePerkEffects() {
 		getServer().getPluginManager().registerEvents(new ButcherEffects(), this);
 		getServer().getPluginManager().registerEvents(new CavemanEffects(), this);
+		getServer().getPluginManager().registerEvents(new NaturalistEffects(), this);
 	}
 
 	@Override 
