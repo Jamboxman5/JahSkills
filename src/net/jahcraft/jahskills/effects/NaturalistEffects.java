@@ -292,7 +292,7 @@ public class NaturalistEffects implements Listener {
 				(System.currentTimeMillis() - excavCooldown.get(p)) < (cooldownseconds*1000)) {
 				if (e.getAction() == Action.RIGHT_CLICK_AIR) {
 					int seconds =  (int)(cooldownseconds -((System.currentTimeMillis() - excavCooldown.get(p))/1000));
-					p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use mega excavator again!");
+					Format.sendEffectCooldown(p, "MegaExcavator", seconds);
 				}
 				return;
 			}
@@ -301,14 +301,14 @@ public class NaturalistEffects implements Listener {
 			   (System.currentTimeMillis() - excavCooldown.get(p)) < ((cooldownseconds/2)*1000)) {
 				if (e.getAction() == Action.RIGHT_CLICK_AIR) {
 					int seconds =  (int)((cooldownseconds/2)-((System.currentTimeMillis() - excavCooldown.get(p))/1000));
-					p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use mega excavator again!");
+					Format.sendEffectCooldown(p, "MegaExcavator", seconds);
 				}
 				return;
 			}
 				
 			if (!excavReady.contains(p)) {
 				excavReady.add(p);
-				p.sendMessage(Colors.BRIGHTBLUE + "You ready your shovel.");
+				Format.sendReady(p, "Shovel");
 				try {
 					new BukkitRunnable() {
 						@Override
@@ -317,7 +317,7 @@ public class NaturalistEffects implements Listener {
 								Thread.sleep(3000);
 								if (excavReady.contains(p)) {
 									excavReady.remove(p);
-									p.sendMessage(Colors.BRIGHTBLUE + "You lower your shovel.");
+									Format.sendLower(p, "Shovel");
 								}
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
@@ -495,4 +495,5 @@ public class NaturalistEffects implements Listener {
 //		p.sendMessage("canHeal: " + canHeal);
 		return (notCreative && activePerk && onGrass && bareFoot && canHeal);
 	}
+	
 }
