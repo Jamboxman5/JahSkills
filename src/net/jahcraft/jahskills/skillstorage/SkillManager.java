@@ -309,7 +309,7 @@ public class SkillManager {
 		case THEBIRDSANDTHEBEES:
 			return "The Birds & The Bees";
 		case HIPPYHEALING:
-			return "The Wastelander";
+			return "Hippy Healing";
 		case THEYFLYNOW:
 			return "They Fly Now";
 		case TREASURESNIFFER:
@@ -380,7 +380,7 @@ public class SkillManager {
 	public static void setMainSkill(Player p, SkillType type) {
 		SkillDatabase.mainSkills.put(p, type);
 	}
-	public static void removeMainSkill(Player p, SkillType type) {
+	public static void removeMainSkill(Player p) {
 		SkillDatabase.mainSkills.put(p, null);
 	}
 
