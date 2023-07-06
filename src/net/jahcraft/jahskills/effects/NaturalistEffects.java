@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -32,6 +33,8 @@ import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class NaturalistEffects implements Listener {
 
@@ -376,6 +379,7 @@ public class NaturalistEffects implements Listener {
 	}
 	@EventHandler
 	public void biggerShovel(BlockBreakEvent e) {
+
 		
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
@@ -439,5 +443,54 @@ public class NaturalistEffects implements Listener {
 		
 		//DONE!
 		
+	}
+	public static BukkitRunnable getHippyHealingTask() {
+		return new BukkitRunnable() {
+
+			@Override
+			public void run() {
+
+				try {
+					
+					for (Player p : Bukkit.getOnlinePlayers()) {
+						if (canHippyHeal(p)) {
+							try {
+								double healFactor = (20.0 + (20.0 - SkillManager.getLevel(p, type)));
+								double healthToAdd = (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()/healFactor);
+								if (SkillManager.getMainSkill(p) == type) healthToAdd *= 2.0;
+								p.setHealth(p.getHealth() + healthToAdd);
+								TextComponent healMSG = new TextComponent("You're Hippy Healing!");
+								healMSG.setColor(ChatColor.GREEN);
+								p.spigot().sendMessage(ChatMessageType.ACTION_BAR, healMSG);
+							} catch (IllegalArgumentException e) {
+								p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+							}
+//							p.sendMessage("Hippy healed.");
+						} else {
+//							Location loc = p.getLocation().subtract(0,+1,0);
+//							p.sendMessage(loc.getBlock().getType().toString());
+						}
+					}
+										
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+			
+		};
+	}
+	private static boolean canHippyHeal(Player p) {
+		boolean notCreative = p.getGameMode() != GameMode.CREATIVE;
+		boolean activePerk = SkillManager.activePerk(p, Perk.HIPPYHEALING);
+		boolean onGrass = p.getLocation().subtract(0,+1,0).getBlock().getType() == Material.GRASS_BLOCK;
+		boolean bareFoot = p.getInventory().getBoots() == null;
+		boolean canHeal = p.getHealth() < p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+//		p.sendMessage("notcreative: " + notCreative);
+//		p.sendMessage("activePerk: " + activePerk);
+//		p.sendMessage("onGrass: " + onGrass);
+//		p.sendMessage("bareFoot: " + bareFoot);
+//		p.sendMessage("canHeal: " + canHeal);
+		return (notCreative && activePerk && onGrass && bareFoot && canHeal);
 	}
 }
