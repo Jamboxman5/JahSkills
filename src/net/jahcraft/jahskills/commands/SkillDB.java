@@ -9,9 +9,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.skills.SkillType;
-import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.Colors;
@@ -26,7 +27,7 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 		if (!sender.hasPermission("jahskills.admin")) return null;
 		if (arguments1.isEmpty()) {
 			arguments1.add("reset");
-			arguments1.add("clear");
+			arguments1.add("info");
 			arguments1.add("givepoints");
 			arguments1.add("setmainskill");
 		}
@@ -34,6 +35,7 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			for (SkillType type : SkillType.values()) {
 				skilltypes.add(type.toString().toLowerCase());
 			}
+			skilltypes.add("none");
 		}
 		List<String> result = new ArrayList<>();
 		if (args.length == 1) {
@@ -74,8 +76,8 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			reset(sender, args);
 			break;
 		}
-		case "clear": {
-			clear(sender);
+		case "info": {
+			info(sender, args);
 			break;
 		}
 		case "givepoints": {
@@ -102,8 +104,13 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			util.sendUsage("/skilldb setmainskill <player> <skilltype>");
 			return;
 		}
+		boolean clearMainSkill = false;
 		try {
-			SkillType.valueOf(args[2].toUpperCase());
+			if (args[2].equalsIgnoreCase("none")) {
+				clearMainSkill = true;
+			} else {
+				SkillType.valueOf(args[2].toUpperCase());
+			}
 		} catch (IllegalArgumentException e) {
 			sender.sendMessage("Skill not found!");
 			return;
@@ -112,12 +119,18 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			util.sendPlayerNotFound();
 			return;
 		}
-		SkillType type = SkillType.valueOf(args[2].toUpperCase());
+		
 		Player target = Bukkit.getPlayer(args[1]);
-		SkillManager.setMainSkill(target, type);
-		sender.sendMessage(Colors.BLUE + "Their main skill has been changed.");
 
-
+		if (clearMainSkill) {
+			SkillManager.removeMainSkill(target);
+			sender.sendMessage(Colors.BLUE + "Their main skill has been removed.");
+		} else {
+			SkillType type = SkillType.valueOf(args[2].toUpperCase());
+			SkillManager.setMainSkill(target, type);
+			sender.sendMessage(Colors.BLUE + "Their main skill has been changed.");
+		}
+		
 	}
 
 	private void givePoints(CommandSender sender, String[] args) {
@@ -144,11 +157,67 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 		ProgressBar.updateBar(target);		
 	}
 
-	private void clear(CommandSender sender) {
-		SkillDatabase.clearDatabase();
-		SkillDatabase.setupDatabase();
-		sender.sendMessage(Colors.BLUE + "Database cleared.");	
-		ProgressBar.updateAll();
+	private void info(CommandSender sender, String[] args) {
+		if (Bukkit.getPlayer(args[1]) == null) {
+			sender.sendMessage(ChatColor.RED + "Player not found!");
+			return;
+		}
+		
+		Player target = Bukkit.getPlayer(args[1]);
+		
+		sender.sendMessage(Colors.PALEBLUE + "Fetching Skill Data for " + target.getDisplayName() + Colors.PALEBLUE + "...");
+		
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				List<String> msgs = getInfoMessages(target);
+				for (String s : msgs) {
+					sender.sendMessage(s);
+				}
+				
+			}
+			
+		}.runTaskAsynchronously(Main.plugin);
+		
+	}
+	
+	private List<String> getInfoMessages(Player p) {
+		ArrayList<String> messages = new ArrayList<>();
+		
+		messages.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                    ");
+		messages.add(Colors.PALEBLUE + "Player: " + Colors.GOLD + p.getDisplayName());
+		messages.add(Colors.PALEBLUE + "Skill Level: " + Colors.GOLD + SkillManager.getLevel(p));
+		messages.add(Colors.PALEBLUE + "Skill Points: " + Colors.GOLD + SkillManager.getPoints(p));
+		messages.add(Colors.PALEBLUE + "Level Progress: " + Colors.GOLD + String.format("%,.2f", SkillManager.getProgress(p).doubleValue()));
+		if (SkillManager.getMainSkill(p) != null) {
+			messages.add(Colors.PALEBLUE + "Main Skill: " + Colors.GOLD + SkillManager.getMainSkill(p));
+		} else {
+			messages.add(Colors.PALEBLUE + "Main Skill: " + Colors.GOLD + "None");
+		}
+		messages.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                    ");
+		for (SkillType type : SkillType.values()) {
+			messages.add(Colors.PALEBLUE + Colors.getFormattedName(type) + " Level: " + Colors.GOLD + SkillManager.getLevel(p, type));
+			String perks = Colors.PALEBLUE + Colors.getFormattedName(type) + " Perks: ";
+			boolean firstPerk = true;
+			for (String perk : SkillManager.getActivePerks(p, type)) {
+				if (perk == null) {
+					//do nothing
+				}
+				else if (firstPerk) {
+					perks += Colors.GOLD + perk;
+					firstPerk = false;
+				} else {
+					perks += Colors.PALEBLUE + ", " + Colors.GOLD + perk;
+				}
+			}
+			if (!firstPerk) {
+				messages.add(perks);
+			}
+		}
+		messages.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                    ");
+
+		return messages;
 	}
 
 	private void reset(CommandSender sender, String[] args) {
