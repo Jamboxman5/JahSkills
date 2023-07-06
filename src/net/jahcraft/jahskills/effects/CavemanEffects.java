@@ -35,6 +35,7 @@ import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
+import net.jahcraft.jahskills.util.Format;
 import net.md_5.bungee.api.ChatColor;
 
 public class CavemanEffects implements Listener {
@@ -583,20 +584,20 @@ public class CavemanEffects implements Listener {
 				!mainSkill(p) &&
 			   (System.currentTimeMillis() - manicMinerCooldown.get(p)) < (1000*60*3)) {
 				int seconds =  (int)(180-((System.currentTimeMillis() - manicMinerCooldown.get(p))/1000));
-				p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use manic mining again!");
+				Format.sendEffectCooldown(p, "Manic Mining", seconds);
 				return;
 			}
 			if (manicMinerCooldown.containsKey(p) &&
 				mainSkill(p) &&
 			   (System.currentTimeMillis() - manicMinerCooldown.get(p)) < (500*60*3)) {
 				int seconds =  (int)(90-((System.currentTimeMillis() - manicMinerCooldown.get(p))/1000));
-				p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use manic mining again!");
+				Format.sendEffectCooldown(p, "Manic Mining", seconds);
 				return;
 			}
 			
 			if (!manicMinerReady.contains(p)) {
 				manicMinerReady.add(p);
-				p.sendMessage(Colors.BRIGHTBLUE + "You ready your pickaxe.");
+				Format.sendReady(p, "Pickaxe");
 				try {
 					new BukkitRunnable() {
 						@Override
@@ -605,7 +606,7 @@ public class CavemanEffects implements Listener {
 								Thread.sleep(3000);
 								if (manicMinerReady.contains(p)) {
 									manicMinerReady.remove(p);
-									p.sendMessage(Colors.BRIGHTBLUE + "You lower your pickaxe.");
+									Format.sendLower(p, "Pickaxe");
 								}
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block

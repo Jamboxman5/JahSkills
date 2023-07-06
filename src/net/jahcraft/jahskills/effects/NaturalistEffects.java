@@ -32,6 +32,7 @@ import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
+import net.jahcraft.jahskills.util.Format;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -67,7 +68,7 @@ public class NaturalistEffects implements Listener {
 				(System.currentTimeMillis() - treeCapCooldown.get(p)) < (cooldownseconds*1000)) {
 				if (e.getAction() == Action.RIGHT_CLICK_AIR) {
 					int seconds =  (int)(cooldownseconds -((System.currentTimeMillis() - treeCapCooldown.get(p))/1000));
-					p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use treecapitator again!");
+					Format.sendEffectCooldown(p, "TreeCapitator", seconds);
 				}
 				return;
 			}
@@ -76,14 +77,14 @@ public class NaturalistEffects implements Listener {
 			   (System.currentTimeMillis() - treeCapCooldown.get(p)) < ((cooldownseconds/4)*1000)) {
 				if (e.getAction() == Action.RIGHT_CLICK_AIR) {
 					int seconds =  (int)((cooldownseconds/4)-((System.currentTimeMillis() - treeCapCooldown.get(p))/1000));
-					p.sendMessage(ChatColor.RED + "You must wait " + seconds + " more seconds to use treecapitator again!");
+					Format.sendEffectCooldown(p, "TreeCapitator", seconds);
 				}
 				return;
 			}
 				
 			if (!treeCapReady.contains(p)) {
 				treeCapReady.add(p);
-				p.sendMessage(Colors.BRIGHTBLUE + "You ready your axe.");
+				Format.sendReady(p, "Axe");
 				try {
 					new BukkitRunnable() {
 						@Override
@@ -92,7 +93,7 @@ public class NaturalistEffects implements Listener {
 								Thread.sleep(3000);
 								if (treeCapReady.contains(p)) {
 									treeCapReady.remove(p);
-									p.sendMessage(Colors.BRIGHTBLUE + "You lower your axe.");
+									Format.sendLower(p, "Axe");
 								}
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
@@ -140,6 +141,7 @@ public class NaturalistEffects implements Listener {
 		
 		
 	}
+	
 	private void veinMine(Block b, int xp, Material m, Player p, ItemStack tool) {
 		
 		if (b.getType() == m && SkillDatabase.isNatural(b.getLocation())) {
