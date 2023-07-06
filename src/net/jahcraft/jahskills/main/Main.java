@@ -1,22 +1,44 @@
 package net.jahcraft.jahskills.main;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
-import net.jahcraft.jahskills.commands.*;
-import net.jahcraft.jahskills.effects.*;
-import net.jahcraft.jahskills.gui.listeners.*;
-import net.jahcraft.jahskills.skillstorage.*;
-import net.jahcraft.jahskills.skilltracking.*;
+import net.jahcraft.jahskills.commands.Afflict;
+import net.jahcraft.jahskills.commands.ClaimMainSkill;
+import net.jahcraft.jahskills.commands.SkillDB;
+import net.jahcraft.jahskills.commands.SkillQuery;
+import net.jahcraft.jahskills.commands.Skills;
+import net.jahcraft.jahskills.effects.ButcherEffects;
+import net.jahcraft.jahskills.effects.CavemanEffects;
+import net.jahcraft.jahskills.effects.NaturalistEffects;
+import net.jahcraft.jahskills.gui.listeners.ButcherMenuListener;
+import net.jahcraft.jahskills.gui.listeners.CavemanMenuListener;
+import net.jahcraft.jahskills.gui.listeners.ExplorerMenuListener;
+import net.jahcraft.jahskills.gui.listeners.HarvesterMenuListener;
+import net.jahcraft.jahskills.gui.listeners.HuntsmanMenuListener;
+import net.jahcraft.jahskills.gui.listeners.IntellectualMenuListener;
+import net.jahcraft.jahskills.gui.listeners.NaturalistMenuListener;
+import net.jahcraft.jahskills.gui.listeners.SkillMenuListener;
+import net.jahcraft.jahskills.gui.listeners.SurvivalistMenuListener;
+import net.jahcraft.jahskills.skillstorage.LoadSave;
+import net.jahcraft.jahskills.skillstorage.SkillDatabase;
+import net.jahcraft.jahskills.skillstorage.SkillManager;
+import net.jahcraft.jahskills.skilltracking.BlockTracker;
+import net.jahcraft.jahskills.skilltracking.ExpEvents;
+import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
 	
 	public static Main plugin;
 	public static Economy eco;
+	ArrayList<BukkitTask> pluginTasks = new ArrayList<>();
 
 	@Override
 	public void onEnable() {
@@ -54,7 +76,13 @@ public class Main extends JavaPlugin {
 	
 	private void initializeRepeatingTasks() {
 		
-		CavemanEffects.getCaveVisionTask().runTaskTimer(plugin, 0, 5);
+		try {
+			pluginTasks.add(CavemanEffects.getCaveVisionTask().runTaskTimer(plugin, 0, 5));
+			pluginTasks.add(NaturalistEffects.getHippyHealingTask().runTaskTimer(plugin, 0, 60));
+		} catch (Exception e) {
+			
+		}
+		
 		
 	}
 	
@@ -105,6 +133,10 @@ public class Main extends JavaPlugin {
 		SkillDatabase.flushDatabase();
 		ProgressBar.disposeBars();
 //		SkillDatabase.clearDatabase();
+		
+		for (BukkitTask task : pluginTasks) {
+			task.cancel();
+		}
 		
 		Bukkit.getLogger().info("JahSkills Unloaded and Disabled!");
 		
