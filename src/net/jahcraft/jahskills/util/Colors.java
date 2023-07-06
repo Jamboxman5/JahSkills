@@ -2,6 +2,8 @@ package net.jahcraft.jahskills.util;
 
 import org.bukkit.Material;
 
+import net.jahcraft.jahskills.perks.Perk;
+import net.jahcraft.jahskills.skills.SkillType;
 import net.md_5.bungee.api.ChatColor;
 
 public class Colors {
@@ -26,6 +28,26 @@ public class Colors {
         }
         StringBuilder friendlyName = new StringBuilder();
         for ( String word : material.name().split( "_" ) ) {
+            friendlyName.append( word.substring( 0, 1 ).toUpperCase() + word.substring( 1 ).toLowerCase() + " " );
+        }
+        return friendlyName.toString().trim();
+    }
+	public final static String getFormattedName(SkillType type) {
+        if ( type == null ) {
+            return null;
+        }
+        StringBuilder friendlyName = new StringBuilder();
+        for ( String word : type.name().split( "_" ) ) {
+            friendlyName.append( word.substring( 0, 1 ).toUpperCase() + word.substring( 1 ).toLowerCase() + " " );
+        }
+        return friendlyName.toString().trim();
+    }
+	public final static String getFormattedName(Perk perk) {
+        if ( perk == null ) {
+            return null;
+        }
+        StringBuilder friendlyName = new StringBuilder();
+        for ( String word : perk.name().split( "_" ) ) {
             friendlyName.append( word.substring( 0, 1 ).toUpperCase() + word.substring( 1 ).toLowerCase() + " " );
         }
         return friendlyName.toString().trim();
