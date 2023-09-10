@@ -193,7 +193,7 @@ public class MenuFunctions {
 			return 44;
 		case NEPTUNEFLIGHT:
 			return 42;
-		case PALEOLITHICPROWESS:
+		case HARSHPARENTING:
 			return 44;
 		case PIGWHISPERER:
 			return 38;

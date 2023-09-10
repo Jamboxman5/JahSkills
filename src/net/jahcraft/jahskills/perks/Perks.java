@@ -548,12 +548,12 @@ public class Perks {
 												   player);
 			return button;
 		}
-		case PALEOLITHICPROWESS:
+		case HARSHPARENTING:
 		{
-			ItemStack button = constructPerkButton(Material.SWEET_BERRIES, 
-												   "Paleolithic Prowess", 
-												   "You're the best gatherer in the tribe!", 
-												   "Gather more seeds and berries in nature.",
+			ItemStack button = constructPerkButton(Material.LEAD, 
+												   "Harsh Parenting", 
+												   "Harness the power of negative reinforcement", 
+												   "and make those babies grow up before their time!",
 												   perk, 
 												   player);
 			return button;
@@ -906,7 +906,7 @@ public class Perks {
 			return 6;
 		case OREWHISPERER:
 			return 9;
-		case PALEOLITHICPROWESS:
+		case HARSHPARENTING:
 			return 3;
 		case PIGWHISPERER:
 			return 6;
@@ -1056,7 +1056,7 @@ public class Perks {
 			return 10;
 		case OREWHISPERER:
 			return 10;
-		case PALEOLITHICPROWESS:
+		case HARSHPARENTING:
 			return 1;
 		case PIGWHISPERER:
 			return 5;
@@ -1184,6 +1184,16 @@ public class Perks {
 		case THEPUMMELER:
 		{
 			Perk[] conflicts = {Perk.KILLINGBLOW};
+			return Arrays.asList(conflicts);
+		}
+		case MUSHROOMMAN:
+		{
+			Perk[] conflicts = {Perk.NATURESTOUCH};
+			return Arrays.asList(conflicts);
+		}
+		case NATURESTOUCH:
+		{
+			Perk[] conflicts = {Perk.MUSHROOMMAN};
 			return Arrays.asList(conflicts);
 		}
 		default:

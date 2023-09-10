@@ -9,11 +9,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Sapling;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +51,8 @@ public class NaturalistEffects implements Listener {
 	HashMap<Player, Long> treeCapCooldown = new HashMap<>();
 	List<Player> excavReady = new ArrayList<>();
 	HashMap<Player, Long> excavCooldown = new HashMap<>();
-	
+	List<Player> mmNTcooldown = new ArrayList<>();
+
 	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
 	static boolean mainSkill(Player p) { return SkillManager.getMainSkill(p) == type; }
@@ -140,44 +147,6 @@ public class NaturalistEffects implements Listener {
 		
 		
 		
-	}
-	
-	private void veinMine(Block b, int xp, Material m, Player p, ItemStack tool) {
-		
-		if (b.getType() == m && SkillDatabase.isNatural(b.getLocation())) {
-			
-			Damageable meta = (Damageable) tool.getItemMeta();
-			meta.setDamage(meta.getDamage()+1);
-			boolean isBroken = (meta.getDamage() >= tool.getType().getMaxDurability());
-			
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					b.breakNaturally(tool);
-					p.giveExp(xp);
-					tool.setItemMeta(meta);
-					if (isBroken) {
-						p.getInventory().remove(tool);
-						p.playSound(p, Sound.ENTITY_ITEM_BREAK, 1, 1);
-						return;
-					}
-				}
-			}.runTask(Main.plugin);
-			
-			if (b.getRelative(BlockFace.UP).getType() == m) veinMine(b.getRelative(BlockFace.UP), xp, m, p, tool);
-			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.NORTH).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.NORTH), xp, m, p, tool);
-			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH), xp, m, p, tool);
-			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.EAST).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.EAST), xp, m, p, tool);
-			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.WEST).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.WEST), xp, m, p, tool);
-//			if (b.getRelative(BlockFace.DOWN).getType() == m) veinMine(b.getRelative(BlockFace.DOWN), xp, m, p, tool);
-			if (b.getRelative(BlockFace.NORTH).getType() == m) veinMine(b.getRelative(BlockFace.NORTH), xp, m, p, tool);
-			if (b.getRelative(BlockFace.SOUTH).getType() == m) veinMine(b.getRelative(BlockFace.SOUTH), xp, m, p, tool);
-			if (b.getRelative(BlockFace.EAST).getType() == m) veinMine(b.getRelative(BlockFace.EAST), xp, m, p, tool);
-			if (b.getRelative(BlockFace.WEST).getType() == m) veinMine(b.getRelative(BlockFace.WEST), xp, m, p, tool);
-		}
-		
-		
-	
 	}
 	@EventHandler
 	public void lumberJack(BlockBreakEvent e) {
@@ -482,6 +451,264 @@ public class NaturalistEffects implements Listener {
 			
 		};
 	}
+	@EventHandler
+	public void natureTouch(PlayerInteractEvent e) {
+		if (e.getPlayer() == null) return;
+		if (e.getItem() != null) return;
+		if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.NATURESTOUCH)) return;
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+		if (!e.getPlayer().isSneaking()) return;
+		if (e.getClickedBlock() == null) return;
+		if (e.getClickedBlock().getType() == Material.AIR) return;
+		if (mmNTcooldown.contains(e.getPlayer())) return;
+
+		Block b = e.getClickedBlock();
+		Material clickedBlockType = e.getClickedBlock().getType();
+		
+		switch(clickedBlockType) {
+		case COARSE_DIRT: {
+			b.setType(Material.DIRT);
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case DIRT: {
+			b.setType(Material.ROOTED_DIRT);
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case ROOTED_DIRT: {
+			b.setType(Material.GRASS_BLOCK);
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case GRASS_BLOCK: {
+			
+			if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+				b.getRelative(BlockFace.UP).setType(Material.GRASS, false);
+			} else {
+				b.setType(Material.MOSS_BLOCK);
+			}
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case DEAD_BUSH: {
+			b.setType(Material.FERN);
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case MOSS_BLOCK: {
+			
+			if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+				b.getRelative(BlockFace.UP).setType(Material.MOSS_CARPET, false);
+			} 
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case GRASS: {
+			if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+				Bisected data = (Bisected) Bukkit.createBlockData(Material.TALL_GRASS);
+				data.setHalf(Half.BOTTOM);
+				b.setBlockData(data);
+				data.setHalf(Half.TOP);
+				b.getRelative(BlockFace.UP).setBlockData(data);
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			} else {
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+				b.setType(Material.MOSS_CARPET);
+			}
+			break;
+		}
+		case FERN: {
+			if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+				Bisected data = (Bisected) Bukkit.createBlockData(Material.LARGE_FERN);
+				data.setHalf(Half.BOTTOM);
+				b.setBlockData(data);
+				data.setHalf(Half.TOP);
+				b.getRelative(BlockFace.UP).setBlockData(data);
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			} else {
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+				b.setType(Material.MOSS_CARPET);
+			}
+			break;
+		}
+		case AZALEA: {
+			b.setType(Material.FLOWERING_AZALEA);
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		case AZALEA_LEAVES: {
+			b.setType(Material.FLOWERING_AZALEA_LEAVES);
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			startMMNTCooldown(e.getPlayer());
+			break;
+		}
+		default:
+			break;
+		
+		}
+		
+		if (SkillManager.getMainSkill(e.getPlayer()) != type) return;
+		
+		if (e.getClickedBlock().getBlockData() instanceof Sapling) {
+			try {
+				Material original = e.getClickedBlock().getType();
+				if (original.toString().contains("MUSHROOM")) return;
+				TreeType tree = getTreeType(e.getClickedBlock());
+				Location loc = e.getClickedBlock().getLocation();
+				e.getClickedBlock().setType(Material.AIR);
+				if (!e.getClickedBlock().getWorld().generateTree(loc, tree)) {
+					e.getClickedBlock().setType(original);
+					e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You can't grow a tree there!"));
+				} else {
+					Location local = e.getClickedBlock().getLocation();
+					e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+					
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else if (e.getClickedBlock().getBlockData() instanceof Ageable) {
+			Ageable data = (Ageable) e.getClickedBlock().getBlockData();
+			if (data.getAge() < data.getMaximumAge()) {
+				data.setAge(data.getAge()+1);
+				e.getClickedBlock().setBlockData(data);
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 5, .3, .3, .3);
+			}
+		}
+		
+	}
+	@EventHandler
+	public void mushroomMan(PlayerInteractEvent e) {
+		if (e.getPlayer() == null) return;
+		if (e.getItem() != null) return;
+		if (e.getPlayer().getInventory().getItemInMainHand().getType() != Material.AIR) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.MUSHROOMMAN)) return;
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+		if (!e.getPlayer().isSneaking()) return;
+		if (e.getClickedBlock() == null) return;
+		if (e.getClickedBlock().getType() == Material.AIR) return;
+		if (mmNTcooldown.contains(e.getPlayer())) return;
+		
+		Block b = e.getClickedBlock();
+		Material clickedBlockType = e.getClickedBlock().getType();
+		
+		switch(clickedBlockType) {
+		case COARSE_DIRT: {
+			b.setType(Material.DIRT);
+			startMMNTCooldown(e.getPlayer());
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			break;
+		}
+		case DIRT: {
+			b.setType(Material.ROOTED_DIRT);
+			startMMNTCooldown(e.getPlayer());
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			break;
+		}
+		case ROOTED_DIRT: {
+			b.setType(Material.MYCELIUM);
+			startMMNTCooldown(e.getPlayer());
+			Location local = e.getClickedBlock().getLocation();
+			e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+			break;
+		}
+		case MYCELIUM: {
+			
+			if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+				int random = (int) (Math.random()*101);
+				if (random > 50) {
+					b.getRelative(BlockFace.UP).setType(Material.RED_MUSHROOM, false);
+				} else {
+					b.getRelative(BlockFace.UP).setType(Material.BROWN_MUSHROOM, false);
+				}
+				Location local = e.getClickedBlock().getLocation();
+				e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+				startMMNTCooldown(e.getPlayer());
+			}
+			break;
+		}
+//		case GRASS: {
+//			if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+//				b.setBlockData(null);
+//			} else {
+//				b.setType(Material.MOSS_CARPET);
+//			}
+//			break;
+//		}
+		
+		default:
+			break;
+		
+		}
+		if (SkillManager.getMainSkill(e.getPlayer()) != type) return;
+
+		if (e.getClickedBlock().getType() == Material.RED_MUSHROOM ||
+			e.getClickedBlock().getType() == Material.BROWN_MUSHROOM) {
+			try {
+				Material original = e.getClickedBlock().getType();
+				if (!original.toString().contains("MUSHROOM")) return;
+				TreeType tree = getTreeType(e.getClickedBlock());
+				Location loc = e.getClickedBlock().getLocation();
+				e.getClickedBlock().setType(Material.AIR);
+				if (!e.getClickedBlock().getWorld().generateTree(loc, tree)) {
+					e.getClickedBlock().setType(original);
+					e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("You can't grow a mushroom there!"));
+				} else {
+					Location local = e.getClickedBlock().getLocation();
+					e.getClickedBlock().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX()+.5, local.getY()+.5, local.getZ()+.5, 10, .5, .5, .5);
+					
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	@EventHandler
+	public void manVsWild(PlayerInteractEvent e) {
+		if (e.getPlayer() == null) return;
+		if (e.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
+		if (e.getItem() == null) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.MANVSWILD)) return;
+		if (e.getAction() != Action.RIGHT_CLICK_AIR) return;
+		
+		ItemStack item = e.getItem();
+		Material type = item.getType();
+		
+		if (!mvwEatables().contains(type)) return;
+		
+		if (e.getPlayer().getFoodLevel() < 20) {
+			item.setAmount(item.getAmount() - 1);
+			e.getPlayer().getLocation().getWorld().playSound(e.getPlayer().getLocation(), Sound.ENTITY_GENERIC_EAT, 1f, 1f);
+			e.getPlayer().setFoodLevel(e.getPlayer().getFoodLevel() + 1);
+		}
+		
+		
+	}
+	
 	private static boolean canHippyHeal(Player p) {
 		boolean notCreative = p.getGameMode() != GameMode.CREATIVE;
 		boolean activePerk = SkillManager.activePerk(p, Perk.HIPPYHEALING);
@@ -495,5 +722,129 @@ public class NaturalistEffects implements Listener {
 //		p.sendMessage("canHeal: " + canHeal);
 		return (notCreative && activePerk && onGrass && bareFoot && canHeal);
 	}
+	private TreeType getTreeType(Block sapling) {
+		switch(sapling.getType()) {
+		default:
+			return null;
+		case SPRUCE_SAPLING:
+			if (Math.random() > 0.5) {
+				return TreeType.REDWOOD;
+			} else {
+				return TreeType.TALL_REDWOOD;
+			}
+		case OAK_SAPLING:
+			if (Math.random() > 0.2) {
+				return TreeType.TREE;
+			} else {
+				return TreeType.BIG_TREE;
+			}
+		case BIRCH_SAPLING:
+			if (Math.random() > 0.2) {
+				return TreeType.BIRCH;
+			} else {
+				return TreeType.TALL_BIRCH;
+			}
+		case DARK_OAK_SAPLING:
+			return TreeType.DARK_OAK;
+		case ACACIA_SAPLING:
+			return TreeType.ACACIA;
+		case JUNGLE_SAPLING:
+			return TreeType.SMALL_JUNGLE;
+		case MANGROVE_PROPAGULE:
+			if (Math.random() > 0.2) {
+				return TreeType.MANGROVE;
+			} else {
+				return TreeType.TALL_MANGROVE;
+			}			
+		case CHERRY_SAPLING:
+			return TreeType.CHERRY;		
+		case BROWN_MUSHROOM:
+			return TreeType.BROWN_MUSHROOM;		
+		case RED_MUSHROOM:
+			return TreeType.RED_MUSHROOM;	
+		}
+		
+		
+	}
+	private void startMMNTCooldown(Player p) {
+		mmNTcooldown.add(p);
+		try {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(200);
+						if (mmNTcooldown.contains(p)) {
+							mmNTcooldown.remove(p);
+						}
+					} catch (Exception e) {
+						
+					}
+					
+				}
+			}.runTaskAsynchronously(Main.plugin);
+		} catch (Exception e) {
+			
+		}
+	}
+	private void veinMine(Block b, int xp, Material m, Player p, ItemStack tool) {
+		
+		if (b.getType() == m && SkillDatabase.isNatural(b.getLocation())) {
+			
+			Damageable meta = (Damageable) tool.getItemMeta();
+			meta.setDamage(meta.getDamage()+1);
+			boolean isBroken = (meta.getDamage() >= tool.getType().getMaxDurability());
+			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					b.breakNaturally(tool);
+					p.giveExp(xp);
+					tool.setItemMeta(meta);
+					if (isBroken) {
+						p.getInventory().remove(tool);
+						p.playSound(p, Sound.ENTITY_ITEM_BREAK, 1, 1);
+						return;
+					}
+				}
+			}.runTask(Main.plugin);
+			
+			if (b.getRelative(BlockFace.UP).getType() == m) veinMine(b.getRelative(BlockFace.UP), xp, m, p, tool);
+			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.NORTH).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.NORTH), xp, m, p, tool);
+			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH), xp, m, p, tool);
+			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.EAST).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.EAST), xp, m, p, tool);
+			if (b.getRelative(BlockFace.UP).getRelative(BlockFace.WEST).getType() == m) veinMine(b.getRelative(BlockFace.UP).getRelative(BlockFace.WEST), xp, m, p, tool);
+//			if (b.getRelative(BlockFace.DOWN).getType() == m) veinMine(b.getRelative(BlockFace.DOWN), xp, m, p, tool);
+			if (b.getRelative(BlockFace.NORTH).getType() == m) veinMine(b.getRelative(BlockFace.NORTH), xp, m, p, tool);
+			if (b.getRelative(BlockFace.SOUTH).getType() == m) veinMine(b.getRelative(BlockFace.SOUTH), xp, m, p, tool);
+			if (b.getRelative(BlockFace.EAST).getType() == m) veinMine(b.getRelative(BlockFace.EAST), xp, m, p, tool);
+			if (b.getRelative(BlockFace.WEST).getType() == m) veinMine(b.getRelative(BlockFace.WEST), xp, m, p, tool);
+		}
+		
+		
 	
+	}
+	private List<Material> mvwEatables() {
+		ArrayList<Material> materials = new ArrayList<>();
+		materials.add(Material.GRASS);
+		materials.add(Material.SUGAR_CANE);
+		materials.add(Material.SUGAR);
+		materials.add(Material.TURTLE_EGG);
+		materials.add(Material.SEA_PICKLE);
+		materials.add(Material.KELP);
+		materials.add(Material.FERN);
+		materials.add(Material.RED_MUSHROOM);
+		materials.add(Material.BROWN_MUSHROOM);
+		materials.add(Material.WARPED_FUNGUS);
+		materials.add(Material.CRIMSON_FUNGUS);
+		materials.add(Material.WHEAT_SEEDS);
+		materials.add(Material.PUMPKIN_SEEDS);
+		materials.add(Material.MELON_SEEDS);
+		materials.add(Material.BEETROOT_SEEDS);
+		materials.add(Material.COCOA_BEANS);
+		materials.add(Material.NETHER_WART);
+		materials.add(Material.GLISTERING_MELON_SLICE);
+		materials.add(Material.WHEAT);
+		return materials;
+	}
 }

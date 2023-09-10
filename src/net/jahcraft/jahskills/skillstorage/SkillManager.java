@@ -282,7 +282,7 @@ public class SkillManager {
 			return "Navigational Skills";
 		case NEPTUNEFLIGHT:
 			return "Neptune Flight";
-		case PALEOLITHICPROWESS:
+		case HARSHPARENTING:
 			return "Paleolithic Prowess";
 		case PIGWHISPERER:
 			return "Pig Whisperer";

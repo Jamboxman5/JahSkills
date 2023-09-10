@@ -335,6 +335,12 @@ public class SkillDatabase {
 	public static void placedBlock(Location location) {
 		sendQuery("insert ignore into locations values ('" + location.getWorld().getName() + "'," + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + ")");
 	}
+	public static void grownBlock(Location location) {
+		sendQuery("delete from locations where world = '" + location.getWorld().getName() + "' and "
+				+ "x = " + location.getBlockX() + " and "
+				+ "y = " + location.getBlockY() + " and "
+				+ "z = " + location.getBlockZ());
+	}
 
 	public static HashMap<Player, Integer> getSkill(SkillType skill) {
 		switch(skill) {

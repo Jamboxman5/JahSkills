@@ -56,7 +56,7 @@ public static List<Inventory> invs = new ArrayList<>();
 			MenuFunctions.clickPerk(e,type,p, Perk.AGRICULTURALSTUDIES);
 		}
 		else if (e.getSlot() == 44) {
-			MenuFunctions.clickPerk(e,type,p, Perk.PALEOLITHICPROWESS);
+			MenuFunctions.clickPerk(e,type,p, Perk.HARSHPARENTING);
 		}
 	}
 

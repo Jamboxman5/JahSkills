@@ -46,7 +46,7 @@ public class Harvester {
 		Perk.THEBIRDSANDTHEBEES,
 		Perk.FERTILIZATION,
 		Perk.AGRICULTURALSTUDIES,
-		Perk.PALEOLITHICPROWESS};
+		Perk.HARSHPARENTING};
 		return perks;
 	}
 

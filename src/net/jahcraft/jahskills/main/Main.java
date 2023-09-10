@@ -16,7 +16,12 @@ import net.jahcraft.jahskills.commands.SkillQuery;
 import net.jahcraft.jahskills.commands.Skills;
 import net.jahcraft.jahskills.effects.ButcherEffects;
 import net.jahcraft.jahskills.effects.CavemanEffects;
+import net.jahcraft.jahskills.effects.ExplorerEffects;
+import net.jahcraft.jahskills.effects.HarvesterEffects;
+import net.jahcraft.jahskills.effects.HuntsmanEffects;
+import net.jahcraft.jahskills.effects.IntellectualEffects;
 import net.jahcraft.jahskills.effects.NaturalistEffects;
+import net.jahcraft.jahskills.effects.SurvivalistEffects;
 import net.jahcraft.jahskills.gui.listeners.ButcherMenuListener;
 import net.jahcraft.jahskills.gui.listeners.CavemanMenuListener;
 import net.jahcraft.jahskills.gui.listeners.ExplorerMenuListener;
@@ -125,6 +130,11 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ButcherEffects(), this);
 		getServer().getPluginManager().registerEvents(new CavemanEffects(), this);
 		getServer().getPluginManager().registerEvents(new NaturalistEffects(), this);
+		getServer().getPluginManager().registerEvents(new HuntsmanEffects(), this);
+		getServer().getPluginManager().registerEvents(new HarvesterEffects(), this);
+		getServer().getPluginManager().registerEvents(new IntellectualEffects(), this);
+		getServer().getPluginManager().registerEvents(new ExplorerEffects(), this);
+		getServer().getPluginManager().registerEvents(new SurvivalistEffects(), this);
 	}
 
 	@Override 
