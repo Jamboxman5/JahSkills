@@ -179,7 +179,7 @@ public class MenuFunctions {
 			return 37;
 		case WINGEDWARRIOR:
 			return 42;
-		case MAJORSWINDLER:
+		case HIGHDEMAND:
 			return 39;
 		case MANVSWILD:
 			return 44;

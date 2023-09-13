@@ -481,12 +481,12 @@ public class Perks {
 			button.setItemMeta(meta);
 			return button;
 		}
-		case MAJORSWINDLER:
+		case HIGHDEMAND:
 		{
 			ItemStack button = constructPerkButton(Material.EMERALD, 
-												   "Major Swindler", 
-												   "Paying is for suckers! Chance to", 
-												   "make a villager trade without paying.", 
+												   "High Demand", 
+												   "Corner the market! Villagers will", 
+												   "buy more of whatever you have!", 
 												   perk, 
 												   player);
 			return button;
@@ -889,7 +889,7 @@ public class Perks {
 			return 6;
 		case WINGEDWARRIOR:
 			return 15;
-		case MAJORSWINDLER:
+		case HIGHDEMAND:
 			return 15;
 		case MANICMINING:
 			return 9;
@@ -1039,7 +1039,7 @@ public class Perks {
 			return 10;
 		case WINGEDWARRIOR:
 			return 20;
-		case MAJORSWINDLER:
+		case HIGHDEMAND:
 			return 20;
 		case MANICMINING:
 			return 5;

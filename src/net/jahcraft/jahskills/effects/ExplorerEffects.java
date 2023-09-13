@@ -21,7 +21,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.TradeSelectEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -52,7 +51,7 @@ static SkillType type = SkillType.EXPLORER;
 	public static HashMap<Villager, List<MerchantRecipe>> moddedVillagers = new HashMap<>();
 	public static HashMap<Player, Integer> selectedTradeCost = new HashMap<>();
 
-	//private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
+	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
 	static boolean mainSkill(Player p) { return SkillManager.getMainSkill(p) == type; }
 	
@@ -77,19 +76,23 @@ static SkillType type = SkillType.EXPLORER;
 	}
 	
 	@EventHandler
-	public void majorSwindlerSelect(TradeSelectEvent e) {
-		int baseAmount = ((MerchantInventory)e.getInventory()).getSelectedRecipe().getAdjustedIngredient1().getAmount();
-		int modifier = ((MerchantInventory)e.getInventory()).getSelectedRecipe().getSpecialPrice();
-		selectedTradeCost.put((Player) e.getWhoClicked(), baseAmount + modifier);
-	}
-	
-	@EventHandler
-	public void majorSwindlerInitiate(InventoryClickEvent e) {
+	public void highDemand(InventoryClickEvent e) {
 		
 		if (!(e.getInventory() instanceof MerchantInventory)) return;
-		if (!SkillManager.activePerk((Player) e.getWhoClicked(), Perk.MAJORSWINDLER)) return;
-		e.getWhoClicked().getInventory().getContents();
+		if (e.getSlot() != 2) return;
+		if (e.getCurrentItem().getType() == Material.AIR) return;
+		if (e.isCancelled()) return;
+		if (!SkillManager.activePerk((Player) e.getWhoClicked(), Perk.HIGHDEMAND)) return;
 		
+		MerchantInventory tradeMenu = (MerchantInventory) e.getClickedInventory();
+		MerchantRecipe activeRecipe = tradeMenu.getSelectedRecipe();
+		
+		if (activeRecipe.getUses()-1 <= 0) {
+			if (getRandom(4) == 1) {
+				activeRecipe.setUses(activeRecipe.getUses()-1);
+				debugMSG("trade count ignored");
+			}
+		}
 		
 	}
 	

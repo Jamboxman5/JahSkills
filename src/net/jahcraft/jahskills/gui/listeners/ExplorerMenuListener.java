@@ -41,7 +41,7 @@ public static List<Inventory> invs = new ArrayList<>();
 			MenuFunctions.clickPerk(e,type,p, Perk.ARTOFTHEDEAL);
 		}
 		else if (e.getSlot() == 39) {
-			MenuFunctions.clickPerk(e,type,p, Perk.MAJORSWINDLER);
+			MenuFunctions.clickPerk(e,type,p, Perk.HIGHDEMAND);
 		}
 		else if (e.getSlot() == 40) {
 			MenuFunctions.clickPerk(e,type,p, Perk.KENTUCKYDERBY);
