@@ -95,7 +95,7 @@ static SkillType type = SkillType.HARVESTER;
 			if (!mainSkill(e.getPlayer())) return;
 			ageEntity.setBreed(true);
 			Location local = ageEntity.getLocation();
-			ageEntity.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX(), local.getY()+.5, local.getZ(), 10, .5, .5, .5);
+			ageEntity.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, local.getX(), local.getY()+.5, local.getZ(), 10, .5, .5, .5);
 			return;
 		}
 		
@@ -103,7 +103,7 @@ static SkillType type = SkillType.HARVESTER;
 		if (mainSkill(e.getPlayer())) ageToAdd *= 1.5;
 		ageEntity.setAge(ageEntity.getAge() + ageToAdd);
 		Location local = ageEntity.getLocation();
-		ageEntity.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, local.getX(), local.getY()+.5, local.getZ(), 8, .5, .5, .5);	
+		ageEntity.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, local.getX(), local.getY()+.5, local.getZ(), 8, .5, .5, .5);	
 	}
 	@EventHandler
 	public void replanter(BlockBreakEvent e) {

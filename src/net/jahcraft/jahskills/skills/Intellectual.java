@@ -44,7 +44,7 @@ public class Intellectual {
 		Perk.SALVAGEOPERATION,
 		Perk.QUICKLEARNER,
 		Perk.BETTERMENDER,
-		Perk.MAGICMAN,
+		Perk.WINGEDWARRIOR,
 		Perk.USETHEFORCE,
 		Perk.INDUSTRIALREVOLUTION};
 		return perks;

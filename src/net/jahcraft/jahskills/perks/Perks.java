@@ -422,7 +422,7 @@ public class Perks {
 		{
 			ItemStack button = constructPerkButton(Material.BLAST_FURNACE, 
 												   "Industrial Revolution", 
-												   "Construct advanced machines to", 
+												   "Construct simple machines to", 
 												   "perform your tasks for you!", 
 												   perk, 
 												   player);
@@ -468,14 +468,17 @@ public class Perks {
 												   player);
 			return button;
 		}
-		case MAGICMAN:
+		case WINGEDWARRIOR:
 		{
-			ItemStack button = constructPerkButton(Material.DRAGON_BREATH, 
-												   "Magic Man", 
-												   "Learn the ways of the witch! Perform", 
-												   "spells from the Encyclopedia Magica.", 
+			ItemStack button = constructPerkButton(Material.ELYTRA, 
+												   "Winged Warrior", 
+												   "Fight or flight? For the simple minded!", 
+												   "Place elytra on your chestplate and do both!", 
 												   perk, 
 												   player);
+			ItemMeta meta = button.getItemMeta();
+			meta.setCustomModelData(1);
+			button.setItemMeta(meta);
 			return button;
 		}
 		case MAJORSWINDLER:
@@ -884,7 +887,7 @@ public class Perks {
 			return 6;
 		case LUMBERJACK:
 			return 6;
-		case MAGICMAN:
+		case WINGEDWARRIOR:
 			return 15;
 		case MAJORSWINDLER:
 			return 15;
@@ -1034,7 +1037,7 @@ public class Perks {
 			return 10;
 		case LUMBERJACK:
 			return 10;
-		case MAGICMAN:
+		case WINGEDWARRIOR:
 			return 20;
 		case MAJORSWINDLER:
 			return 20;

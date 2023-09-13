@@ -177,7 +177,7 @@ public class MenuFunctions {
 			return 36;
 		case LUMBERJACK:
 			return 37;
-		case MAGICMAN:
+		case WINGEDWARRIOR:
 			return 42;
 		case MAJORSWINDLER:
 			return 39;

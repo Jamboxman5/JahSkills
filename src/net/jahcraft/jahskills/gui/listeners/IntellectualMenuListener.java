@@ -50,7 +50,7 @@ public static List<Inventory> invs = new ArrayList<>();
 			MenuFunctions.clickPerk(e,type,p, Perk.BETTERMENDER);
 		}
 		else if (e.getSlot() == 42) {
-			MenuFunctions.clickPerk(e,type,p, Perk.MAGICMAN);
+			MenuFunctions.clickPerk(e,type,p, Perk.WINGEDWARRIOR);
 		}
 		else if (e.getSlot() == 43) {
 			MenuFunctions.clickPerk(e,type,p, Perk.USETHEFORCE);

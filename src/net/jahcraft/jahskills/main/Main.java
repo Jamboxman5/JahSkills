@@ -3,8 +3,10 @@ package net.jahcraft.jahskills.main;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Horse;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -14,6 +16,7 @@ import net.jahcraft.jahskills.commands.ClaimMainSkill;
 import net.jahcraft.jahskills.commands.SkillDB;
 import net.jahcraft.jahskills.commands.SkillQuery;
 import net.jahcraft.jahskills.commands.Skills;
+import net.jahcraft.jahskills.crafting.RecipeUtil;
 import net.jahcraft.jahskills.effects.ButcherEffects;
 import net.jahcraft.jahskills.effects.CavemanEffects;
 import net.jahcraft.jahskills.effects.ExplorerEffects;
@@ -60,6 +63,8 @@ public class Main extends JavaPlugin {
 		
 		//JAHSKILLS
 		try {
+			
+			RecipeUtil.registerRecipes();
 
 			//SUBCOMMANDS
 			SkillDatabase.setupDatabase();
@@ -140,8 +145,19 @@ public class Main extends JavaPlugin {
 	@Override 
 	public void onDisable() {
 
+		RecipeUtil.unregisterRecipes();
 		SkillDatabase.flushDatabase();
 		ProgressBar.disposeBars();
+		
+		for (Horse h : ExplorerEffects.wildHorses) {
+			ExplorerEffects.removeHorse(h);
+		}
+		
+		for (Horse horse : ExplorerEffects.boostedHorses) {
+			horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue() / 2);
+			ExplorerEffects.boostedHorses.remove(horse);
+		}
+		
 //		SkillDatabase.clearDatabase();
 		
 		for (BukkitTask task : pluginTasks) {

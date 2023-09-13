@@ -54,6 +54,12 @@ public class SkillManager {
 		return SkillDatabase.skillProgress.get(player);
 	}
 	public static void addProgress(Player player, BigDecimal toAdd) {
+		if (SkillManager.activePerk(player, Perk.QUICKLEARNER)) {
+			toAdd.multiply(BigDecimal.valueOf(1.1));
+			if (SkillManager.getMainSkill(player) == SkillType.INTELLECTUAL) {
+				toAdd.multiply(BigDecimal.valueOf(1.1));
+			}
+		}
 		BigDecimal newProgress = SkillDatabase.skillProgress.get(player).add(toAdd);
 		while (newProgress.doubleValue() >= 1) {
 			levelUp(player);
@@ -266,7 +272,7 @@ public class SkillManager {
 			return "Lucky Looter";
 		case LUMBERJACK:
 			return "Lumberjack";
-		case MAGICMAN:
+		case WINGEDWARRIOR:
 			return "Magic Man";
 		case MAJORSWINDLER:
 			return "Major Swindler";
@@ -347,9 +353,15 @@ public class SkillManager {
 	}
 	public static void deactivatePerk(Player p, Perk perk) {
 		SkillDatabase.activePerks.get(p).remove(perk);
+		if (perk == Perk.SWIFTSTEPS) {
+			p.setWalkSpeed(.2f);
+		}
 	}
 	public static void activatePerk(Player p, Perk perk) {
 		SkillDatabase.activePerks.get(p).add(perk);
+		if (perk == Perk.SWIFTSTEPS) {
+			p.setWalkSpeed(.4f);
+		}
 	}
 	public static int getLevelCost(Player p, SkillType type) {
 		if (getLevel(p, type) < 5) return 1;
