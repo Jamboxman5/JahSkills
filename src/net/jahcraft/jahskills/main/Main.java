@@ -40,6 +40,7 @@ import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.skilltracking.BlockTracker;
 import net.jahcraft.jahskills.skilltracking.ExpEvents;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
+import net.jahcraft.jahskills.util.BiomeFinder;
 import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
@@ -65,6 +66,8 @@ public class Main extends JavaPlugin {
 		try {
 			
 			RecipeUtil.registerRecipes();
+			
+			BiomeFinder.initBiomeMenu();
 
 			//SUBCOMMANDS
 			SkillDatabase.setupDatabase();
