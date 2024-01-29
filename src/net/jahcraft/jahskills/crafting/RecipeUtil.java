@@ -15,9 +15,9 @@ public class RecipeUtil {
 	
 	public static void registerRecipes() {
 		FamilyRecipes.registerRecipes();
-		IndustrialRevolution.registerRecipes();
 		SalvageOperations.registerRecipes();
 		TheyFlyNow.registerRecipes();
+		EMTCertified.registerRecipes();
 		
 		registeredRecipes = collectRecipes();
 		recipeKeys = collectRecipeKeys();
@@ -38,6 +38,7 @@ public class RecipeUtil {
 		HashSet<Recipe> recipes = new HashSet<>();
 		
 		recipes.addAll(TheyFlyNow.recipes);
+		recipes.addAll(EMTCertified.recipes);
 		recipes.addAll(FamilyRecipes.recipes);
 		recipes.addAll(SalvageOperations.recipes);
 		

@@ -317,7 +317,7 @@ public class Perks {
 		}
 		case EMTCERTIFIED:
 		{
-			ItemStack button = constructPerkButton(Material.DRIED_KELP, 
+			ItemStack button = constructPerkButton(Material.GHAST_TEAR, 
 												   "EMT Certified", 
 												   "Craft first aid kits to give", 
 												   "yourself the quick health you need!", 
@@ -420,10 +420,10 @@ public class Perks {
 		}
 		case INDUSTRIALREVOLUTION:
 		{
-			ItemStack button = constructPerkButton(Material.BLAST_FURNACE, 
+			ItemStack button = constructPerkButton(Material.PISTON, 
 												   "Industrial Revolution", 
-												   "Construct simple machines to", 
-												   "perform your tasks for you!", 
+												   "Easily convert your redstone", 
+												   "into simple machines!", 
 												   perk, 
 												   player);
 			return button;
@@ -468,12 +468,12 @@ public class Perks {
 												   player);
 			return button;
 		}
-		case WINGEDWARRIOR:
+		case ENDERINFUSION:
 		{
-			ItemStack button = constructPerkButton(Material.ELYTRA, 
-												   "Winged Warrior", 
-												   "Fight or flight? For the simple minded!", 
-												   "Place elytra on your chestplate and do both!", 
+			ItemStack button = constructPerkButton(Material.ENDER_EYE, 
+												   "Ender Infusion", 
+												   "Engage your ender instincts!", 
+												   "Instinctually avoid arrows and water!", 
 												   perk, 
 												   player);
 			ItemMeta meta = button.getItemMeta();
@@ -887,7 +887,7 @@ public class Perks {
 			return 6;
 		case LUMBERJACK:
 			return 6;
-		case WINGEDWARRIOR:
+		case ENDERINFUSION:
 			return 15;
 		case HIGHDEMAND:
 			return 15;
@@ -1037,7 +1037,7 @@ public class Perks {
 			return 10;
 		case LUMBERJACK:
 			return 10;
-		case WINGEDWARRIOR:
+		case ENDERINFUSION:
 			return 20;
 		case HIGHDEMAND:
 			return 20;

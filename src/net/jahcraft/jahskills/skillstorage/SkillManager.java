@@ -272,7 +272,7 @@ public class SkillManager {
 			return "Lucky Looter";
 		case LUMBERJACK:
 			return "Lumberjack";
-		case WINGEDWARRIOR:
+		case ENDERINFUSION:
 			return "Magic Man";
 		case HIGHDEMAND:
 			return "Major Swindler";

@@ -41,6 +41,7 @@ import net.jahcraft.jahskills.skilltracking.BlockTracker;
 import net.jahcraft.jahskills.skilltracking.ExpEvents;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.BiomeFinder;
+import net.jahcraft.jahskills.util.IndustrialRevolution;
 import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
@@ -68,6 +69,7 @@ public class Main extends JavaPlugin {
 			RecipeUtil.registerRecipes();
 			
 			BiomeFinder.initBiomeMenu();
+			IndustrialRevolution.initRedstoneMenu();
 
 			//SUBCOMMANDS
 			SkillDatabase.setupDatabase();
@@ -151,6 +153,7 @@ public class Main extends JavaPlugin {
 		RecipeUtil.unregisterRecipes();
 		SkillDatabase.flushDatabase();
 		ProgressBar.disposeBars();
+		SurvivalistEffects.clearClones();
 		
 		for (Horse h : ExplorerEffects.wildHorses) {
 			ExplorerEffects.removeHorse(h);

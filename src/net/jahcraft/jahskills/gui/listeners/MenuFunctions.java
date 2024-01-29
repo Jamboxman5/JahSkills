@@ -177,7 +177,7 @@ public class MenuFunctions {
 			return 36;
 		case LUMBERJACK:
 			return 37;
-		case WINGEDWARRIOR:
+		case ENDERINFUSION:
 			return 42;
 		case HIGHDEMAND:
 			return 39;

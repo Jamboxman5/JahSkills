@@ -7,9 +7,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -22,6 +25,7 @@ import net.jahcraft.jahskills.crafting.TheyFlyNow;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
+import net.jahcraft.jahskills.util.IndustrialRevolution;
 import net.md_5.bungee.api.ChatColor;
 
 public class IntellectualEffects implements Listener {
@@ -98,6 +102,26 @@ public class IntellectualEffects implements Listener {
 			return;
 		}
 		
+	}
+	
+	@EventHandler
+	public void industrialRevolution(PlayerInteractEvent e) {
+		if (e.getAction() != Action.RIGHT_CLICK_AIR) return;
+		if (e.getItem().getType() != Material.REDSTONE) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.INDUSTRIALREVOLUTION)) return;
+		
+		e.getPlayer().openInventory(IndustrialRevolution.redstoneSelector);
+		IndustrialRevolution.menuItems.put(e.getPlayer(), e.getItem());
+	}
+	
+	@EventHandler
+	public void navigationalSkillsSelect(InventoryClickEvent e) {
+		if (!e.getInventory().equals(IndustrialRevolution.redstoneSelector)) return;
+		e.setCancelled(true);
+		
+		IndustrialRevolution.menuItems.get(e.getWhoClicked()).setType(e.getCurrentItem().getType());
+		
+		e.getWhoClicked().closeInventory();
 	}
 	
 	@EventHandler
