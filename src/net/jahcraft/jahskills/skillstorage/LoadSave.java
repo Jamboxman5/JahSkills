@@ -12,6 +12,7 @@ public class LoadSave implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		SkillDatabase.load(e.getPlayer());
+		SkillManager.updatePrefixes(e.getPlayer());
 		ProgressBar.createBar(e.getPlayer());
 	}
 	

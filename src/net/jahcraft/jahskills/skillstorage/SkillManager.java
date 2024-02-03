@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.perks.Perks;
 import net.jahcraft.jahskills.skills.Butcher;
@@ -21,8 +22,11 @@ import net.jahcraft.jahskills.skills.SkillType;
 import net.jahcraft.jahskills.skills.Survivalist;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.Colors;
+import net.md_5.bungee.api.ChatColor;
 
 public class SkillManager {
+	
+	public static final int MAXSKILLLEVEL = 30;
 	
 	public static int getLevel(Player player) {
 		return SkillDatabase.skillLevel.get(player);
@@ -44,6 +48,7 @@ public class SkillManager {
 		SkillDatabase.skillLevel.put(p, skillLevel);
 		SkillDatabase.skillPoints.put(p, newPoints);
 		p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP, .4f, .4f);
+		updatePrefixes(p);
 		if (pointsAdded > 1) {
 			p.sendMessage(Colors.GOLD + "Level up!" + Colors.BRIGHTBLUE + " » " + Colors.BLUE + "You gained " + Colors.BRIGHTBLUE + pointsAdded + Colors.BLUE + " skill points!" + Colors.BRIGHTBLUE + " (Total: " + newPoints + ")");
 		} else {
@@ -89,6 +94,7 @@ public class SkillManager {
 		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 			SkillDatabase.load(p);
 			ProgressBar.createBar(p);
+			updatePrefixes(p);
 		}
 	}
 	private static void setupSkills() {
@@ -350,6 +356,7 @@ public class SkillManager {
 		int newPoints = skillPoints - getLevelCost(p, type);
 		SkillDatabase.getSkill(type).put(p, skillLevel);
 		SkillDatabase.skillPoints.put(p, newPoints);		
+		updatePrefixes(p);
 	}
 	public static void deactivatePerk(Player p, Perk perk) {
 		SkillDatabase.activePerks.get(p).remove(perk);
@@ -371,7 +378,7 @@ public class SkillManager {
 		return 0;
 	}
 	public static boolean canLevelUp(Player p, SkillType type) {
-		return (SkillManager.getPoints(p) >= SkillManager.getLevelCost(p, type) && SkillManager.getLevel(p, type) < 20);
+		return (SkillManager.getPoints(p) >= SkillManager.getLevelCost(p, type) && SkillManager.getLevel(p, type) < MAXSKILLLEVEL);
 	}
 	public static int getPointsToLevelUp(Player p, SkillType type) {
 		return (getLevelCost(p, type) - getPoints(p));
@@ -391,9 +398,70 @@ public class SkillManager {
 	}
 	public static void setMainSkill(Player p, SkillType type) {
 		SkillDatabase.mainSkills.put(p, type);
+		updatePrefixes(p);
 	}
 	public static void removeMainSkill(Player p) {
 		SkillDatabase.mainSkills.put(p, null);
+		updatePrefixes(p);
+	}
+	public static void updatePrefixes(Player player) {
+		if (player.hasPermission("jahskills.blockprefixes")) return;
+		String defPrefix = "";
+		defPrefix += Colors.format("&7[");
+		defPrefix += Colors.BRIGHTBLUE + "" + ChatColor.BOLD + getLevel(player);
+		defPrefix += Colors.format("&7]");
+
+		if (getMainSkill(player) != null) {
+			defPrefix += Colors.format("&7[");
+			switch(getMainSkill(player)) {
+			case BUTCHER:
+				defPrefix += Butcher.getDisplayName();
+				break;
+			case CAVEMAN:
+				defPrefix += Caveman.getDisplayName();
+				break;
+			case EXPLORER:
+				defPrefix += Explorer.getDisplayName();
+				break;
+			case HARVESTER:
+				defPrefix += Harvester.getDisplayName();
+				break;
+			case HUNTSMAN:
+				defPrefix += Huntsman.getDisplayName();
+				break;
+			case INTELLECTUAL:
+				defPrefix += Intellectual.getDisplayName();
+				break;
+			case NATURALIST:
+				defPrefix += Naturalist.getDisplayName();
+				break;
+			case SURVIVALIST:
+				defPrefix += Survivalist.getDisplayName();
+				break;
+			default:
+				break;
+			}
+			defPrefix += " ";
+			if (getLevel(player, getMainSkill(player)) < 20) {
+				defPrefix += Colors.GOLD + "" + ChatColor.BOLD + "I";
+			} else if (getLevel(player, getMainSkill(player)) < 30) {
+				defPrefix += Colors.GOLD + "" + ChatColor.BOLD + "II";
+			} else {
+				defPrefix += Colors.GOLD + "" + ChatColor.BOLD + "III";
+			}
+			defPrefix += Colors.format("&7]");
+			
+		}
+		defPrefix += Colors.format(" &r");
+		Main.chat.setPlayerPrefix(player, defPrefix);
+		
+	}
+	public static void setLevel(Player target, int lvl) {
+		SkillDatabase.skillLevel.put(target, lvl);
+		updatePrefixes(target);
+		ProgressBar.updateBar(target);
+
+		
 	}
 
 }

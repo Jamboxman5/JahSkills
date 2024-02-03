@@ -15,6 +15,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.jahcraft.jahskills.main.Main;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class BiomeFinder {
 	
@@ -73,7 +78,21 @@ public class BiomeFinder {
 				cancelTasks();
 				
 				if (found != null) {
-					p.sendMessage("Biome found at X: " + found.getBlockX() + " Z: " + found.getBlockZ());
+					TextComponent biomeMSG = new TextComponent("Biome found at X: " + found.getBlockX() + " Z: " + found.getBlockZ());
+					
+					TextComponent[] comps = {biomeMSG};
+					
+					biomeMSG.setColor(Colors.BRIGHTBLUE);
+					
+					if (p.hasPermission("jahskill.biometeleport")) {
+						biomeMSG.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tppos " + found.getBlockX() + " " + (found.getWorld().getHighestBlockYAt(found)+1) + " " + found.getBlockZ()));
+						biomeMSG.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(
+								ChatColor.translateAlternateColorCodes('&', ChatColor.GRAY + "Click to teleport here."))));
+					}
+					
+					p.spigot().sendMessage(comps);
+					
+//					p.sendMessage("Biome found at X: " + found.getBlockX() + " Z: " + found.getBlockZ());
 				} else {
 					p.sendMessage("Biome could not be located within reasonable distance!");
 				}

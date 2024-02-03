@@ -42,20 +42,22 @@ import net.jahcraft.jahskills.skilltracking.ExpEvents;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.BiomeFinder;
 import net.jahcraft.jahskills.util.IndustrialRevolution;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
 	
 	public static Main plugin;
 	public static Economy eco;
+	public static Chat chat;
 	ArrayList<BukkitTask> pluginTasks = new ArrayList<>();
 
 	@Override
 	public void onEnable() {
 		
-		if (!setupEconomy()) {
+		if (!setupVaultHooks()) {
 			
-			Bukkit.getLogger().info("Economy not detected! Disabling JahCore!");
+			Bukkit.getLogger().info("Vault not detected! Disabling JahCore!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 			
@@ -174,14 +176,17 @@ public class Main extends JavaPlugin {
 		
 	}
 	
-	private boolean setupEconomy() {
+	private boolean setupVaultHooks() {
 		
+		RegisteredServiceProvider<Chat> chatservice = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 		RegisteredServiceProvider<Economy> economy = getServer().
 				getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 		
 		if (economy != null)
 			eco = economy.getProvider();
-		return (eco != null);
+		if (chatservice != null)
+			chat = chatservice.getProvider();
+		return (eco != null) && (chat != null);
 		
 	}
 

@@ -21,11 +21,13 @@ import net.jahcraft.jahskills.skillstorage.SkillManager;
 public class ExpEvents implements Listener {
 	
 	private static HashMap<Entity, Player> targetStorage = new HashMap<>();
-	private final double levelScaler = .85;
+	private final double levelScaler = .88;
 	private final double randomMultiplierCap = 20;
 	
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
+		
+		if (e.getPlayer().hasPermission("jahskills.freezexp")) return;
 				
 		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		
@@ -47,7 +49,8 @@ public class ExpEvents implements Listener {
 //		if (ButcherEffects.theGrindrMobs.contains(e.getEntity())) return;
 		if (!targetStorage.containsKey(e.getEntity())) return;
 		Player p = targetStorage.get(e.getEntity());
-		
+		if (p.hasPermission("jahskills.freezexp")) return;
+
 		BigDecimal baseProgress = BigDecimal.valueOf(.03);
 		BigDecimal factor = BigDecimal.valueOf(levelScaler).pow(SkillManager.getLevel(p));
 		BigDecimal multiplier = BigDecimal.valueOf(getMultiplier(e.getEntityType()));
@@ -60,7 +63,8 @@ public class ExpEvents implements Listener {
 	@EventHandler
 	public void onKill(PlayerFishEvent e) {
 		if (e.getState() != State.CAUGHT_FISH) return;
-		
+		if (e.getPlayer().hasPermission("jahskills.freezexp")) return;
+
 		BigDecimal baseProgress = BigDecimal.valueOf(.03);
 		BigDecimal factor = BigDecimal.valueOf(levelScaler).pow(SkillManager.getLevel(e.getPlayer()));
 		BigDecimal multiplier = BigDecimal.valueOf(getMultiplier());
@@ -110,6 +114,7 @@ public class ExpEvents implements Listener {
 		if (type.toString().contains("DIAMOND")) return 75;
 		if (type.toString().contains("GOLD")) return 30;
 		if (type.toString().contains("IRON")) return 15;
+		if (type.toString().contains("COPPER")) return 10;
 		if (type.toString().contains("LAPIS")) return 25;
 		if (type.toString().contains("REDSTONE")) return 20;
 		if (type.toString().contains("COAL")) return 10;

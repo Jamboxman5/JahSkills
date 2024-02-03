@@ -50,7 +50,7 @@ public class Butcher {
 		return perks;
 	}
 
-
+	public static String getDisplayName() { return name; }
 
 	public static ItemStack getSkillButton(Player p) {
 		ItemStack button = new ItemStack(displayItem);
@@ -59,7 +59,7 @@ public class Butcher {
 		List<String> lore = new ArrayList<>();
 		int level = SkillManager.getLevel(p, type);
 		lore.add(Colors.PALEBLUE + "Current Level: " + Colors.GOLD + level);
-		lore.add(Colors.PALEBLUE + "Maximum Level: " + Colors.GOLD + 20);
+		lore.add(Colors.PALEBLUE + "Maximum Level: " + Colors.GOLD + SkillManager.MAXSKILLLEVEL);
 		lore.add(breaker);
 		lore.add(Colors.PALEBLUE + "Leveling up this skill will");
 		lore.add(Colors.PALEBLUE + "unlock new perks! The higher ");

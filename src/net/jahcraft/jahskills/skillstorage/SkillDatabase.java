@@ -292,8 +292,14 @@ public class SkillDatabase {
 	}
 
 	public static void save(Player player) {
+		if (!activePerks.containsKey(player) || !ownedPerks.containsKey(player)) {
+			Bukkit.getLogger().warning("Couldn't save skill data for " + player.getName() + "! Skipping player...");
+			return;
+		}
+		
 		con = getConnection();
 		clearData(player);
+
 		for (Perk p : activePerks.get(player)) {
 			sendQuery("insert into activePerks values ('" + player.getUniqueId() + "'" + ",'" + p.toString() + "')");
 		}

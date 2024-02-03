@@ -30,6 +30,7 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			arguments1.add("info");
 			arguments1.add("givepoints");
 			arguments1.add("setmainskill");
+			arguments1.add("setlevel");
 		}
 		if (skilltypes.isEmpty()) {
 			for (SkillType type : SkillType.values()) {
@@ -88,6 +89,10 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			setMainSkill(sender, args);
 			break;
 		}
+		case "setlevel": {
+			setLevel(sender, args);
+			break;
+		}
 		case "remove": {
 			break;
 		}
@@ -95,6 +100,32 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 		
 		return false;
 
+	}
+	
+	private void setLevel(CommandSender sender, String[] args) {
+		CommandUtil util = new CommandUtil(sender, "skilldb");
+		
+		if (args.length != 3) {
+			util.sendUsage("/skilldb setlevel <player> <level>");
+			return;
+		}
+		int lvl = 0;
+		try {
+			lvl = Integer.parseInt(args[2]);
+		} catch (NumberFormatException e) {
+			sender.sendMessage("Invalid Level!");
+			return;
+		}
+		if (!util.isPlayer(args[1])) {
+			util.sendPlayerNotFound();
+			return;
+		}
+		
+		Player target = Bukkit.getPlayer(args[1]);
+
+		SkillManager.setLevel(target, lvl);
+		sender.sendMessage(Colors.BLUE + "Their level has been updated.");
+		
 	}
 	
 	private void setMainSkill(CommandSender sender, String[] args) {
