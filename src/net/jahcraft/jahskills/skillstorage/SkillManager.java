@@ -374,7 +374,7 @@ public class SkillManager {
 		if (getLevel(p, type) < 5) return 1;
 		if (getLevel(p, type) < 10) return 2;
 		if (getLevel(p, type) < 15) return 3;
-		if (getLevel(p, type) <= 20) return 5;
+		if (getLevel(p, type) <= MAXSKILLLEVEL) return 5;
 		return 0;
 	}
 	public static boolean canLevelUp(Player p, SkillType type) {
