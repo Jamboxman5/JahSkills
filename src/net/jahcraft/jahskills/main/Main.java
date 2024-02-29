@@ -34,6 +34,7 @@ import net.jahcraft.jahskills.gui.listeners.IntellectualMenuListener;
 import net.jahcraft.jahskills.gui.listeners.NaturalistMenuListener;
 import net.jahcraft.jahskills.gui.listeners.SkillMenuListener;
 import net.jahcraft.jahskills.gui.listeners.SurvivalistMenuListener;
+import net.jahcraft.jahskills.papi.PAPIExpansion;
 import net.jahcraft.jahskills.skillstorage.LoadSave;
 import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
@@ -63,6 +64,10 @@ public class Main extends JavaPlugin {
 			
 		}
 		
+		if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PAPIExpansion(this).register();
+		}
+		
 		plugin = this;
 		
 		//JAHSKILLS
@@ -76,6 +81,7 @@ public class Main extends JavaPlugin {
 			//SUBCOMMANDS
 			SkillDatabase.setupDatabase();
 			SkillManager.loadSkills();
+			
 			
 			initializePerkEffects();
 			initializeDataTrackers();

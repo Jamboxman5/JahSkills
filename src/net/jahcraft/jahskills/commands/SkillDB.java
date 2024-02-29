@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.skills.SkillType;
+import net.jahcraft.jahskills.skillstorage.SkillDatabase;
 import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.skilltracking.ProgressBar;
 import net.jahcraft.jahskills.util.Colors;
@@ -28,6 +29,7 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 		if (arguments1.isEmpty()) {
 			arguments1.add("reset");
 			arguments1.add("info");
+			arguments1.add("lookup");
 			arguments1.add("givepoints");
 			arguments1.add("setmainskill");
 			arguments1.add("setlevel");
@@ -78,6 +80,10 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			break;
 		}
 		case "info": {
+			info(sender, args);
+			break;
+		}
+		case "lookup": {
 			info(sender, args);
 			break;
 		}
@@ -189,14 +195,36 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 	}
 
 	private void info(CommandSender sender, String[] args) {
+		
 		if (Bukkit.getPlayer(args[1]) == null) {
-			sender.sendMessage(ChatColor.RED + "Player not found!");
+			//PLAYER OFFLINE
+			if (SkillDatabase.getUUID(args[1]).equals(args[1])) {
+				//playernotfound
+				sender.sendMessage(ChatColor.RED + "Player not found!");
+				return;
+			}
+			
+			String uuid = SkillDatabase.getUUID(args[1]);
+			sender.sendMessage(Colors.PALEBLUE + "Fetching Skill Data for " + Colors.GOLD + SkillDatabase.getUsername(uuid) + Colors.PALEBLUE + "...");
+			new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					List<String> msgs = getInfoMessages(args[1], uuid);
+					for (String s : msgs) {
+						sender.sendMessage(s);
+					}
+					
+				}
+				
+			}.runTaskAsynchronously(Main.plugin);
+			
 			return;
 		}
-		
+				
 		Player target = Bukkit.getPlayer(args[1]);
 		
-		sender.sendMessage(Colors.PALEBLUE + "Fetching Skill Data for " + target.getDisplayName() + Colors.PALEBLUE + "...");
+		sender.sendMessage(Colors.PALEBLUE + "Fetching Skill Data for " + Colors.GOLD + target.getDisplayName() + Colors.PALEBLUE + "...");
 		
 		new BukkitRunnable() {
 
@@ -232,6 +260,45 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 			String perks = Colors.PALEBLUE + Colors.getFormattedName(type) + " Perks: ";
 			boolean firstPerk = true;
 			for (String perk : SkillManager.getActivePerks(p, type)) {
+				if (perk == null) {
+					//do nothing
+				}
+				else if (firstPerk) {
+					perks += Colors.GOLD + perk;
+					firstPerk = false;
+				} else {
+					perks += Colors.PALEBLUE + ", " + Colors.GOLD + perk;
+				}
+			}
+			if (!firstPerk) {
+				messages.add(perks);
+			}
+		}
+		messages.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                    ");
+
+		return messages;
+	}
+	
+	private List<String> getInfoMessages(String name, String uuid) {
+		ArrayList<String> messages = new ArrayList<>();
+		
+		messages.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                    ");
+		messages.add(Colors.PALEBLUE + "Player: " + Colors.GOLD + SkillDatabase.getUsername(uuid));
+		messages.add(Colors.PALEBLUE + "Skill Level: " + Colors.GOLD + SkillDatabase.getData(uuid, "userlevels"));
+		messages.add(Colors.PALEBLUE + "Skill Points: " + Colors.GOLD + SkillDatabase.getData(uuid, "userpoints"));
+		messages.add(Colors.PALEBLUE + "Level Progress: " + Colors.GOLD + String.format("%,.2f", Double.parseDouble(SkillDatabase.getData(uuid, "userprogress"))));
+		if (SkillDatabase.getMainSkill(uuid) != null) {
+			messages.add(Colors.PALEBLUE + "Main Skill: " + Colors.GOLD + SkillDatabase.getMainSkill(uuid));
+		} else {
+			messages.add(Colors.PALEBLUE + "Main Skill: " + Colors.GOLD + "None");
+		}
+		messages.add(Colors.BLUE + "" + ChatColor.STRIKETHROUGH + "                    ");
+		for (SkillType type : SkillType.values()) {
+			String table = type.toString().toLowerCase() + "level";
+			messages.add(Colors.PALEBLUE + Colors.getFormattedName(type) + " Level: " + Colors.GOLD + SkillDatabase.getLevel(uuid, table));
+			String perks = Colors.PALEBLUE + Colors.getFormattedName(type) + " Perks: ";
+			boolean firstPerk = true;
+			for (String perk : SkillDatabase.getActivePerks(uuid, type)) {
 				if (perk == null) {
 					//do nothing
 				}

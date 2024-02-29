@@ -89,6 +89,36 @@ public class SkillDatabase {
 		e.printStackTrace();
 	}
 	
+	public static String getUsername(String uuid) {
+		try {
+			ResultSet result = sendResultQuery("select name from usernames where uuid = '" + uuid + "'");
+			if (result.next()) {
+				return result.getString(1);
+			} else {
+				return uuid;
+			}
+		} catch (SQLException e) {
+			Bukkit.getLogger().warning("Error loading username data for: " + uuid);
+			e.printStackTrace();
+			return uuid;
+		} 	
+	}
+	
+	public static String getUUID(String username) {
+		try {
+			ResultSet result = sendResultQuery("select uuid from usernames where name = '" + username + "'");
+			if (result.next()) {
+				return result.getString(1);
+			} else {
+				return username;
+			}
+		} catch (SQLException e) {
+			Bukkit.getLogger().warning("Error loading uuid data for: " + username);
+			e.printStackTrace();
+			return username;
+		} 	
+	}
+	
 	public static void setupDatabase() {
 		Bukkit.getLogger().info("Setting up database...");
 		try {
@@ -105,6 +135,7 @@ public class SkillDatabase {
 			sendUnsafeQuery("create table survivalistlevel(uuid varchar(36), level int, primary key ( uuid ) )");
 			sendUnsafeQuery("create table locations (world varchar(36), x int, y int, z int)");
 			sendUnsafeQuery("create table userskills (uuid varchar(36), primary key (uuid))");
+			sendUnsafeQuery("create table usernames (uuid varchar(36), name varchar(36), primary key (uuid))");
 			sendUnsafeQuery("create table userpoints (uuid varchar(36), value smallint, primary key (uuid))");
 			sendUnsafeQuery("create table userlevels (uuid varchar(36), value smallint, primary key (uuid))");
 			sendUnsafeQuery("create table userprogress (uuid varchar(36), value double(5,4), primary key (uuid))");
@@ -135,6 +166,7 @@ public class SkillDatabase {
 			sendUnsafeQuery("drop table explorerlevel");
 			sendUnsafeQuery("drop table survivalistlevel");
 			sendUnsafeQuery("drop table locations");
+			sendUnsafeQuery("drop table usernames");
 		} catch (SQLException e) {
 			Bukkit.getLogger().info("Error Detected! Reporting...");
 			e.printStackTrace();
@@ -170,12 +202,43 @@ public class SkillDatabase {
 		
 	}
 	
-	private static SkillType getMainSkill(Player p) {
+	public static SkillType getMainSkill(Player p) {
 		try {
 			return SkillType.valueOf(getMainSkillData(p));
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public static SkillType getMainSkill(String uuid) {
+		try {
+			return SkillType.valueOf(getMainSkillData(uuid));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public static List<String> getSkillTop() {
+		List<String> players = new ArrayList<>();
+		ResultSet result = null;
+		try {
+			result = sendResultQuery("select * from userlevels order by value desc");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return players;
+		}
+		
+		try {
+			int i = 0;
+			while (result.next() && i < 10) {
+				players.add(getUsername(result.getString(1)) + " - " + result.getString(2));
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return players;
 	}
 
 	private static List<Perk> getActivePerks(Player p) {
@@ -194,6 +257,39 @@ public class SkillDatabase {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		return perks;
+	}
+	
+	public static List<Perk> getActivePerks(String uuid) {
+		List<Perk> perks = new ArrayList<>();
+		ResultSet result = null;
+		try {
+			result = sendResultQuery("select perk from activePerks where uuid = '" + uuid + "'");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return perks;
+		}
+		
+		try {
+			while (result.next()) {
+				perks.add(Perk.valueOf(result.getString(1)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return perks;
+	}
+	
+	public static String[] getActivePerks(String uuid, SkillType type) {
+		List<Perk> activePerks = getActivePerks(uuid);
+		String[] perks = new String[9];
+		int count = 0;
+		for (Perk perk : SkillManager.getPerks(type)) {
+			if (activePerks.contains(perk)) {
+				perks[count] = SkillManager.getFormattedName(perk);
+				count++; 
+			}
 		}
 		return perks;
 	}
@@ -244,6 +340,30 @@ public class SkillDatabase {
 		} 
 	}
 	
+	public static String getData(String uuid, String table) {
+		try {
+			ResultSet result = sendResultQuery("select value from " + table + " where uuid = '" + uuid + "'");
+			if (result.next()) {
+				return result.getString(1);
+			} else {
+				if (table.equals("userpoints") || table.equals("userprogress")) {
+					return "0";
+				} else {
+					return "1";
+				}
+			}
+		} catch (SQLException e) {
+			Bukkit.getLogger().warning("Error loading " + table + "data for: " + uuid);
+			e.printStackTrace();
+			if (table.equals("userpoints") || table.equals("userprogress")) {
+				return "0";
+			} else {
+				return "1";
+
+			}
+		} 
+	}
+	
 	private static String getMainSkillData(Player p) {
 		try {
 			ResultSet result = sendResultQuery("select skill from " + "mainskills" + " where uuid = '" + p.getUniqueId() + "'");
@@ -257,7 +377,20 @@ public class SkillDatabase {
 		} 
 	}
 	
-	private static String getLevel(Player p, String table) {
+	public static String getMainSkillData(String uuid) {
+		try {
+			ResultSet result = sendResultQuery("select skill from " + "mainskills" + " where uuid = '" + uuid + "'");
+			if (result.next()) {
+				return result.getString(1);
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			return null;
+		} 
+	}
+	
+	public static String getLevel(Player p, String table) {
 		try {
 			ResultSet result = sendResultQuery("select level from " + table + " where uuid = '" + p.getUniqueId() + "'");
 			if (result.next()) {
@@ -267,6 +400,21 @@ public class SkillDatabase {
 			}
 		} catch (SQLException e) {
 			Bukkit.getLogger().warning("Error loading " + table + "data for: " + p.getName());
+			e.printStackTrace();
+			return "0";
+		} 
+	}
+	
+	public static String getLevel(String uuid, String table) {
+		try {
+			ResultSet result = sendResultQuery("select level from " + table + " where uuid = '" + uuid + "'");
+			if (result.next()) {
+				return result.getString(1);
+			} else {
+				return "0";
+			}
+		} catch (SQLException e) {
+			Bukkit.getLogger().warning("Error loading " + table + "data for: " + uuid);
 			e.printStackTrace();
 			return "0";
 		} 
@@ -288,6 +436,7 @@ public class SkillDatabase {
 		sendQuery("delete from survivalistlevel where uuid = '" + p.getUniqueId() + "'");
 		sendQuery("delete from naturalistlevel where uuid = '" + p.getUniqueId() + "'");
 		sendQuery("delete from intellectuallevel where uuid = '" + p.getUniqueId() + "'");
+		sendQuery("delete from usernames where uuid = '" + p.getUniqueId() + "'");
 		
 	}
 
@@ -318,6 +467,7 @@ public class SkillDatabase {
 		sendQuery("insert into survivalistlevel values ('" + player.getUniqueId() + "', " + SkillManager.getLevel(player, SkillType.SURVIVALIST) + ")");
 		sendQuery("insert into naturalistlevel values ('" + player.getUniqueId() + "', " + SkillManager.getLevel(player, SkillType.NATURALIST) + ")");
 		sendQuery("insert into intellectuallevel values ('" + player.getUniqueId() + "', " + SkillManager.getLevel(player, SkillType.INTELLECTUAL) + ")");
+		sendQuery("insert into usernames values ('" + player.getUniqueId() + "', '" + player.getName() + "')");
 		if (SkillManager.getMainSkill(player) != null) {
 			sendQuery("insert into mainskills values ('" + player.getUniqueId() + "', '" + SkillManager.getMainSkill(player).toString() + "')");
 		}
