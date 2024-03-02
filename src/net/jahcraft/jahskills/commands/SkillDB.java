@@ -320,6 +320,11 @@ public class SkillDB implements CommandExecutor, TabCompleter {
 
 	private void reset(CommandSender sender, String[] args) {
 		if (Bukkit.getPlayer(args[1]) == null) {
+			if (SkillDatabase.getUUID(args[1]) != args[1]) {
+				SkillManager.reset(SkillDatabase.getUUID(args[1]));
+				sender.sendMessage(Colors.BLUE + "Their skills have been reset.");
+				return;
+			}
 			sender.sendMessage(ChatColor.RED + "Player not found!");
 			return;
 		}

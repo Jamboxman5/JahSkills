@@ -131,6 +131,9 @@ public class SkillManager {
 		SkillDatabase.survivalistLevel.put(target, 0);
 		ProgressBar.updateBar(target);
 	}
+	public static void reset(String uuid) {
+		SkillDatabase.clearData(uuid);
+	}
 	public static int getAvailablePerks(Player player, SkillType type) {
 		int available = 0;
 		for (Perk perk : getPerks(type)) {
@@ -452,7 +455,7 @@ public class SkillManager {
 			defPrefix += Colors.format("&7]");
 			
 		}
-		defPrefix += Colors.format(" &r");
+		defPrefix += " " + ChatColor.YELLOW;
 		Main.chat.setPlayerPrefix(player, defPrefix);
 		
 	}

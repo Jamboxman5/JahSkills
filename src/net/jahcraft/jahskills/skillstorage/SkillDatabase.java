@@ -439,6 +439,26 @@ public class SkillDatabase {
 		sendQuery("delete from usernames where uuid = '" + p.getUniqueId() + "'");
 		
 	}
+	
+	public static void clearData(String uuid) {
+		sendQuery("delete from mainskills where uuid = '" + uuid + "'");
+		sendQuery("delete from ownedPerks where uuid = '" + uuid + "'");
+		sendQuery("delete from activePerks where uuid = '" + uuid + "'");
+		sendQuery("delete from userskills where uuid = '" + uuid + "'");
+		sendQuery("delete from userpoints where uuid = '" + uuid + "'");
+		sendQuery("delete from userlevels where uuid = '" + uuid + "'");
+		sendQuery("delete from userprogress where uuid = '" + uuid + "'");
+		sendQuery("delete from butcherlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from cavemanlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from explorerlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from harvesterlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from huntsmanlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from survivalistlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from naturalistlevel where uuid = '" + uuid + "'");
+		sendQuery("delete from intellectuallevel where uuid = '" + uuid + "'");
+//		sendQuery("delete from usernames where uuid = '" + uuid + "'");
+		
+	}
 
 	public static void save(Player player) {
 		if (!activePerks.containsKey(player) || !ownedPerks.containsKey(player)) {

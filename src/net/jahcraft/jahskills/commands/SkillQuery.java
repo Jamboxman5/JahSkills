@@ -24,8 +24,8 @@ public class SkillQuery implements CommandExecutor {
 			return true;
 		}
 		String query = "";
-		for (int i = 1; i<args.length; i++) {
-			query += args[i];
+		for (int i = 0; i<args.length; i++) {
+			query += args[i] + " ";
 		}
 		
 		try {
@@ -33,7 +33,8 @@ public class SkillQuery implements CommandExecutor {
 			sender.sendMessage(Colors.BLUE + "Query sent!");
 			return true;
 		} catch (SQLException e) {
-			sender.sendMessage(ChatColor.RED + "Invalid query! Check syntax and try again!");
+			sender.sendMessage(ChatColor.RED + "Invalid query! Check console for details!");
+			e.printStackTrace();
 			return true;
 		}
 		
