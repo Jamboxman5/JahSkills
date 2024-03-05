@@ -812,149 +812,149 @@ public class Perks {
 	public static int getPointCost(Perk p) {
 		switch(p) {
 		case BLOODMONEY:
-			return 9;
+			return 5;
 		case BLUNTFORCETRAUMA:
-			return 3;
+			return 2;
 		case HITMAN:
-			return 12;
+			return 8;
 		case KILLINGBLOW:
-			return 15;
+			return 10;
 		case SELFDEFENSE:
 			return 3;
 		case SERRATIONS:
-			return 3;
+			return 2;
 		case SPOILSOFWAR:
-			return 6;
+			return 5;
 		case THEGRINDR:
-			return 9;
+			return 6;
 		case THEPUMMELER:
-			return 3;
+			return 2;
 		case AGRICULTURALSTUDIES:
-			return 6;
+			return 3;
 		case ARTFULDODGER:
-			return 12;
+			return 5;
 		case ARTOFTHEDEAL:
-			return 15;
+			return 8;
 		case ATTACKOFTHECLONES:
-			return 12;
+			return 6;
 		case BAREHANDEDARCHERY:
-			return 6;
+			return 2;
 		case BETTERMENDER:
-			return 15;
+			return 8;
 		case BIGGERSHOVEL:
-			return 3;
+			return 2;
 		case BOMBTHROWER:
-			return 15;
+			return 10;
 		case CALLOFTHEWILD:
-			return 6;
-		case CAVEVISION:
-			return 15;
-		case CHRISKYLE:
-			return 12;
-		case CLIMBINGGEAR:
-			return 6;
-		case DIVININGROD:
-			return 12;
-		case EFFICIENTDIGGER:
 			return 3;
+		case CAVEVISION:
+			return 6;
+		case CHRISKYLE:
+			return 6;
+		case CLIMBINGGEAR:
+			return 3;
+		case DIVININGROD:
+			return 10;
+		case EFFICIENTDIGGER:
+			return 2;
 		case EMTCERTIFIED:
-			return 15;
+			return 9;
 		case EXPLOSIVESHOTS:
-			return 12;
+			return 10;
 		case FAMILYRECIPES:
 			return 3;
 		case FARMINGFRENZY:
 			return 3;
 		case FERTILITYTREATMENT:
-			return 6;
+			return 5;
 		case FERTILIZATION:
 			return 3;
 		case FREAKISHFARMING:
-			return 12;
-		case GORDONRAMSAY:
 			return 6;
+		case GORDONRAMSAY:
+			return 3;
 		case GREENTHUMB:
-			return 9;
+			return 6;
 		case INCENDIARYROUNDS:
 			return 3;
 		case INDUSTRIALREVOLUTION:
-			return 12;
+			return 8;
 		case ISPEAKFORTHETREES:
-			return 6;
+			return 4;
 		case KENTUCKYDERBY:
-			return 3;
+			return 2;
 		case LUCKYLOOTER:
 			return 6;
 		case LUMBERJACK:
-			return 6;
+			return 5;
 		case ENDERINFUSION:
-			return 15;
+			return 10;
 		case HIGHDEMAND:
-			return 15;
+			return 10;
 		case MANICMINING:
-			return 9;
+			return 4;
 		case MANVSWILD:
-			return 3;
+			return 2;
 		case MEGAEXCAVATOR:
-			return 6;
+			return 4;
 		case MOTHERLODE:
-			return 12;
+			return 7;
 		case MUSHROOMMAN:
-			return 3;
+			return 2;
 		case NATURESTOUCH:
-			return 6;
+			return 4;
 		case NAVIGATIONALSKILLS:
-			return 12;
+			return 5;
 		case NEPTUNEFLIGHT:
 			return 6;
 		case OREWHISPERER:
-			return 9;
+			return 6;
 		case HARSHPARENTING:
-			return 3;
+			return 1;
 		case PIGWHISPERER:
-			return 6;
+			return 2;
 		case QUICKLEARNER:
-			return 12;
+			return 7;
 		case REPLANTER:
-			return 3;
+			return 2;
 		case RESURRECTION:
-			return 15;
+			return 10;
 		case SALVAGEOPERATION:
-			return 6;
+			return 4;
 		case SLAUGHTERHOUSE:
-			return 6;
+			return 2;
 		case SNIPERSENSE:
-			return 9;
-		case SUPERFOODS:
-			return 15;
-		case SUPERIORSMELTING:
-			return 12;
-		case SUPERSAIYAN:
-			return 12;
-		case SWEETMEATS:
-			return 9;
-		case SWIFTSTEPS:
-			return 9;
-		case THEBIRDSANDTHEBEES:
 			return 6;
+		case SUPERFOODS:
+			return 7;
+		case SUPERIORSMELTING:
+			return 5;
+		case SUPERSAIYAN:
+			return 8;
+		case SWEETMEATS:
+			return 5;
+		case SWIFTSTEPS:
+			return 8;
+		case THEBIRDSANDTHEBEES:
+			return 2;
 		case THERMALINSULATION:
-			return 12;
+			return 5;
 		case HIPPYHEALING:
-			return 9;
+			return 3;
 		case THEYFLYNOW:
-			return 15;
+			return 8;
 		case TREASURESNIFFER:
-			return 12;
+			return 8;
 		case TREECAPITATOR:
-			return 9;
+			return 4;
 		case UNMATCHEDWILLPOWER:
-			return 15;
+			return 10;
 		case USETHEFORCE:
-			return 9;
+			return 6;
 		case XPREBATES:
-			return 9;
+			return 4;
 		case YOUMISSEDME:
-			return 12;
+			return 8;
 		}
 		return 0;
 	}
@@ -962,91 +962,91 @@ public class Perks {
 	public static int getLevelRequirement(Perk p) {
 		switch(p) {
 		case BLOODMONEY:
-			return 10;
+			return 8;
 		case BLUNTFORCETRAUMA:
-			return 5;
+			return 3;
 		case HITMAN:
-			return 20;
+			return 12;
 		case KILLINGBLOW:
-			return 20;
+			return 15;
 		case SELFDEFENSE:
-			return 10;
+			return 8;
 		case SERRATIONS:
 			return 5;
 		case SPOILSOFWAR:
-			return 15;
+			return 10;
 		case THEGRINDR:
-			return 15;
+			return 12;
 		case THEPUMMELER:
-			return 5;
+			return 3;
 		case AGRICULTURALSTUDIES:
-			return 10;
+			return 6;
 		case ARTFULDODGER:
-			return 10;
+			return 8;
 		case ARTOFTHEDEAL:
 			return 15;
 		case ATTACKOFTHECLONES:
 			return 15;
 		case BAREHANDEDARCHERY:
-			return 5;
+			return 3;
 		case BETTERMENDER:
-			return 15;
+			return 8;
 		case BIGGERSHOVEL:
 			return 1;
 		case BOMBTHROWER:
-			return 20;
-		case CALLOFTHEWILD:
-			return 1;
-		case CAVEVISION:
-			return 10;
-		case CHRISKYLE:
 			return 15;
+		case CALLOFTHEWILD:
+			return 3;
+		case CAVEVISION:
+			return 5;
+		case CHRISKYLE:
+			return 5;
 		case CLIMBINGGEAR:
-			return 10;
+			return 6;
 		case DIVININGROD:
 			return 15;
 		case EFFICIENTDIGGER:
-			return 5;
+			return 3;
 		case EMTCERTIFIED:
-			return 15;
+			return 12;
 		case EXPLOSIVESHOTS:
 			return 15;
 		case FAMILYRECIPES:
 			return 5;
 		case FARMINGFRENZY:
-			return 10;
+			return 8;
 		case FERTILITYTREATMENT:
 			return 5;
 		case FERTILIZATION:
 			return 10;
 		case FREAKISHFARMING:
-			return 20;
-		case GORDONRAMSAY:
 			return 15;
+		case GORDONRAMSAY:
+			return 6;
 		case GREENTHUMB:
 			return 15;
 		case INCENDIARYROUNDS:
-			return 10;
+			return 8;
 		case INDUSTRIALREVOLUTION:
-			return 20;
+			return 15;
 		case ISPEAKFORTHETREES:
-			return 10;
+			return 6;
 		case KENTUCKYDERBY:
-			return 5;
+			return 3;
 		case LUCKYLOOTER:
 			return 10;
 		case LUMBERJACK:
-			return 10;
-		case ENDERINFUSION:
-			return 20;
-		case HIGHDEMAND:
-			return 20;
-		case MANICMINING:
 			return 5;
+		case ENDERINFUSION:
+			return 15;
+		case HIGHDEMAND:
+			return 15;
+		case MANICMINING:
+			return 3;
 		case MANVSWILD:
 			return 1;
 		case MEGAEXCAVATOR:
-			return 5;
+			return 3;
 		case MOTHERLODE:
 			return 10;
 		case MUSHROOMMAN:
@@ -1056,9 +1056,9 @@ public class Perks {
 		case NAVIGATIONALSKILLS:
 			return 10;
 		case NEPTUNEFLIGHT:
-			return 10;
+			return 8;
 		case OREWHISPERER:
-			return 10;
+			return 6;
 		case HARSHPARENTING:
 			return 1;
 		case PIGWHISPERER:
@@ -1066,45 +1066,45 @@ public class Perks {
 		case QUICKLEARNER:
 			return 15;
 		case REPLANTER:
-			return 1;
+			return 3;
 		case RESURRECTION:
-			return 20;
-		case SALVAGEOPERATION:
-			return 10;
-		case SLAUGHTERHOUSE:
-			return 5;
-		case SNIPERSENSE:
 			return 15;
+		case SALVAGEOPERATION:
+			return 6;
+		case SLAUGHTERHOUSE:
+			return 3;
+		case SNIPERSENSE:
+			return 12;
 		case SUPERFOODS:
 			return 10;
 		case SUPERIORSMELTING:
 			return 10;
 		case SUPERSAIYAN:
-			return 15;
+			return 12;
 		case SWEETMEATS:
 			return 5;
 		case SWIFTSTEPS:
-			return 10;
-		case THEBIRDSANDTHEBEES:
 			return 5;
+		case THEBIRDSANDTHEBEES:
+			return 3;
 		case THERMALINSULATION:
-			return 15;
-		case HIPPYHEALING:
 			return 10;
+		case HIPPYHEALING:
+			return 5;
 		case THEYFLYNOW:
-			return 20;
+			return 12;
 		case TREASURESNIFFER:
 			return 15;
 		case TREECAPITATOR:
-			return 10;
+			return 5;
 		case UNMATCHEDWILLPOWER:
 			return 15;
 		case USETHEFORCE:
-			return 10;
+			return 12;
 		case XPREBATES:
 			return 5;
 		case YOUMISSEDME:
-			return 15;
+			return 12;
 		default:
 			return 0;
 

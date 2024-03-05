@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -24,9 +25,10 @@ public class ExpEvents implements Listener {
 	private final double levelScaler = .88;
 	private final double randomMultiplierCap = 20;
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBreak(BlockBreakEvent e) {
 		
+		if (e.isCancelled()) return;
 		if (e.getPlayer().hasPermission("jahskills.freezexp")) return;
 				
 		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;

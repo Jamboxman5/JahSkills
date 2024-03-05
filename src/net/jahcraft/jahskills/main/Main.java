@@ -7,6 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -162,6 +163,10 @@ public class Main extends JavaPlugin {
 		SkillDatabase.flushDatabase();
 		ProgressBar.disposeBars();
 		SurvivalistEffects.clearClones();
+		
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			p.closeInventory();
+		}
 		
 		for (Horse h : ExplorerEffects.wildHorses) {
 			ExplorerEffects.removeHorse(h);
