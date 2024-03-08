@@ -153,11 +153,11 @@ public class NaturalistEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 				if (e.getPlayer() == null) return;
-				if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 				if (!SkillManager.activePerk(e.getPlayer(), Perk.LUMBERJACK)) return;
 				if (!e.getBlock().getType().toString().contains("LOG") &&
 					!e.getBlock().getType().toString().contains("WOOD")) return;
-				
+				if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
 				//INITIALIZE TOOLS
 				
 				Player p = e.getPlayer();
@@ -206,11 +206,11 @@ public class NaturalistEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 		if (e.getPlayer() == null) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.ISPEAKFORTHETREES)) return;
 		if (!e.getBlock().getType().toString().contains("LOG") &&
 			!e.getBlock().getType().toString().contains("WOOD")) return;
-		
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
 		//INITIALIZE TOOLS
 		
 		Player p = e.getPlayer();
@@ -355,7 +355,6 @@ public class NaturalistEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 		if (e.getPlayer() == null) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.BIGGERSHOVEL)) return;
 		if (!e.getBlock().getType().equals(Material.DIRT) &&
 			!e.getBlock().getType().equals(Material.SAND) &&
@@ -370,7 +369,8 @@ public class NaturalistEffects implements Listener {
 			!e.getBlock().getType().equals(Material.ROOTED_DIRT) &&
 			!e.getBlock().getType().equals(Material.FARMLAND) &&
 			!e.getBlock().getType().equals(Material.MUD)) return;
-		
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
 		//INITIALIZE TOOLS
 		
 		Player p = e.getPlayer();

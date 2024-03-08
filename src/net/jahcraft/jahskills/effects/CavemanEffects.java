@@ -47,6 +47,7 @@ public class CavemanEffects implements Listener {
 	HashMap<Player, Long> manicMinerCooldown = new HashMap<>();
 	
 	List<Player> manicMinerReady = new ArrayList<>();
+	List<Player> manicMinerActive = new ArrayList<>();
 	
 	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
@@ -58,10 +59,11 @@ public class CavemanEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 		if (e.getPlayer() == null) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.MOTHERLODE)) return;
 		if (!e.getBlock().getType().toString().contains("ORE") &&
 				!e.getBlock().getType().toString().contains("DEBRIS")) return;
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+		
 		
 		//INITIALIZE TOOLS
 		
@@ -113,12 +115,12 @@ public class CavemanEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 		if (e.getPlayer() == null) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		if (e.getExpToDrop() <= 0) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.OREWHISPERER)) return;
 		if (!e.getBlock().getType().toString().contains("ORE") &&
 				!e.getBlock().getType().toString().contains("DEBRIS")) return;
-		
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
 		//INITIALIZE TOOLS
 		
 		Player p = e.getPlayer();
@@ -154,7 +156,6 @@ public class CavemanEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 		if (e.getPlayer() == null) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.EFFICIENTDIGGER)) return;
 		if (!e.getBlock().getType().equals(Material.STONE) &&
 			!e.getBlock().getType().equals(Material.TUFF) &&
@@ -174,7 +175,8 @@ public class CavemanEffects implements Listener {
 			!e.getBlock().getType().equals(Material.END_STONE) &&
 			!e.getBlock().getType().equals(Material.OBSIDIAN) &&
 			!e.getBlock().getType().equals(Material.NETHER_BRICKS)) return;
-		
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
 		//INITIALIZE TOOLS
 		
 		Player p = e.getPlayer();

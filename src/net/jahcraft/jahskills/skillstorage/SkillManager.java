@@ -41,9 +41,10 @@ public class SkillManager {
 		int skillLevel = SkillDatabase.skillLevel.get(p) + 1;
 		int skillPoints = SkillDatabase.skillPoints.get(p);
 		int pointsAdded = 1;
-		if (skillLevel % 5 == 0) {
-			pointsAdded = 3;
-		}
+		if (skillLevel % 5 == 0) pointsAdded = 3;
+		int bonusPoints = (skillLevel/10)-1;
+		if (bonusPoints >= 0) pointsAdded += bonusPoints;
+		
 		int newPoints = skillPoints + pointsAdded;
 		SkillDatabase.skillLevel.put(p, skillLevel);
 		SkillDatabase.skillPoints.put(p, newPoints);
@@ -282,9 +283,9 @@ public class SkillManager {
 		case LUMBERJACK:
 			return "Lumberjack";
 		case ENDERINFUSION:
-			return "Magic Man";
+			return "Ender Infusion";
 		case HIGHDEMAND:
-			return "Major Swindler";
+			return "High Demand";
 		case MANVSWILD:
 			return "Man vs. Wild";
 		case MEGAEXCAVATOR:
@@ -298,7 +299,7 @@ public class SkillManager {
 		case NEPTUNEFLIGHT:
 			return "Neptune Flight";
 		case HARSHPARENTING:
-			return "Paleolithic Prowess";
+			return "Harsh Parenting";
 		case PIGWHISPERER:
 			return "Pig Whisperer";
 		case QUICKLEARNER:
@@ -456,7 +457,7 @@ public class SkillManager {
 			
 		}
 		defPrefix += " " + ChatColor.YELLOW;
-		Main.chat.setPlayerPrefix(player, defPrefix);
+		Main.chat.setPlayerPrefix(null, player, defPrefix);
 		
 	}
 	public static void setLevel(Player target, int lvl) {

@@ -121,10 +121,10 @@ static SkillType type = SkillType.HARVESTER;
 		if (e.getPlayer() == null) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.GREENTHUMB)) return;
 		if (!(e.getBlock().getBlockData() instanceof Ageable)) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 		Ageable data = (Ageable) e.getBlock().getBlockData();
 		if (data.getAge() != data.getMaximumAge()) return;
-		
+		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
 		e.setDropItems(false);
 		List<ItemStack> drops = new ArrayList<>();
 		

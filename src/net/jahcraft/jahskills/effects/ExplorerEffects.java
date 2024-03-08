@@ -190,6 +190,7 @@ static SkillType type = SkillType.EXPLORER;
 	@EventHandler 
 	public void artofTheDealClose(InventoryCloseEvent e) {
 		if (!(e.getInventory() instanceof MerchantInventory)) return;
+		if (!(e.getInventory().getHolder() instanceof Villager)) return;
 		Villager villager = (Villager) e.getInventory().getHolder();
 		if (!moddedVillagers.containsKey(villager)) return;
 		

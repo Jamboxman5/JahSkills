@@ -1024,7 +1024,7 @@ public class Perks {
 		case GORDONRAMSAY:
 			return 6;
 		case GREENTHUMB:
-			return 15;
+			return 5;
 		case INCENDIARYROUNDS:
 			return 8;
 		case INDUSTRIALREVOLUTION:
