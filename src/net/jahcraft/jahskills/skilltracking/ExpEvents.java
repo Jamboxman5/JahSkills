@@ -111,10 +111,12 @@ public class ExpEvents implements Listener {
 		
 	}
 	
-	private int getMultiplier(Material type) {
+	private double getMultiplier(Material type) {
 		if (type.toString().contains("EMERALD")) return 150;
+		if (type.toString().contains("DEBRIS")) return 500;
 		if (type.toString().contains("DIAMOND")) return 75;
 		if (type.toString().contains("GOLD")) return 30;
+		if (type.toString().contains("QUARTZ")) return 60;
 		if (type.toString().contains("IRON")) return 15;
 		if (type.toString().contains("COPPER")) return 10;
 		if (type.toString().contains("LAPIS")) return 25;
@@ -129,6 +131,8 @@ public class ExpEvents implements Listener {
 		if (type.toString().contains("BEET")) return 5;
 		if (type.toString().contains("BEANS")) return 5;
 		if (type.toString().contains("LOG")) return 4;
+		if (type.toString().contains("BLACKSTONE")) return 2;
+		if (type.toString().contains("NETHERRACK")) return 1.25;
 		return 1;
 		
 	}
