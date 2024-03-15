@@ -120,33 +120,61 @@ static SkillType type = SkillType.HARVESTER;
 	public void greenThumb(BlockBreakEvent e) {
 		if (e.getPlayer() == null) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.GREENTHUMB)) return;
-		if (!(e.getBlock().getBlockData() instanceof Ageable)) return;
-		Ageable data = (Ageable) e.getBlock().getBlockData();
-		if (data.getAge() != data.getMaximumAge()) return;
-		if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+		if (e.getBlock().getBlockData() instanceof Ageable) {
+			
+			Ageable data = (Ageable) e.getBlock().getBlockData();
+			if (data.getAge() != data.getMaximumAge()) return;
+			if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
 
-		e.setDropItems(false);
-		List<ItemStack> drops = new ArrayList<>();
-		
-		
-		
-		for (ItemStack i : e.getBlock().getDrops()) {
-			double chance = (SkillManager.getLevel(e.getPlayer(), type)/100.0) * 5.0;
-			if (chance > Math.random()) {
-				int ogAmount = i.getAmount();
-				i.setAmount(ogAmount * 2);
-				if (mainSkill(e.getPlayer())) {
-					if (chance > Math.random()) {
-						i.setAmount(ogAmount * 3);
+			e.setDropItems(false);
+			List<ItemStack> drops = new ArrayList<>();
+			
+			
+			
+			for (ItemStack i : e.getBlock().getDrops(e.getPlayer().getInventory().getItemInMainHand())) {
+				double chance = (SkillManager.getLevel(e.getPlayer(), type)/100.0) * 5.0;
+				if (chance > Math.random()) {
+					int ogAmount = i.getAmount();
+					i.setAmount(ogAmount * 2);
+					if (mainSkill(e.getPlayer())) {
+						if (chance > Math.random()) {
+							i.setAmount(ogAmount * 3);
+						}
 					}
 				}
+				drops.add(i);
 			}
-			drops.add(i);
+			
+			for (ItemStack i : drops) {
+				e.getBlock().getLocation().getWorld().dropItemNaturally(e.getBlock().getLocation(), i);
+			}
+			
+		} else {
+			if (e.getBlock().getType() != Material.MELON && e.getBlock().getType() != Material.PUMPKIN) return;
+			if (!SkillDatabase.isNatural(e.getBlock().getLocation())) return;
+
+			e.setDropItems(false);
+			List<ItemStack> drops = new ArrayList<>();
+						
+			for (ItemStack i : e.getBlock().getDrops(e.getPlayer().getInventory().getItemInMainHand())) {
+				double chance = (SkillManager.getLevel(e.getPlayer(), type)/100.0) * 5.0;
+				if (chance > Math.random()) {
+					int ogAmount = i.getAmount();
+					i.setAmount(ogAmount * 2);
+					if (mainSkill(e.getPlayer())) {
+						if (chance > Math.random()) {
+							i.setAmount(ogAmount * 3);
+						}
+					}
+				}
+				drops.add(i);
+			}
+			
+			for (ItemStack i : drops) {
+				e.getBlock().getLocation().getWorld().dropItemNaturally(e.getBlock().getLocation(), i);
+			}
 		}
 		
-		for (ItemStack i : drops) {
-			e.getBlock().getLocation().getWorld().dropItemNaturally(e.getBlock().getLocation(), i);
-		}
 	}
 	@EventHandler
 	public void FreakishFarming(BlockBreakEvent e) {

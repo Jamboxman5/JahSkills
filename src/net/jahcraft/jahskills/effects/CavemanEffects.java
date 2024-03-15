@@ -566,8 +566,9 @@ public class CavemanEffects implements Listener {
 		//INITIAL CHECKS (IS THIS EVENT ELIGIBLE FOR CONSIDERATION?)
 		
 		if (e.getPlayer() == null) return;
-		if (e.getItem() == null) return;
+		if (e.getPlayer().getInventory().getItemInMainHand() == null) return;
 		if (!SkillManager.activePerk(e.getPlayer(), Perk.MANICMINING)) return;
+		if (manicMinerActive.contains(e.getPlayer())) return;
 		if (e.getAction() == Action.LEFT_CLICK_BLOCK && e.getClickedBlock() == null) return;
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) return;
 
@@ -576,7 +577,7 @@ public class CavemanEffects implements Listener {
 			e.getAction() != Action.RIGHT_CLICK_AIR) return;
 				
 		Player p = e.getPlayer();
-		ItemStack tool = e.getItem();
+		ItemStack tool = p.getInventory().getItemInMainHand();
 		
 		if (!tool.getType().toString().contains("PICKAXE")) return;
 		if (e.getAction() == Action.RIGHT_CLICK_AIR ||
@@ -632,6 +633,7 @@ public class CavemanEffects implements Listener {
 			if (manicMinerReady.contains(p)) {
 				manicMinerReady.remove(p);
 				p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Activated!");
+				manicMinerActive.add(p);
 				int oldLevel = tool.getEnchantmentLevel(Enchantment.DIG_SPEED);
 				ItemMeta meta = tool.getItemMeta();
 				meta.addEnchant(Enchantment.DIG_SPEED, 10, true);
@@ -653,7 +655,8 @@ public class CavemanEffects implements Listener {
 								} else {
 									meta.removeEnchant(Enchantment.DIG_SPEED);
 								}
-								tool.setItemMeta(meta);								
+								tool.setItemMeta(meta);		
+								manicMinerActive.remove(p);
 								p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Finished.");
 								manicMinerCooldown.put(p, System.currentTimeMillis());
 							} catch (InterruptedException e) {
