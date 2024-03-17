@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
@@ -103,7 +104,16 @@ public class Afflictions {
 //						entity.sendMessage("bleed " + i);
 						Thread.sleep(500);
 						entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getLocation(), 5, new Particle.DustOptions(org.bukkit.Color.RED, i));
-						entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_CALCITE_BREAK, 1, 1);
+						
+						new BukkitRunnable() {
+
+							@Override
+							public void run() {
+								entity.getWorld().playSound(entity.getLocation(), Sound.BLOCK_CALCITE_BREAK, 1, 1);
+								
+							}
+							
+						}.runTask(Main.plugin);
 
 						Bukkit.getScheduler().runTask(Main.plugin, new Runnable() {
 							@Override

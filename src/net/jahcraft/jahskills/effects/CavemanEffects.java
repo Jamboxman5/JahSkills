@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -23,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.IllegalPluginAccessException;
@@ -37,6 +39,8 @@ import net.jahcraft.jahskills.skillstorage.SkillManager;
 import net.jahcraft.jahskills.util.Colors;
 import net.jahcraft.jahskills.util.Format;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class CavemanEffects implements Listener {
 
@@ -45,6 +49,7 @@ public class CavemanEffects implements Listener {
 	HashMap<Block, Player> superSmeltingPlayers = new HashMap<>();
 	HashMap<Player, Long> diviningRodCooldown = new HashMap<>();
 	HashMap<Player, Long> manicMinerCooldown = new HashMap<>();
+	HashMap<Player, Long> sneakTimes = new HashMap<>();
 	
 	List<Player> manicMinerReady = new ArrayList<>();
 	List<Player> manicMinerActive = new ArrayList<>();
@@ -249,19 +254,43 @@ public class CavemanEffects implements Listener {
 		//DO THE THING
 
 		{
-			double multiplier = 1.0/(level/5.0);
-			double initialDamage = e.getDamage();
-			if (mainSkill(p)) {
-				e.setDamage((initialDamage * multiplier)/2);
+			
+			int timeBufferMS = 500;
+			if (mainSkill(p)) timeBufferMS += 300;
+			
+			if (p.isSneaking() && (System.currentTimeMillis() - sneakTimes.get(p)) < timeBufferMS) {
+				e.setCancelled(true);
+				TextComponent gracefulLanding = new TextComponent("* Rolled *");
+				gracefulLanding.setItalic(true);
+				gracefulLanding.setColor(Colors.NATUREGREEN);
+				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, null, gracefulLanding);
+				p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_BIG_FALL, 1f, .7f);
 			} else {
-				e.setDamage(initialDamage * multiplier);
+				double multiplier = 1.0/(level/5.0);
+				double initialDamage = e.getDamage();
+				if (mainSkill(p)) {
+					e.setDamage((initialDamage * multiplier)/2);
+				} else {
+					e.setDamage(initialDamage * multiplier);
+				}
 			}
-			if (p.isSneaking()) e.setCancelled(true);
+			
 		}
 		
 		//DONE!
 		
 	}
+	
+	@EventHandler
+	public void climbingGearCrouch(PlayerToggleSneakEvent e) {
+		if (e.getPlayer() == null) return;
+		if (!e.isSneaking()) return;
+		if (!SkillManager.activePerk(e.getPlayer(), Perk.CLIMBINGGEAR)) return;
+		
+		sneakTimes.put(e.getPlayer(), System.currentTimeMillis());
+		
+	}
+	
 	@EventHandler
 	public void thermalInsulation(EntityDamageEvent e) {
 		

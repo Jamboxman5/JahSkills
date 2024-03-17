@@ -104,9 +104,10 @@ public class ExpEvents implements Listener {
 		if (type.equals(EntityType.PILLAGER)) return 15;
 		if (type.equals(EntityType.ENDERMAN)) return 40;
 		if (type.equals(EntityType.WITCH)) return 100;
-		if (type.equals(EntityType.ELDER_GUARDIAN)) return 250;
-		if (type.equals(EntityType.WARDEN)) return 500;
-		if (type.equals(EntityType.ENDER_DRAGON)) return 250;
+		if (type.equals(EntityType.ELDER_GUARDIAN)) return 750;
+		if (type.equals(EntityType.WARDEN)) return 2000;
+		if (type.equals(EntityType.ENDER_DRAGON)) return 1500;
+		if (type.equals(EntityType.WITHER)) return 1250;
 		return 1;
 		
 	}
