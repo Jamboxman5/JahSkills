@@ -18,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -188,6 +189,46 @@ public class HuntsmanEffects implements Listener {
 			}.runTaskAsynchronously(Main.plugin);
 			
 		}
+		
+	}
+	
+	@EventHandler
+	public void incendiaryRounds(ProjectileLaunchEvent e) {
+		if (e.getEntity() == null) return;
+		if (e.getEntity().getShooter() == null) return;
+		if (!(e.getEntity().getShooter() instanceof Player)) return;
+		
+		Player shooter = (Player) e.getEntity().getShooter();
+		
+		if (!SkillManager.activePerk(shooter, Perk.INCENDIARYROUNDS)) return;
+		
+		int roll = (int) (Math.random() * (SkillManager.MAXSKILLLEVEL + 1));
+		int level = SkillManager.getLevel(shooter, type);
+		
+		if (!mainSkill(shooter) && level < roll) return;
+		if (e.getEntity().getFireTicks() > 0) return;
+		
+		e.getEntity().setFireTicks(level*20);
+		
+	}
+	
+	@EventHandler
+	public void explosiveShots(ProjectileLaunchEvent e) {
+		if (e.getEntity() == null) return;
+		if (e.getEntity().getShooter() == null) return;
+		if (!(e.getEntity().getShooter() instanceof Player)) return;
+		
+		Player shooter = (Player) e.getEntity().getShooter();
+		
+		if (!SkillManager.activePerk(shooter, Perk.INCENDIARYROUNDS)) return;
+		
+		int roll = (int) (Math.random() * (SkillManager.MAXSKILLLEVEL + 1));
+		int level = SkillManager.getLevel(shooter, type);
+		
+		if (!mainSkill(shooter) && level < roll) return;
+		if (e.getEntity().getFireTicks() > 0) return;
+		
+		e.getEntity().setFireTicks(level*20);
 		
 	}
 	
