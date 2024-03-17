@@ -20,6 +20,8 @@ public class FamilyRecipes {
 		
 		Recipe recipe = generateSaddleRecipe();
 		recipes.add(recipe);
+		recipe = generateBundleRecipe();
+		recipes.add(recipe);
 		recipe = generateNameTagRecipe();
 		recipes.add(recipe);
 		recipe = generateChainmailHelmetRecipe();
@@ -43,6 +45,15 @@ public class FamilyRecipes {
 		recipe.shape(" L ","LLL", "I I");
 		recipe.setIngredient('L', Material.LEATHER);
 		recipe.setIngredient('I', Material.IRON_INGOT);
+		keys.add(key);
+		return recipe;
+	}
+	private static ShapedRecipe generateBundleRecipe() {
+		NamespacedKey key = new NamespacedKey(Main.plugin, "bundle_recipe");
+		ShapedRecipe recipe = new ShapedRecipe(key, new ItemStack(Material.BUNDLE));
+		recipe.shape("SLS","L L", "LLL");
+		recipe.setIngredient('L', Material.RABBIT_HIDE);
+		recipe.setIngredient('S', Material.STRING);
 		keys.add(key);
 		return recipe;
 	}
