@@ -1199,6 +1199,21 @@ public class Perks {
 			Perk[] conflicts = {Perk.MUSHROOMMAN};
 			return Arrays.asList(conflicts);
 		}
+		case INCENDIARYROUNDS:
+		{
+			Perk[] conflicts = {Perk.EXPLOSIVESHOTS};
+			return Arrays.asList(conflicts);
+		}
+		case EXPLOSIVESHOTS:
+		{
+			Perk[] conflicts = {Perk.INCENDIARYROUNDS, Perk.BOMBTHROWER};
+			return Arrays.asList(conflicts);
+		}
+		case BOMBTHROWER:
+		{
+			Perk[] conflicts = {Perk.EXPLOSIVESHOTS};
+			return Arrays.asList(conflicts);
+		}
 		default:
 		{
 			Perk[] conflicts = {};

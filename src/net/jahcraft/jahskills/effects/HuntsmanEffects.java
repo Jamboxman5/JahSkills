@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -22,6 +24,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -41,6 +44,8 @@ public class HuntsmanEffects implements Listener {
 	HashMap<Player, Long> bomberCooldown = new HashMap<>();
 	
 	List<Player> excavReady = new ArrayList<>();
+	
+	private static NamespacedKey explosiveRoundTag;
 
 	//private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
@@ -195,6 +200,7 @@ public class HuntsmanEffects implements Listener {
 	@EventHandler
 	public void incendiaryRounds(ProjectileLaunchEvent e) {
 		if (e.getEntity() == null) return;
+		if (e.getEntityType() != EntityType.ARROW) return;
 		if (e.getEntity().getShooter() == null) return;
 		if (!(e.getEntity().getShooter() instanceof Player)) return;
 		
@@ -214,21 +220,41 @@ public class HuntsmanEffects implements Listener {
 	
 	@EventHandler
 	public void explosiveShots(ProjectileLaunchEvent e) {
+		if (e.getEntityType() != EntityType.ARROW) return;
 		if (e.getEntity() == null) return;
 		if (e.getEntity().getShooter() == null) return;
 		if (!(e.getEntity().getShooter() instanceof Player)) return;
 		
 		Player shooter = (Player) e.getEntity().getShooter();
 		
-		if (!SkillManager.activePerk(shooter, Perk.INCENDIARYROUNDS)) return;
+		if (!SkillManager.activePerk(shooter, Perk.EXPLOSIVESHOTS)) return;
 		
-		int roll = (int) (Math.random() * (SkillManager.MAXSKILLLEVEL + 1));
+		if (explosiveRoundTag == null) explosiveRoundTag = new NamespacedKey(Main.plugin, "explosiveRound");
+		
+		int roll = (int) (Math.random() * ((SkillManager.MAXSKILLLEVEL*10) + 1));
+		if (mainSkill(shooter)) roll = (int) (Math.random() * ((SkillManager.MAXSKILLLEVEL*6) + 1));
 		int level = SkillManager.getLevel(shooter, type);
 		
-		if (!mainSkill(shooter) && level < roll) return;
-		if (e.getEntity().getFireTicks() > 0) return;
+		if (level < roll) return;
 		
-		e.getEntity().setFireTicks(level*20);
+		e.getEntity().getPersistentDataContainer().set(explosiveRoundTag, PersistentDataType.BOOLEAN, true);
+		
+	}
+	
+	@EventHandler()
+	public void onLand(ProjectileHitEvent event) {
+		if (event.getEntityType() != EntityType.ARROW) return;
+		if (event.getEntity().getShooter() == null) return;
+		if (!(event.getEntity().getShooter() instanceof Player)) return; 
+		Player player = (Player) event.getEntity().getShooter();
+		if (!SkillManager.activePerk(player, Perk.EXPLOSIVESHOTS)) return;
+				
+		
+		if (!event.getEntity().getPersistentDataContainer().has(explosiveRoundTag, PersistentDataType.BOOLEAN)) return;
+		Location loc = event.getEntity().getLocation();
+		loc.getWorld().createExplosion(loc, (float) 1.75);
+		event.getEntity().getPersistentDataContainer().remove(explosiveRoundTag);
+		player.sendMessage("Shot with explosive force!");
 		
 	}
 	
