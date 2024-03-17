@@ -28,6 +28,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import net.jahcraft.jahskills.afflicts.Afflictions;
 import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.skills.SkillType;
@@ -46,6 +47,7 @@ public class HuntsmanEffects implements Listener {
 	List<Player> excavReady = new ArrayList<>();
 	
 	private static NamespacedKey explosiveRoundTag;
+	private static NamespacedKey chrisKyleRoundTag;
 
 	//private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
@@ -110,7 +112,51 @@ public class HuntsmanEffects implements Listener {
 	}
 	
 	@EventHandler
-	public void chrisKyle(ProjectileHitEvent e) {
+	public void chrisKyle(ProjectileLaunchEvent e) {
+		if (e.getEntityType() != EntityType.ARROW) return;
+		if (e.getEntity() == null) return;
+		if (e.getEntity().getShooter() == null) return;
+		if (!(e.getEntity().getShooter() instanceof Player)) return;
+		
+		Player shooter = (Player) e.getEntity().getShooter();
+		
+		if (!SkillManager.activePerk(shooter, Perk.CHRISKYLE)) return;
+		
+		if (chrisKyleRoundTag == null) chrisKyleRoundTag = new NamespacedKey(Main.plugin, "chrisKyleRound");
+		
+		int roll = (int) (Math.random() * ((SkillManager.MAXSKILLLEVEL*10) + 1));
+		if (mainSkill(shooter)) roll = (int) (Math.random() * ((SkillManager.MAXSKILLLEVEL*6) + 1));
+		int level = SkillManager.getLevel(shooter, type);
+		
+		if (level < roll) return;
+		
+		int multiplier = SkillManager.getLevel(shooter, type)/4;
+		if (mainSkill(shooter)) multiplier *= 1.5;
+		int baseMS = 1000;
+		
+		e.getEntity().getPersistentDataContainer().set(chrisKyleRoundTag, PersistentDataType.INTEGER, baseMS*multiplier);
+		
+	}
+	
+	@EventHandler
+	public void chrisKyleLand(ProjectileHitEvent event) {
+		if (event.getEntityType() != EntityType.ARROW) return;
+		if (event.getEntity().getShooter() == null) return;
+		if (!(event.getEntity().getShooter() instanceof Player)) return; 
+		Player player = (Player) event.getEntity().getShooter();
+		if (!SkillManager.activePerk(player, Perk.CHRISKYLE)) return;
+		
+		if (!event.getEntity().getPersistentDataContainer().has(chrisKyleRoundTag, PersistentDataType.INTEGER)) return;
+		int dazeTimeMS = event.getEntity().getPersistentDataContainer().get(chrisKyleRoundTag, PersistentDataType.INTEGER);
+		event.getEntity().getPersistentDataContainer().remove(chrisKyleRoundTag);
+		
+		if (event.getHitEntity() == null) return; 
+		if (!(event.getHitEntity() instanceof Player)) return; 
+		Player target = (Player) event.getHitEntity();
+		
+		player.sendMessage("Opponent Dazed!");
+		Afflictions.daze(target, dazeTimeMS);
+		
 	}
 	
 	@EventHandler
@@ -241,8 +287,8 @@ public class HuntsmanEffects implements Listener {
 		
 	}
 	
-	@EventHandler()
-	public void onLand(ProjectileHitEvent event) {
+	@EventHandler
+	public void explosiveShotsLand(ProjectileHitEvent event) {
 		if (event.getEntityType() != EntityType.ARROW) return;
 		if (event.getEntity().getShooter() == null) return;
 		if (!(event.getEntity().getShooter() instanceof Player)) return; 
