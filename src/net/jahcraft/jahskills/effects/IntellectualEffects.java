@@ -1,14 +1,24 @@
 package net.jahcraft.jahskills.effects;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -35,7 +45,8 @@ public class IntellectualEffects implements Listener {
 	//private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
 	void debugMSG(String s) { Bukkit.broadcastMessage(s); }
 	static boolean mainSkill(Player p) { return SkillManager.getMainSkill(p) == type; }
-	
+	private int getRandom(int i) { return (int) (Math.random() * (i+1)); }
+
 	@EventHandler
 	public void xpRebates(EnchantItemEvent e) {
 		if (e.getEnchanter() == null) return;
@@ -133,6 +144,80 @@ public class IntellectualEffects implements Listener {
 		} else {
 			e.setRepairAmount(e.getRepairAmount() + SkillManager.getLevel(e.getPlayer(), type)/4);
 		}
+	}
+	
+	@EventHandler
+	public void enderInfusionArrow(EntityDamageByEntityEvent e) {
+		
+		if (!(e.getEntity() instanceof Player)) return;
+		if (!SkillManager.activePerk((Player) e.getEntity(), Perk.ENDERINFUSION)) return;
+		if (e.getCause() != DamageCause.PROJECTILE) return;
+				
+		int chance = SkillManager.getLevel((Player) e.getEntity(), type) - 5;
+		if (mainSkill((Player) e.getEntity())) chance += 10;
+		
+		if (chance < getRandom(100)) return;
+		
+		e.setCancelled(true);
+		
+		chorusTeleport((Player)e.getEntity());
+		e.getEntity().getWorld().playSound(e.getEntity(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
+		
+	}
+	
+	public void chorusTeleport(LivingEntity entity) {
+		for (int i = 0; i < 16; i++) { //16 attempts: +/- 8 blocks in every direction
+		    Location attempt = entity.getLocation();
+		    double deltaX = ThreadLocalRandom.current().nextDouble() * 16 - 8;
+		    double deltaY = ThreadLocalRandom.current().nextDouble() * 16 - 8;
+		    double deltaZ = ThreadLocalRandom.current().nextDouble() * 16 - 8;
+		    attempt.setX(attempt.getX() + deltaX);
+		    attempt.setY(Math.min(Math.max(attempt.getY() + deltaY, 0),
+		    		entity.getWorld().getMaxHeight() - 1));
+		    attempt.setZ(attempt.getZ() + deltaZ);
+		    attempt = getSafeLocation(attempt);
+		    if (attempt != null) {
+		    	entity.getWorld().playSound(entity.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT,
+		        SoundCategory.PLAYERS, 1, 1);
+		    	entity.teleport(attempt);
+		      break;
+		    }
+		}
+	}
+	
+	private Location getSafeLocation(Location loc) {
+	    int blockY = loc.getBlockY();
+	    World world = loc.getWorld();
+	    if (blockY > world.getHighestBlockYAt(loc)) {
+	      blockY = world.getHighestBlockYAt(loc) + 1;
+	    }
+	    boolean found = false;
+	    boolean hadSpace = false;
+	    while (blockY > 0) {
+	      Block current = world.getBlockAt(loc.getBlockX(), blockY, loc.getBlockZ());
+	      if (current.isEmpty() && current.getRelative(BlockFace.UP).isEmpty()) {
+	        hadSpace = true;
+	      } else if (hadSpace) {
+	        if (current.getType().isSolid()) {
+	          found = true;
+	          blockY++;
+	          break;
+	        } else {
+	          hadSpace = false;
+	        }
+	      }
+	      blockY--;
+	    }
+	    if (Math.abs(blockY - loc.getBlockY()) > 10) return null;
+	    if (found) {
+	      loc.setY(blockY);
+	      loc.setX(loc.getBlockX() + 0.5);
+	      //TODO: Do a proper bounding box check instead of just centering the location
+	      loc.setZ(loc.getBlockZ() + 0.5);
+	      return loc;
+	    } else {
+	      return null;
+	    }
 	}
 	
 	@EventHandler

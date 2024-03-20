@@ -348,7 +348,7 @@ public class SurvivalistEffects implements Listener {
 	public void artfulDodger(EntityDamageByEntityEvent e) {
 		
 		if (!(e.getEntity() instanceof Player)) return;
-		if (!SkillManager.activePerk((Player) e.getEntity(), Perk.YOUMISSEDME)) return;
+		if (!SkillManager.activePerk((Player) e.getEntity(), Perk.ARTFULDODGER)) return;
 				
 		int chance = SkillManager.getLevel((Player) e.getEntity(), type) - 5;
 		if (mainSkill((Player) e.getEntity())) chance += 10;

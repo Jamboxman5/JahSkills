@@ -22,8 +22,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -50,6 +53,8 @@ public class CavemanEffects implements Listener {
 	HashMap<Player, Long> diviningRodCooldown = new HashMap<>();
 	HashMap<Player, Long> manicMinerCooldown = new HashMap<>();
 	HashMap<Player, Long> sneakTimes = new HashMap<>();
+	HashMap<Player, Integer> oldLevels = new HashMap<>();
+	HashMap<Player, ItemStack> manicMinerTools = new HashMap<>();
 	
 	List<Player> manicMinerReady = new ArrayList<>();
 	List<Player> manicMinerActive = new ArrayList<>();
@@ -661,12 +666,7 @@ public class CavemanEffects implements Listener {
 		if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
 			if (manicMinerReady.contains(p)) {
 				manicMinerReady.remove(p);
-				p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Activated!");
-				manicMinerActive.add(p);
-				int oldLevel = tool.getEnchantmentLevel(Enchantment.DIG_SPEED);
-				ItemMeta meta = tool.getItemMeta();
-				meta.addEnchant(Enchantment.DIG_SPEED, 10, true);
-				tool.setItemMeta(meta);
+				enableManicMiner(p, tool);
 				try {
 					new BukkitRunnable() {
 
@@ -678,16 +678,9 @@ public class CavemanEffects implements Listener {
 								} else {
 									Thread.sleep(SkillManager.getLevel(p, SkillType.CAVEMAN) * 1000);
 								}
-								ItemMeta meta = tool.getItemMeta();
-								if (oldLevel > 0) {
-									meta.addEnchant(Enchantment.DIG_SPEED, oldLevel, true);
-								} else {
-									meta.removeEnchant(Enchantment.DIG_SPEED);
-								}
-								tool.setItemMeta(meta);		
-								manicMinerActive.remove(p);
-								p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Finished.");
-								manicMinerCooldown.put(p, System.currentTimeMillis());
+								
+								disableManicMiner(p, tool);
+								
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -702,6 +695,60 @@ public class CavemanEffects implements Listener {
 			}
 		}
 		
+	}
+	
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		if (e.getPlayer() == null) return;
+		if (!manicMinerActive.contains(e.getPlayer())) return;
+		disableManicMiner(e.getPlayer(), manicMinerTools.get(e.getPlayer()));
+	}
+	
+	@EventHandler
+	public void onDrop(PlayerDropItemEvent e) {
+		if (e.getPlayer() == null) return;
+		if (!manicMinerActive.contains(e.getPlayer())) return;
+		if (!manicMinerTools.containsKey(e.getPlayer())) return;
+		if (e.getItemDrop().getItemStack().getEnchantmentLevel(Enchantment.DIG_SPEED) != 10) return;
+		disableManicMiner(e.getPlayer(), e.getItemDrop().getItemStack());
+	}
+	
+	@EventHandler
+	public void onDeath(EntityDeathEvent e) {
+		if (!(e.getEntity() instanceof Player)) return;
+		Player p = (Player) e.getEntity();
+		if (p == null) return;
+		if (!manicMinerActive.contains(p)) return;
+		if (!manicMinerTools.containsKey(p)) return;
+		disableManicMiner(p, manicMinerTools.get(p));
+	}
+	
+	public void enableManicMiner(Player p, ItemStack tool) {
+		p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Activated!");
+		manicMinerActive.add(p);
+		oldLevels.put(p, tool.getEnchantmentLevel(Enchantment.DIG_SPEED));
+		manicMinerTools.put(p, tool);
+		ItemMeta meta = tool.getItemMeta();
+		meta.addEnchant(Enchantment.DIG_SPEED, 10, true);
+		tool.setItemMeta(meta);
+	}
+	
+	public void disableManicMiner(Player p, ItemStack tool) {
+		int oldLevel = 0;
+		if (oldLevels.containsKey(p)) oldLevel = oldLevels.get(p);
+		
+		ItemMeta meta = tool.getItemMeta();
+		if (oldLevel > 0) {
+			meta.addEnchant(Enchantment.DIG_SPEED, oldLevel, true);
+		} else {
+			meta.removeEnchant(Enchantment.DIG_SPEED);
+		}
+		tool.setItemMeta(meta);		
+		manicMinerActive.remove(p);
+		p.sendMessage(Colors.BRIGHTBLUE + "Manic Miner Finished.");
+		manicMinerCooldown.put(p, System.currentTimeMillis());
+		manicMinerTools.remove(p);
+		oldLevels.remove(p);
 	}
 	
 }
