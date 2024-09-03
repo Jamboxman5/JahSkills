@@ -14,14 +14,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import net.jahcraft.jahskills.main.Main;
 import net.jahcraft.jahskills.perks.Perk;
 import net.jahcraft.jahskills.skills.SkillType;
 
 public class SkillDatabase {
 	
-	private static final String url = "jdbc:mysql://localhost:3306/jahskills";
-	private static final String login = "jahcraft";
-	private static Connection con = getConnection();
+	private static String url = "jdbc:mysql://localhost:3306/jahskills";
+	private static String login = "jahcraft";
+	private static String pwd = "jahcraft";
+	private static String port = "3306";
+	private static boolean mySQL = false;
+	private static Connection con;
 	
 	protected static HashMap<Player, List<Perk>> ownedPerks;
 	protected static HashMap<Player, List<Perk>> activePerks;
@@ -38,11 +42,42 @@ public class SkillDatabase {
 	protected static HashMap<Player, Integer> skillPoints;
 	protected static HashMap<Player, SkillType> mainSkills;
 	
+	public static boolean setupConnection() {
+		String dbtype = Main.data.getConfig().getString("database.type");
+		if (dbtype.equalsIgnoreCase("mysql")) {
+			login = Main.data.getConfig().getString("database.mysql.username");
+			pwd = Main.data.getConfig().getString("database.mysql.password");
+			port = Main.data.getConfig().getString("database.mysql.port");
+			url = "jdbc:mysql://localhost:" + port + "/jahskills";
+			mySQL = true;
+
+			con = getConnection();
+			if (con == null) {
+				Bukkit.getLogger().severe("[JahSkills] Unable to connect to MySQL database! Credentials are likely invalid!");
+				return false;
+			}
+			return true;
+		} else if (dbtype.equalsIgnoreCase("sqlite")) {
+			Bukkit.getLogger().info("PATH: " + Main.getPlugin(Main.class).getDataFolder().getAbsolutePath());
+            url = "jdbc:sqlite:" + Main.getPlugin(Main.class).getDataFolder().getAbsolutePath() + "\\jahskills.db";
+            mySQL = false;
+			con = getConnection();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	private static Connection getConnection() {
 		Connection con = null;
 		
 		try {
-			con = DriverManager.getConnection(url, login, login);
+			if (mySQL) {
+				con = DriverManager.getConnection(url, login, pwd);
+			} else {
+				//SQLite
+				con = DriverManager.getConnection(url);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -128,7 +163,7 @@ public class SkillDatabase {
 			sendUnsafeQuery("create table butcherlevel(uuid varchar(36), level int, primary key ( uuid ) )");
 			sendUnsafeQuery("create table cavemanlevel(uuid varchar(36), level int, primary key ( uuid ) )");
 			sendUnsafeQuery("create table naturalistlevel(uuid varchar(36), level int, primary key ( uuid ) )");
-			sendUnsafeQuery("create table hunstmanlevel(uuid varchar(36), level int, primary key ( uuid ) )");
+			sendUnsafeQuery("create table huntsmanlevel(uuid varchar(36), level int, primary key ( uuid ) )");
 			sendUnsafeQuery("create table harvesterlevel(uuid varchar(36), level int, primary key ( uuid ) )");
 			sendUnsafeQuery("create table intellectuallevel(uuid varchar(36), level int, primary key ( uuid ) )");
 			sendUnsafeQuery("create table explorerlevel(uuid varchar(36), level int, primary key ( uuid ) )");

@@ -346,6 +346,7 @@ public class SkillManager {
 		}
 	}
 	public static boolean activePerk(Player player, Perk perk) {
+		if (!SkillDatabase.activePerks.containsKey(player)) return false;
 		return SkillDatabase.activePerks.get(player).contains(perk);
 
 	}

@@ -17,6 +17,7 @@ import net.jahcraft.jahskills.commands.ClaimMainSkill;
 import net.jahcraft.jahskills.commands.SkillDB;
 import net.jahcraft.jahskills.commands.SkillQuery;
 import net.jahcraft.jahskills.commands.Skills;
+import net.jahcraft.jahskills.config.DataManager;
 import net.jahcraft.jahskills.crafting.RecipeUtil;
 import net.jahcraft.jahskills.effects.ButcherEffects;
 import net.jahcraft.jahskills.effects.CavemanEffects;
@@ -52,14 +53,28 @@ public class Main extends JavaPlugin {
 	public static Main plugin;
 	public static Economy eco;
 	public static Chat chat;
+	public static DataManager data;
 	ArrayList<BukkitTask> pluginTasks = new ArrayList<>();
 
 	@Override
 	public void onEnable() {
 		
+		Main.data = new DataManager(this);
+		
+		data.reloadConfig();
+		
+		if (!SkillDatabase.setupConnection()) {
+			
+			Bukkit.getLogger().severe("[JahSkills] Couldn't reach the database! Disabling JahSkills!");
+			Bukkit.getLogger().severe("[JahSkills] Check your config for database errors!");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+			
+		}
+		
 		if (!setupVaultHooks()) {
 			
-			Bukkit.getLogger().info("Vault not detected! Disabling JahCore!");
+			Bukkit.getLogger().info("Vault not detected! Disabling JahSkills!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 			
@@ -159,10 +174,16 @@ public class Main extends JavaPlugin {
 	@Override 
 	public void onDisable() {
 
-		RecipeUtil.unregisterRecipes();
-		SkillDatabase.flushDatabase();
-		ProgressBar.disposeBars();
-		SurvivalistEffects.clearClones();
+		try {
+			RecipeUtil.unregisterRecipes();
+			SkillDatabase.flushDatabase();
+			ProgressBar.disposeBars();
+			SurvivalistEffects.clearClones();
+		} catch (NullPointerException e) {
+			
+		}
+		
+		
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			p.closeInventory();

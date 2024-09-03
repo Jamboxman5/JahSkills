@@ -1,0 +1,29 @@
+################################################################################
+#
+#        ____.      .__      ___________   .__.__  .__           
+#       |    |____  |  |__  /   _____/  | _|__|  | |  |   ______ 
+#       |    \__  \ |  |  \ \_____  \|  |/ /  |  | |  |  /  ___/ 
+#   /\__|    |/ __ \|   Y  \/        \    <|  |  |_|  |__\___ \  
+#   \________(____  /___|  /_______  /__|_ \__|____/____/____  > 
+#                 \/     \/        \/     \/                 \/  
+#
+#
+################################################################################
+#
+#   JahSkills configuration
+#   Plugin by Jamboxman5
+#
+################################################################################
+
+database:
+  # Database Type - "mysql" or "sqlite" - Default database type is SQLite.
+  type: "sqlite"
+  
+  mysql:
+    # If using MySQL, replace these with your logon
+    # Keep these the same unless you're switching between types and need to have your database translated.
+    username: "username"
+    password: "password"
+    # Default port is 3306 for MySQL
+    port: "3306"
+    
