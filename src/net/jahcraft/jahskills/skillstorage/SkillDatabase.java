@@ -59,7 +59,7 @@ public class SkillDatabase {
 			return true;
 		} else if (dbtype.equalsIgnoreCase("sqlite")) {
 			Bukkit.getLogger().info("PATH: " + Main.getPlugin(Main.class).getDataFolder().getAbsolutePath());
-            url = "jdbc:sqlite:" + Main.getPlugin(Main.class).getDataFolder().getAbsolutePath() + "\\jahskills.db";
+            url = "jdbc:sqlite:" + Main.getPlugin(Main.class).getDataFolder().getAbsolutePath() + System.getProperty("file.separator") + "jahskills.db";
             mySQL = false;
 			con = getConnection();
 			return true;
