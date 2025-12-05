@@ -74,7 +74,9 @@ public class Main extends JavaPlugin {
 		
 		if (!setupVaultHooks()) {
 			
-			Bukkit.getLogger().info("Vault not detected! Disabling JahSkills!");
+			Bukkit.getLogger().warning("Couldn't set up Vault hooks! Disabling JahSkills!");
+            if (eco == null) Bukkit.getLogger().warning("No economy detected! Install an economy plugin!");
+            if (chat == null) Bukkit.getLogger().warning("No chat manager detected! Install a chat plugin!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 			
