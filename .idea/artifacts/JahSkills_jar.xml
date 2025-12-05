@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="JahSkills:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JahSkills_jar</output-path>
+    <root id="archive" name="JahSkills.jar">
+      <element id="module-output" name="JahSkills" />
+    </root>
+  </artifact>
+</component>
